@@ -13,8 +13,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
+//tạm comment khi đang chạy trên local/test
+//app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
