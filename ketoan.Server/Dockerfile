@@ -1,8 +1,8 @@
 # Stage 1: Build project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["ketoan.Server.csproj", "./"]
-RUN dotnet restore "ketoan.Server.csproj"
+COPY ["ketoan.Server/ketoan.Server.csproj", "ketoan.Server/"]
+RUN dotnet restore "ketoan.Server/ketoan.Server.csproj"
 COPY . .
 RUN dotnet publish "ketoan.Server.csproj" -c Release -o /app/publish
 
