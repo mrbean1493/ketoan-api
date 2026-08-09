@@ -1,4 +1,11 @@
+using ketoan.Server.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Đăng ký DbContext PostgreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Thêm dịch vụ Controller & Swagger
 builder.Services.AddControllers();

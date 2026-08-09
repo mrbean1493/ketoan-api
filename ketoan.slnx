@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="ketoan.Client/ketoan.Client.csproj" Id="962a4c87-e66b-4245-95df-40ee6b741995" />
   <Project Path="ketoan.Server/ketoan.Server.csproj" />
 </Solution>
