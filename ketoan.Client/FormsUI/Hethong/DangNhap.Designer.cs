@@ -73,6 +73,7 @@
             btnHuy.TabIndex = 3;
             btnHuy.Text = "Thoát/Hủy";
             btnHuy.UseVisualStyleBackColor = true;
+            btnHuy.Click += btnHuy_Click;
             // 
             // txtTenDangNhap
             // 
@@ -111,6 +112,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "DangNhap";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Đăng nhập";
             ResumeLayout(false);
             PerformLayout();
