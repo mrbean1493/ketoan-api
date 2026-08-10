@@ -142,6 +142,8 @@ namespace ketoan.Client
         {
             tabControlMain.ItemSize = new Size(150, 30);
             tabControlMain.SizeMode = TabSizeMode.Fixed;
+
+            //if(QuanLyPhien.NgaySinh!=null)
         }
     }
 }

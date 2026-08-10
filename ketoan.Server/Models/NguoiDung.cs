@@ -30,5 +30,8 @@ namespace ketoan.Server.Models
 
         [Column("TrangThai")]
         public bool TrangThai { get; set; } = true;
+
+        // Bổ sung quan hệ với bảng trung gian
+        public ICollection<NguoiDungQuyen> NguoiDungQuyens { get; set; } = new List<NguoiDungQuyen>();
     }
 }

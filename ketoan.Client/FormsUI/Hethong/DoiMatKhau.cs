@@ -23,11 +23,6 @@ namespace ketoan.Client.FormsUI.Hethong
 
         private async void btnDoiMatKhau_Click(object sender, EventArgs e)
         {
-
-            BCrypt.Net.BCrypt.HashPassword
-            return;
-
-
             string strMatKhauCu = txtMatKhauCu.Text.Trim();
             string strMatKhauMoi = txtMatKhauMoi.Text.Trim();
             string strMatKhauMoi2 = txtMatKhauMoi2.Text.Trim();
