@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ketoan.Server.Models
 {
-    [Table("DVT")] //trên neon.tech
+    [Table("dvt")] //trên neon.tech
     public class DonViTinh
     {
         [Key]
@@ -11,7 +11,7 @@ namespace ketoan.Server.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("tendvt")]
+        [Column("TenDVT")]
         public string TenDVT { get; set; }
     }
 }
