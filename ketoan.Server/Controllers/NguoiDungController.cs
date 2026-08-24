@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace ketoan.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] 
     [ApiController]
     public class NguoiDungController : ControllerBase
     {
@@ -43,8 +43,8 @@ namespace ketoan.Server.Controllers
             {
                 Message = "Đăng nhập thành công!",
                 UserId = user.Id,
-                Username = user.TenDangNhap,
-                HoTen = user.TenNguoiDung ?? string.Empty, // Nếu thuộc tính HoTen có trong model NguoiDung
+                TenDangNhap = user.TenDangNhap,
+                TenNguoiDung = user.TenNguoiDung ?? string.Empty, // Nếu thuộc tính HoTen có trong model NguoiDung
                 NgaySinh=user.NgaySinh
                 //VaiTro = user.VaiTro ?? string.Empty // Nếu có phân quyền
             };

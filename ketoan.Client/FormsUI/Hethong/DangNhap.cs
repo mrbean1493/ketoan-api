@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ketoan.Client.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,6 +27,8 @@ namespace ketoan.Client.FormsUI.Hethong
         {
             InitializeComponent();
             lblTrangThai.Text = "";
+            string realHash = BCrypt.Net.BCrypt.HashPassword("admin");
+            Console.WriteLine(realHash);
         }
 
         private async void btnDangNhap_Click(object sender, EventArgs e)
@@ -48,20 +51,38 @@ namespace ketoan.Client.FormsUI.Hethong
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // 1. Giải mã JSON từ API thành LoginResponseDto
+                    var result = await response.Content.ReadFromJsonAsync<DangNhapDtoClient>();
+
+                    if (result != null)
+                    {
+                        QuanLyPhien.UserId = result.UserId;
+                        QuanLyPhien.TenDangNhap = result.TenDangNhap;
+                        QuanLyPhien.TenNguoiDung = result.TenNguoiDung;
+                        QuanLyPhien.DanhSachQuyenQLP = result.DanhSachQuyen;
+                    }
+
                     MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lblTrangThai.Text = "Đăng nhập thành công!"; lblTrangThai.ForeColor = Color.Green;
                     this.Hide();
                     // Mở FormMain
-                    FormMain main = new FormMain();
-                    main.ShowDialog();
-                    this.Close();
+                    FormMain main = new FormMain(this); // Mở FormMain và truyền 'this' (FormDangNhap) sang FormMain
+                    //main.ShowDialog();
+                    main.Show();
+                    //this.Close();
                 }
                 else
                 {
-                    var errorResult = await response.Content.ReadFromJsonAsync<dynamic>();
-                    string errorMsg = errorResult?.GetProperty("message").GetString() ?? "Đăng nhập thất bại.";
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Lỗi API (Mã {(int)response.StatusCode}):\n{errorMessage}",
+                                    "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+
+                    //var errorResult = await response.Content.ReadFromJsonAsync<dynamic>();
+                    //string errorMsg = errorResult?.GetProperty("message").GetString() ?? "Đăng nhập thất bại.";
                     lblTrangThai.Text = "Tài khoản hoặc mật khẩu không đúng!"; lblTrangThai.ForeColor = Color.Red;
-                    MessageBox.Show(errorMsg, "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //MessageBox.Show(errorMsg, "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
@@ -77,6 +98,20 @@ namespace ketoan.Client.FormsUI.Hethong
         private void btnHuy_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public void ClearFields()
+        {
+            txtTenDangNhap.Text = "";
+            txtMatKhau.Text = "";
+        }
+
+        private void txtMatKhau_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnDangNhap.PerformClick();
+            }
         }
     }
 }

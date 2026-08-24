@@ -8,4 +8,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="FormsUI\Quy\" />
+    <Folder Include="FormsUI\Xuathang\" />
+    <Folder Include="FormsUI\Nhaphang\" />
+  </ItemGroup>
+
 </Project>

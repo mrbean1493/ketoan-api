@@ -69,6 +69,7 @@
             // 
             txtMatKhauCu.Location = new Point(198, 18);
             txtMatKhauCu.Name = "txtMatKhauCu";
+            txtMatKhauCu.PasswordChar = '*';
             txtMatKhauCu.Size = new Size(155, 23);
             txtMatKhauCu.TabIndex = 3;
             // 
@@ -76,6 +77,7 @@
             // 
             txtMatKhauMoi.Location = new Point(198, 54);
             txtMatKhauMoi.Name = "txtMatKhauMoi";
+            txtMatKhauMoi.PasswordChar = '*';
             txtMatKhauMoi.Size = new Size(155, 23);
             txtMatKhauMoi.TabIndex = 4;
             // 
@@ -83,6 +85,7 @@
             // 
             txtMatKhauMoi2.Location = new Point(198, 88);
             txtMatKhauMoi2.Name = "txtMatKhauMoi2";
+            txtMatKhauMoi2.PasswordChar = '*';
             txtMatKhauMoi2.Size = new Size(155, 23);
             txtMatKhauMoi2.TabIndex = 5;
             // 

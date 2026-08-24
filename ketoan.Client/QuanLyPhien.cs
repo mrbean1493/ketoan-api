@@ -15,7 +15,7 @@ namespace ketoan.Client
         public static string TenDangNhap { get; set; } = string.Empty;
 
         // Lưu Họ tên đầy đủ (nếu có)
-        public static string HoTen { get; set; } = string.Empty;
+        public static string TenNguoiDung { get; set; } = string.Empty;
 
         // Lưu Vai trò / Quyền (ví dụ: "Admin", "NhanVien")
         //public static string VaiTro { get; set; } = string.Empty;
@@ -29,7 +29,7 @@ namespace ketoan.Client
         {
             UserId = 0;
             TenDangNhap = string.Empty;
-            HoTen = string.Empty;
+            TenNguoiDung = string.Empty;
             //VaiTro = string.Empty;
             NgaySinh = null;
         }

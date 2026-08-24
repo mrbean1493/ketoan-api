@@ -89,6 +89,7 @@
             txtMatKhau.PasswordChar = '*';
             txtMatKhau.Size = new Size(187, 23);
             txtMatKhau.TabIndex = 5;
+            txtMatKhau.KeyDown += txtMatKhau_KeyDown;
             // 
             // lblTrangThai
             // 

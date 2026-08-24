@@ -18,5 +18,7 @@ namespace ketoan.Server.Data
             modelBuilder.Entity<NguoiDungQuyen>()
                 .HasKey(nq => new { nq.NguoiDungId, nq.QuyenId });
         }
+
+        public DbSet<DonViTinh> DVTs { get; set; }
     }
 }

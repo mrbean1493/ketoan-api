@@ -1,8 +1,13 @@
-﻿namespace ketoan.Server.DTOs
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ketoan.Client.DTOs
 {
-    public class DangNhapDto
+    public class DangNhapDtoClient
     {
-        public string Message { get; set; } = string.Empty;
         public int UserId { get; set; }
         public string TenDangNhap { get; set; } = string.Empty;
         public string TenNguoiDung { get; set; } = string.Empty;

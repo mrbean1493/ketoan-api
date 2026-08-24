@@ -1,3 +1,4 @@
+using ketoan.Client.FormsUI.Danhmuc;
 using ketoan.Client.FormsUI.Hethong;
 using System;
 using System.Windows.Forms;
@@ -5,9 +6,12 @@ namespace ketoan.Client
 {
     public partial class FormMain : System.Windows.Forms.Form
     {
-        public FormMain()
+        private DangNhap _frmDangNhap;
+        // Constructor nhận FormDangNhap từ bên ngoài
+        public FormMain(DangNhap frmDangNhap)
         {
             InitializeComponent();
+            _frmDangNhap = frmDangNhap;
         }
 
         private void OpenChildFormInTab<T>() where T : System.Windows.Forms.Form, new()
@@ -144,6 +148,70 @@ namespace ketoan.Client
             tabControlMain.SizeMode = TabSizeMode.Fixed;
 
             //if(QuanLyPhien.NgaySinh!=null)
+        }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+    "Bạn có chắc chắn muốn đăng xuất tài khoản không?",
+    "Xác nhận",
+    MessageBoxButtons.YesNo,
+    MessageBoxIcon.Question
+);
+
+            if (result == DialogResult.Yes)
+            {
+                // Xử lý khi chọn Yes
+                // 2. Clear thông tin trong SessionManager
+                QuanLyPhien.ClearSession();
+                // 3. Đóng tất cả các Form con đang mở (Nếu bạn dùng MDI hoặc TabControl)
+
+                // CÁCH A: Nếu bạn dùng MDI Form (Form con mở dạng MdiChildren)
+                /*
+                foreach (Form childForm in this.MdiChildren)
+                {
+                    childForm.Close();
+                }
+                */
+                // CÁCH B: Nếu bạn dùng TabControl (Ví dụ đóng các Tab/Page đang xem)
+                if (tabControlMain != null)
+                {
+                    tabControlMain.TabPages.Clear();
+                }
+
+                // 4. Mở lại Form Đăng nhập và Ẩn/Đóng FormMain
+                //DangNhap frmdangNhap = new DangNhap();
+                //frmdangNhap.Show();
+
+                // Đóng FormMain hiện tại
+                //this.Hide();
+
+
+                // 2. Hiện lại Form Đăng nhập cũ (đã được làm sạch ô nhập)
+                _frmDangNhap.ClearFields(); // Hàm xóa ô txtMatKhau
+                _frmDangNhap.Show();
+
+                // 3. Đóng FormMain hiện tại (giải phóng tài nguyên)
+                this.Close();
+            }
+            else
+            {
+                // Xử lý khi chọn No
+            }
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Nếu thoát bằng nút X góc trên của FormMain
+            if (e.CloseReason == CloseReason.UserClosing && !_frmDangNhap.Visible)
+            {
+                Application.Exit(); // Đóng hoàn toàn ứng dụng chạy ngầm
+            }
+        }
+
+        private void đơnVịTínhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildFormInTab<DonViTinh>();
         }
     }
 }
