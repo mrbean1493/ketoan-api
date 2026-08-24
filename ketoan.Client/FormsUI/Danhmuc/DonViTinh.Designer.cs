@@ -36,12 +36,16 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
+            txtID = new TextBox();
+            txtRefresh = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(txtRefresh);
+            groupBox1.Controls.Add(txtID);
             groupBox1.Controls.Add(btnSave);
             groupBox1.Controls.Add(txtDVT);
             groupBox1.Controls.Add(label1);
@@ -51,7 +55,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(414, 80);
+            groupBox1.Size = new Size(509, 80);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
@@ -71,7 +75,7 @@
             // 
             txtDVT.Location = new Point(109, 46);
             txtDVT.Name = "txtDVT";
-            txtDVT.Size = new Size(286, 23);
+            txtDVT.Size = new Size(362, 23);
             txtDVT.TabIndex = 19;
             // 
             // label1
@@ -122,14 +126,33 @@
             dataGridView1.Location = new Point(0, 80);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(414, 370);
+            dataGridView1.Size = new Size(509, 370);
             dataGridView1.TabIndex = 1;
+            dataGridView1.CellClick += dataGridView1_CellClick;
+            // 
+            // txtID
+            // 
+            txtID.Location = new Point(477, 45);
+            txtID.Name = "txtID";
+            txtID.Size = new Size(21, 23);
+            txtID.TabIndex = 21;
+            txtID.Visible = false;
+            // 
+            // txtRefresh
+            // 
+            txtRefresh.Enabled = false;
+            txtRefresh.Location = new Point(423, 12);
+            txtRefresh.Name = "txtRefresh";
+            txtRefresh.Size = new Size(75, 23);
+            txtRefresh.TabIndex = 22;
+            txtRefresh.Text = "Refresh";
+            txtRefresh.UseVisualStyleBackColor = true;
             // 
             // DonViTinh
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(414, 450);
+            ClientSize = new Size(509, 450);
             Controls.Add(dataGridView1);
             Controls.Add(groupBox1);
             Name = "DonViTinh";
@@ -151,5 +174,7 @@
         private Button btnDel;
         private Button btnEdit;
         private Button btnAdd;
+        private Button txtRefresh;
+        private TextBox txtID;
     }
 }

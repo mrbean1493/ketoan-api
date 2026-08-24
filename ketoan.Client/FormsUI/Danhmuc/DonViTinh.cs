@@ -59,6 +59,16 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 // 3. Đổ danh sách dữ liệu vào DataGridView
                 dataGridView1.DataSource = listData;
 
+                if (listData.Count() > 0)
+                {
+                    // 1. Chọn dòng đầu tiên
+                    dataGridView1.ClearSelection();
+                    dataGridView1.Rows[0].Selected = true;
+
+                    // 2. Giả lập gọi sự kiện CellClick cho ô đầu tiên của dòng đầu tiên (Cột 0, Dòng 0)
+                    dataGridView1_CellClick(dataGridView1, new DataGridViewCellEventArgs(0, 0));
+                }
+
                 // 4. (Tùy chọn) Chỉnh lại tên tiêu đề cột hiển thị cho đẹp
                 //CustomGridViewHeaders();
             }
@@ -82,6 +92,21 @@ namespace ketoan.Client.FormsUI.Danhmuc
             {
                 dataGridView1.Columns["UnitName"].HeaderText = "Tên Đơn Vị Tính";
                 dataGridView1.Columns["UnitName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Ép dữ liệu dòng được chọn thành đối tượng DTO
+                var item = dataGridView1.Rows[e.RowIndex].DataBoundItem as DonViTinhDtoClient;
+
+                if (item != null)
+                {
+                    txtID.Text = item.Id.ToString();
+                    txtDVT.Text = item.TenDVT;
+                }
             }
         }
     }

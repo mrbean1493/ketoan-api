@@ -20,5 +20,7 @@ namespace ketoan.Server.Data
         }
 
         public DbSet<DonViTinh> DVTs { get; set; }
+
+        public DbSet<HangHoa> HangHoas { get; set; }
     }
 }
