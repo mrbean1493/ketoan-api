@@ -7,6 +7,7 @@ namespace ketoan.Server.Models
     public class DonViTinh
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Ép EF Core không truyền Id để DB tự tăng
         [Column("id")]
         public int Id { get; set; }
 

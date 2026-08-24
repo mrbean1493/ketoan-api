@@ -43,6 +43,22 @@ namespace ketoan.Server.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            string tenDvtTrimmed = dto.TenDVT.Trim();
+
+            // 1. Kiểm tra trùng tên trong Database (Bỏ qua hoa/thường)
+            bool isExist = await _context.DVTs
+                .AnyAsync(x => x.TenDVT.ToLower() == tenDvtTrimmed.ToLower());
+
+            if (isExist)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"Đơn vị tính '{tenDvtTrimmed}' đã tồn tại trong hệ thống!"
+                });
+            }
+
+            // 2. Tạo mới nếu chưa tồn tại
             var model = new DonViTinh
             {
                 TenDVT = dto.TenDVT.Trim()
@@ -56,8 +72,17 @@ namespace ketoan.Server.Controllers
                 Id = model.Id,
                 TenDVT = model.TenDVT
             };
-
+            /*
             return CreatedAtAction(nameof(GetAll), new ApiResponse<ResponseDVTDto>
+            {
+                Success = true,
+                Data = result,
+                Message = "Tạo mới thành công"
+            });
+            */
+
+            // Trả về OkThay vì CreatedAtAction để đảm bảo JSON luôn được ghi vào Response
+            return Ok(new ApiResponse<ResponseDVTDto>
             {
                 Success = true,
                 Data = result,
@@ -75,6 +100,22 @@ namespace ketoan.Server.Controllers
                 return NotFound(new ApiResponse<object> { Success = false, Message = "Không tìm thấy dữ liệu" });
             }
 
+            string tenDvtTrimmed = dto.TenDVT.Trim();
+
+            // Kiểm tra trùng tên với bản ghi KHIỂN KHÁC bản ghi hiện tại
+            bool isExist = await _context.DVTs
+                .AnyAsync(x => x.Id != id && x.TenDVT.ToLower() == tenDvtTrimmed.ToLower());
+
+            if (isExist)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"Tên đơn vị tính '{tenDvtTrimmed}' đã tồn tại!"
+                });
+            }
+
+
             model.TenDVT = dto.TenDVT.Trim();
             await _context.SaveChangesAsync();
 
@@ -90,6 +131,20 @@ namespace ketoan.Server.Controllers
             {
                 return NotFound(new ApiResponse<object> { Success = false, Message = "Không tìm thấy dữ liệu" });
             }
+
+            // 1. Kiểm tra khóa ngoại ở bảng Hàng hóa (Thay HangHoas và DvtId theo đúng DbContext của bạn)
+            bool isUsedInHangHoa = await _context.HangHoas.AnyAsync(h => h.id_dvt == id);
+
+            if (isUsedInHangHoa)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"Đơn vị tính '{model.TenDVT}' đã phát sinh dữ liệu trong danh mục Hàng hóa, không thể xóa!"
+                });
+            }
+
+            // 2. Thực hiện xóa nếu không vướng khóa ngoại
 
             _context.DVTs.Remove(model);
             await _context.SaveChangesAsync();

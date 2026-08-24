@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            txtRefresh = new Button();
+            txtID = new TextBox();
             btnSave = new Button();
             txtDVT = new TextBox();
             label1 = new Label();
@@ -36,8 +38,6 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
-            txtID = new TextBox();
-            txtRefresh = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -59,6 +59,24 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
+            // 
+            // txtRefresh
+            // 
+            txtRefresh.Location = new Point(423, 12);
+            txtRefresh.Name = "txtRefresh";
+            txtRefresh.Size = new Size(75, 23);
+            txtRefresh.TabIndex = 22;
+            txtRefresh.Text = "Refresh";
+            txtRefresh.UseVisualStyleBackColor = true;
+            txtRefresh.Click += txtRefresh_Click;
+            // 
+            // txtID
+            // 
+            txtID.Location = new Point(477, 45);
+            txtID.Name = "txtID";
+            txtID.Size = new Size(21, 23);
+            txtID.TabIndex = 21;
+            txtID.Visible = false;
             // 
             // btnSave
             // 
@@ -129,24 +147,6 @@
             dataGridView1.Size = new Size(509, 370);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // txtID
-            // 
-            txtID.Location = new Point(477, 45);
-            txtID.Name = "txtID";
-            txtID.Size = new Size(21, 23);
-            txtID.TabIndex = 21;
-            txtID.Visible = false;
-            // 
-            // txtRefresh
-            // 
-            txtRefresh.Enabled = false;
-            txtRefresh.Location = new Point(423, 12);
-            txtRefresh.Name = "txtRefresh";
-            txtRefresh.Size = new Size(75, 23);
-            txtRefresh.TabIndex = 22;
-            txtRefresh.Text = "Refresh";
-            txtRefresh.UseVisualStyleBackColor = true;
             // 
             // DonViTinh
             // 

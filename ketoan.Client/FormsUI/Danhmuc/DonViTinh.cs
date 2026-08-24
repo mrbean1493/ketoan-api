@@ -17,27 +17,182 @@ namespace ketoan.Client.FormsUI.Danhmuc
         {
             InitializeComponent();
         }
-
+        int status = 0;
         // Khai báo đối tượng kết nối API
         private readonly ApiConnectClient _apiClient = new ApiConnectClient();
         private void btnAdd_Click(object sender, EventArgs e)
         {
             txtDVT.Text = "";
+            btnAdd.Enabled = false;
+            btnEdit.Enabled = false;
+            btnDel.Enabled = false;
+            btnSave.Enabled = true;
+            status = 1;
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
+            btnAdd.Enabled = false;
+            btnEdit.Enabled = false;
+            btnDel.Enabled = false;
+            btnSave.Enabled = true;
+            status = 2;
         }
 
-        private void btnDel_Click(object sender, EventArgs e)
+        private async void btnDel_Click(object sender, EventArgs e)
         {
+            // 1. Kiểm tra đã chọn dòng cần xóa chưa
+            if (!int.TryParse(txtID.Text, out int id) || id <= 0)
+            {
+                MessageBox.Show("Vui lòng chọn đơn vị tính cần xóa từ danh sách!", "Cảnh báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string TenDVT = txtDVT.Text.Trim();
 
+            DialogResult result = MessageBox.Show(
+    "Bạn có chắc chắn muốn xóa đơn vị tính '{TenDVT}' ?",
+    "Xác nhận",
+    MessageBoxButtons.YesNo,
+    MessageBoxIcon.Question
+);
+
+            if (result == DialogResult.Yes)
+            {
+                btnDel.Enabled = false;
+
+                // 3. Gọi API xóa
+                var response = await _apiClient.DeleteDonViTinhAsync(id);
+
+                if (response != null && response.Success)
+                {
+                    MessageBox.Show(response.Message, "Thông báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // 4. Xóa trắng dữ liệu nhập và reload lại danh sách
+                    txtID.Clear();
+                    txtDVT.Clear();
+
+                    btnAdd.Enabled = true;
+                    btnEdit.Enabled = true;
+                    btnDel.Enabled = true;
+                    btnSave.Enabled = false;
+                    status = 0;
+
+                    await LoadDataToGridView();
+                }
+            }
+            else
+            {
+                return;
+            }
+            
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
+            //btnAdd.Enabled = true;
+            //btnEdit.Enabled = true;
+            //btnDel.Enabled = true;
+            //btnSave.Enabled = false;
 
+            if (status == 1)
+            {
+                // 1. Kiểm tra dữ liệu đầu vào
+                string tenDvt = txtDVT.Text.Trim();
+                if (string.IsNullOrEmpty(tenDvt))
+                {
+                    MessageBox.Show("Vui lòng nhập tên đơn vị tính!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtDVT.Focus();
+                    return;
+                }
+
+                try
+                {
+                    // 2. Tắt nút để tránh người dùng click liên tục
+                    btnAdd.Enabled = false;
+
+                    // 3. Gọi API thêm mới
+                    var response = await _apiClient.CreateDonViTinhAsync(tenDvt);
+
+                    if (response != null && response.Success)
+                    {
+                        MessageBox.Show(response.Message, "Thông báo",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // 4. Xóa trắng ô nhập liệu và tải lại danh sách trên DataGridView
+                        txtDVT.Clear();
+                        await LoadDataToGridView();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Hiển thị thông báo lỗi (Bao gồm cả lỗi trùng tên do Server trả về)
+                    MessageBox.Show(ex.Message, "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    // Mở lại nút sau khi xử lý xong
+                    btnAdd.Enabled = true;
+                    btnEdit.Enabled = true;
+                    btnDel.Enabled = true;
+                    btnSave.Enabled = false;
+                    status = 0;
+                }
+            }
+            else if (status == 2)
+            {
+                // 1. Kiểm tra ID xem đã chọn dòng nào chưa
+                if (!int.TryParse(txtID.Text, out int id) || id <= 0)
+                {
+                    MessageBox.Show("Vui lòng chọn đơn vị tính cần sửa từ danh sách!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 2. Kiểm tra tên nhập vào
+                string tenDvt = txtDVT.Text.Trim();
+                if (string.IsNullOrEmpty(tenDvt))
+                {
+                    MessageBox.Show("Tên đơn vị tính không được để trống!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtDVT.Focus();
+                    return;
+                }
+
+                try
+                {
+                    btnEdit.Enabled = false;
+
+                    // 3. Gọi API cập nhật
+                    var response = await _apiClient.UpdateDonViTinhAsync(id, tenDvt);
+
+                    if (response != null && response.Success)
+                    {
+                        MessageBox.Show(response.Message, "Thông báo",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // 4. Tải lại bảng dữ liệu
+                        await LoadDataToGridView();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    btnAdd.Enabled = true;
+                    btnEdit.Enabled = true;
+                    btnDel.Enabled = true;
+                    btnSave.Enabled = false;
+                    status = 0;
+                }
+            }
+            
         }
 
         private async void DonViTinh_Load(object sender, EventArgs e)
@@ -108,6 +263,16 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     txtDVT.Text = item.TenDVT;
                 }
             }
+        }
+
+        private async void txtRefresh_Click(object sender, EventArgs e)
+        {
+            await LoadDataToGridView();
+            btnAdd.Enabled = true;
+            btnEdit.Enabled = true;
+            btnDel.Enabled = true;
+            btnSave.Enabled = false;
+            status = 0;
         }
     }
 }
