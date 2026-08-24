@@ -11,7 +11,7 @@ namespace ketoan.Server.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("TenDVT")]
+        [Column("tendvt")]
         public string TenDVT { get; set; }
     }
 }
