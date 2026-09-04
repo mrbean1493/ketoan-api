@@ -51,7 +51,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
             string TenDVT = txtDVT.Text.Trim();
 
             DialogResult result = MessageBox.Show(
-    "Bạn có chắc chắn muốn xóa đơn vị tính '{TenDVT}' ?",
+    "Bạn có chắc chắn muốn xóa đơn vị tính " + TenDVT + " ?",
     "Xác nhận",
     MessageBoxButtons.YesNo,
     MessageBoxIcon.Question
