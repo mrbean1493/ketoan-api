@@ -13,7 +13,7 @@ namespace ketoan.Server.DTOs
 
         public int id_dvt { get; set; }
 
-        public virtual DonViTinh DonViTinh { get; set; }
+        public string TenDVT { get; set; }
     }
 
     // Wrapper chuẩn hóa phản hồi

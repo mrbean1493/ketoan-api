@@ -45,12 +45,6 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
-            colSTT = new DataGridViewTextBoxColumn();
-            colId = new DataGridViewTextBoxColumn();
-            colTenHangHoa = new DataGridViewTextBoxColumn();
-            colVietTat = new DataGridViewTextBoxColumn();
-            colDVT = new DataGridViewTextBoxColumn();
-            colMoTa = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -214,7 +208,6 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colSTT, colId, colTenHangHoa, colVietTat, colDVT, colMoTa });
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 196);
             dataGridView1.Name = "dataGridView1";
@@ -222,42 +215,6 @@
             dataGridView1.Size = new Size(1558, 368);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // colSTT
-            // 
-            colSTT.HeaderText = "STT";
-            colSTT.Name = "colSTT";
-            colSTT.ReadOnly = true;
-            // 
-            // colId
-            // 
-            colId.HeaderText = "Mã hàng hóa";
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            // 
-            // colTenHangHoa
-            // 
-            colTenHangHoa.HeaderText = "Tên hàng hóa";
-            colTenHangHoa.Name = "colTenHangHoa";
-            colTenHangHoa.ReadOnly = true;
-            // 
-            // colVietTat
-            // 
-            colVietTat.HeaderText = "Tên viết tắt";
-            colVietTat.Name = "colVietTat";
-            colVietTat.ReadOnly = true;
-            // 
-            // colDVT
-            // 
-            colDVT.HeaderText = "ĐVT";
-            colDVT.Name = "colDVT";
-            colDVT.ReadOnly = true;
-            // 
-            // colMoTa
-            // 
-            colMoTa.HeaderText = "Mô tả";
-            colMoTa.Name = "colMoTa";
-            colMoTa.ReadOnly = true;
             // 
             // HangHoa
             // 
@@ -280,12 +237,6 @@
         private GroupBox groupBox1;
         private DataGridView dataGridView1;
         private Button btnAdd;
-        private DataGridViewTextBoxColumn colSTT;
-        private DataGridViewTextBoxColumn colId;
-        private DataGridViewTextBoxColumn colTenHangHoa;
-        private DataGridViewTextBoxColumn colVietTat;
-        private DataGridViewTextBoxColumn colDVT;
-        private DataGridViewTextBoxColumn colMoTa;
         private Button btnDel;
         private Button btnEdit;
         private TextBox txtVietTat;
