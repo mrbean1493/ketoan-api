@@ -94,6 +94,18 @@ namespace ketoan.Client
 
             return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
         }
+
+        // 1. GET: Lấy danh sách Hàng Hóa
+        public async Task<List<HangHoaDtoClient>> GetHangHoaAsync()
+        {
+            HttpResponseMessage response = await Client.GetAsync("api/hang-hoa");
+            response.EnsureSuccessStatusCode();
+
+            string json = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ApiResponse<List<HangHoaDtoClient>>>(json, _jsonOptions);
+
+            return result?.Data ?? new List<HangHoaDtoClient>();
+        }
     }
 
     public class ApiResponse<T>

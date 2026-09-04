@@ -213,5 +213,10 @@ namespace ketoan.Client
         {
             OpenChildFormInTab<DonViTinh>();
         }
+
+        private void hàngHóaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildFormInTab<HangHoa>();
+        }
     }
 }

@@ -120,6 +120,7 @@
             hàngHóaToolStripMenuItem.Name = "hàngHóaToolStripMenuItem";
             hàngHóaToolStripMenuItem.Size = new Size(180, 22);
             hàngHóaToolStripMenuItem.Text = "Hàng hóa";
+            hàngHóaToolStripMenuItem.Click += hàngHóaToolStripMenuItem_Click;
             // 
             // nhàCungCấpToolStripMenuItem
             // 
