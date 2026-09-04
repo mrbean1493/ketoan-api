@@ -18,10 +18,19 @@ namespace ketoan.Server.Controllers
 
         // 1. GET: api/hang-hoa
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? keyword)
         {
-            var list = await _context.HangHoas
-                //.Include(x => x.DonViTinh) // <--- Thêm Include để nạp bảng ĐVT
+            var query = _context.HangHoas.AsQueryable();
+
+            // Nếu người dùng có truyền từ khóa tìm kiếm
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                string kw = keyword.Trim().ToLower();
+                query = query.Where(x => x.TenHH.ToLower().Contains(kw) ||
+                                         x.VietTat.ToLower().Contains(kw));
+            }
+
+            var list = await query
                 .Select(x => new ResponseHangHoaDto
                 {
                     Id = x.Id,
@@ -29,7 +38,7 @@ namespace ketoan.Server.Controllers
                     VietTat = x.VietTat,
                     MoTa = x.MoTa,
                     id_dvt = x.id_dvt,
-                    // Chỏ thẳng vào lấy chuỗi TenDVT từ Navigation Property
+                    // Trỏ thẳng vào lấy chuỗi TenDVT từ Navigation Property
                     TenDVT = x.DonViTinh != null ? x.DonViTinh.TenDVT : ""
                 })
                 .ToListAsync();

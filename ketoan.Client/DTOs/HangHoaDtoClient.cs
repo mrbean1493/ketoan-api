@@ -19,6 +19,8 @@ namespace ketoan.Client.DTOs
 
         public int id_dvt { get; set; }
 
+        public string TenDVT { get; set; }
+
         // Mẹo: Override ToString() giúp hiển thị đẹp mắt khi bind vào ComboBox
         //public override string ToString()
         //{

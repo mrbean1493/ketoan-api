@@ -30,16 +30,16 @@
         {
             groupBox1 = new GroupBox();
             btnSave = new Button();
-            textBox2 = new TextBox();
+            txtMoTa = new TextBox();
             cboDVT = new ComboBox();
-            textBox1 = new TextBox();
+            txtVietTatView = new TextBox();
             txtTenHHView = new TextBox();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             txtVietTat = new TextBox();
-            button1 = new Button();
+            btnTimKiem = new Button();
             txtTenHH = new TextBox();
             btnDel = new Button();
             btnEdit = new Button();
@@ -52,16 +52,16 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(btnSave);
-            groupBox1.Controls.Add(textBox2);
+            groupBox1.Controls.Add(txtMoTa);
             groupBox1.Controls.Add(cboDVT);
-            groupBox1.Controls.Add(textBox1);
+            groupBox1.Controls.Add(txtVietTatView);
             groupBox1.Controls.Add(txtTenHHView);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(txtVietTat);
-            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(btnTimKiem);
             groupBox1.Controls.Add(txtTenHH);
             groupBox1.Controls.Add(btnDel);
             groupBox1.Controls.Add(btnEdit);
@@ -84,12 +84,12 @@
             btnSave.Text = "Lưu";
             btnSave.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // txtMoTa
             // 
-            textBox2.Location = new Point(969, 129);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(440, 23);
-            textBox2.TabIndex = 13;
+            txtMoTa.Location = new Point(969, 129);
+            txtMoTa.Name = "txtMoTa";
+            txtMoTa.Size = new Size(440, 23);
+            txtMoTa.TabIndex = 13;
             // 
             // cboDVT
             // 
@@ -100,12 +100,12 @@
             cboDVT.Size = new Size(440, 23);
             cboDVT.TabIndex = 12;
             // 
-            // textBox1
+            // txtVietTatView
             // 
-            textBox1.Location = new Point(98, 126);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(777, 23);
-            textBox1.TabIndex = 11;
+            txtVietTatView.Location = new Point(98, 126);
+            txtVietTatView.Name = "txtVietTatView";
+            txtVietTatView.Size = new Size(777, 23);
+            txtVietTatView.TabIndex = 11;
             // 
             // txtTenHHView
             // 
@@ -158,14 +158,15 @@
             txtVietTat.Size = new Size(254, 23);
             txtVietTat.TabIndex = 5;
             // 
-            // button1
+            // btnTimKiem
             // 
-            button1.Location = new Point(749, 22);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Tìm kiếm";
-            button1.UseVisualStyleBackColor = true;
+            btnTimKiem.Location = new Point(749, 22);
+            btnTimKiem.Name = "btnTimKiem";
+            btnTimKiem.Size = new Size(75, 23);
+            btnTimKiem.TabIndex = 4;
+            btnTimKiem.Text = "Tìm kiếm";
+            btnTimKiem.UseVisualStyleBackColor = true;
+            btnTimKiem.Click += btnTimKiem_Click;
             // 
             // txtTenHH
             // 
@@ -240,7 +241,7 @@
         private Button btnDel;
         private Button btnEdit;
         private TextBox txtVietTat;
-        private Button button1;
+        private Button btnTimKiem;
         private TextBox txtTenHH;
         private TextBox txtTenHHView;
         private Label label4;
@@ -248,8 +249,8 @@
         private Label label2;
         private Label label1;
         private Button btnSave;
-        private TextBox textBox2;
+        private TextBox txtMoTa;
         private ComboBox cboDVT;
-        private TextBox textBox1;
+        private TextBox txtVietTatView;
     }
 }
