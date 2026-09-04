@@ -13,6 +13,7 @@ namespace ketoan.Server.DTOs
 
         public int id_dvt { get; set; }
 
+        // Khai báo là string thay vì object DonViTinh
         public string TenDVT { get; set; }
     }
 
