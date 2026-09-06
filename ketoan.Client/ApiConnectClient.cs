@@ -96,9 +96,18 @@ namespace ketoan.Client
         }
 
         // 1. GET: Lấy danh sách Hàng Hóa
-        public async Task<List<HangHoaDtoClient>> GetHangHoaAsync()
+        public async Task<List<HangHoaDtoClient>> GetHangHoaAsync(string? keyword = null)
         {
-            HttpResponseMessage response = await Client.GetAsync("api/hang-hoa");
+            // 1. Tạo URL mặc định
+            string url = "api/hang-hoa";
+
+            // 2. Nếu có keyword, nối thêm query string ?keyword=... (dùng EscapeDataString để tránh lỗi ký tự đặc biệt/tiếng Việt)
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                url += $"?keyword={Uri.EscapeDataString(keyword.Trim())}";
+            }
+
+            HttpResponseMessage response = await Client.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnRefresh = new Button();
             btnSave = new Button();
             txtMoTa = new TextBox();
             cboDVT = new ComboBox();
@@ -45,12 +46,15 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
+            txtId = new TextBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(txtId);
+            groupBox1.Controls.Add(btnRefresh);
             groupBox1.Controls.Add(btnSave);
             groupBox1.Controls.Add(txtMoTa);
             groupBox1.Controls.Add(cboDVT);
@@ -69,24 +73,36 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1558, 196);
+            groupBox1.Size = new Size(1558, 121);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
             // 
+            // btnRefresh
+            // 
+            btnRefresh.Enabled = false;
+            btnRefresh.Location = new Point(399, 20);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(75, 23);
+            btnRefresh.TabIndex = 15;
+            btnRefresh.Text = "Làm mới";
+            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
+            // 
             // btnSave
             // 
             btnSave.Enabled = false;
-            btnSave.Location = new Point(316, 20);
+            btnSave.Location = new Point(306, 20);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 14;
             btnSave.Text = "Lưu";
             btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // txtMoTa
             // 
-            txtMoTa.Location = new Point(969, 129);
+            txtMoTa.Location = new Point(969, 84);
             txtMoTa.Name = "txtMoTa";
             txtMoTa.Size = new Size(440, 23);
             txtMoTa.TabIndex = 13;
@@ -95,21 +111,21 @@
             // 
             cboDVT.FormattingEnabled = true;
             cboDVT.Items.AddRange(new object[] { "Kg", "Cái", "Chiếc", "Con" });
-            cboDVT.Location = new Point(969, 97);
+            cboDVT.Location = new Point(969, 52);
             cboDVT.Name = "cboDVT";
             cboDVT.Size = new Size(440, 23);
             cboDVT.TabIndex = 12;
             // 
             // txtVietTatView
             // 
-            txtVietTatView.Location = new Point(98, 126);
+            txtVietTatView.Location = new Point(98, 81);
             txtVietTatView.Name = "txtVietTatView";
             txtVietTatView.Size = new Size(777, 23);
             txtVietTatView.TabIndex = 11;
             // 
             // txtTenHHView
             // 
-            txtTenHHView.Location = new Point(98, 97);
+            txtTenHHView.Location = new Point(98, 52);
             txtTenHHView.Name = "txtTenHHView";
             txtTenHHView.Size = new Size(777, 23);
             txtTenHHView.TabIndex = 10;
@@ -117,7 +133,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(896, 129);
+            label4.Location = new Point(896, 84);
             label4.Name = "label4";
             label4.Size = new Size(38, 15);
             label4.TabIndex = 9;
@@ -126,7 +142,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(896, 97);
+            label3.Location = new Point(896, 52);
             label3.Name = "label3";
             label3.Size = new Size(28, 15);
             label3.TabIndex = 8;
@@ -135,7 +151,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(14, 129);
+            label2.Location = new Point(14, 84);
             label2.Name = "label2";
             label2.Size = new Size(64, 15);
             label2.TabIndex = 7;
@@ -144,7 +160,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 99);
+            label1.Location = new Point(14, 54);
             label1.Name = "label1";
             label1.Size = new Size(78, 15);
             label1.TabIndex = 6;
@@ -157,10 +173,11 @@
             txtVietTat.PlaceholderText = "Nhập tên viết tắt hàng hóa để tìm kiếm";
             txtVietTat.Size = new Size(254, 23);
             txtVietTat.TabIndex = 5;
+            txtVietTat.Visible = false;
             // 
             // btnTimKiem
             // 
-            btnTimKiem.Location = new Point(749, 22);
+            btnTimKiem.Location = new Point(799, 22);
             btnTimKiem.Name = "btnTimKiem";
             btnTimKiem.Size = new Size(75, 23);
             btnTimKiem.TabIndex = 4;
@@ -170,29 +187,31 @@
             // 
             // txtTenHH
             // 
-            txtTenHH.Location = new Point(476, 22);
+            txtTenHH.Location = new Point(480, 22);
             txtTenHH.Name = "txtTenHH";
-            txtTenHH.PlaceholderText = "Nhập tên hàng hóa để tìm kiếm";
-            txtTenHH.Size = new Size(254, 23);
+            txtTenHH.PlaceholderText = "Nhập tên hàng hóa hoặc tên viết tắt để tìm kiếm";
+            txtTenHH.Size = new Size(312, 23);
             txtTenHH.TabIndex = 3;
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(213, 20);
+            btnDel.Location = new Point(210, 20);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(75, 23);
             btnDel.TabIndex = 2;
             btnDel.Text = "Xóa";
             btnDel.UseVisualStyleBackColor = true;
+            btnDel.Click += btnDel_Click;
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(112, 20);
+            btnEdit.Location = new Point(111, 20);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(75, 23);
             btnEdit.TabIndex = 1;
             btnEdit.Text = "Sửa";
             btnEdit.UseVisualStyleBackColor = true;
+            btnEdit.Click += btnEdit_Click;
             // 
             // btnAdd
             // 
@@ -210,12 +229,21 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 196);
+            dataGridView1.Location = new Point(0, 121);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1558, 368);
+            dataGridView1.Size = new Size(1558, 443);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
+            // 
+            // txtId
+            // 
+            txtId.Location = new Point(1332, 20);
+            txtId.Name = "txtId";
+            txtId.PlaceholderText = "Id hàng hóa";
+            txtId.Size = new Size(77, 23);
+            txtId.TabIndex = 16;
+            txtId.Visible = false;
             // 
             // HangHoa
             // 
@@ -252,5 +280,7 @@
         private TextBox txtMoTa;
         private ComboBox cboDVT;
         private TextBox txtVietTatView;
+        private Button btnRefresh;
+        private TextBox txtId;
     }
 }
