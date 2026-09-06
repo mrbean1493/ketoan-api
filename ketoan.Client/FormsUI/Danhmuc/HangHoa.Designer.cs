@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            txtId = new TextBox();
             btnRefresh = new Button();
             btnSave = new Button();
             txtMoTa = new TextBox();
@@ -46,7 +47,6 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
-            txtId = new TextBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -78,6 +78,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
             // 
+            // txtId
+            // 
+            txtId.Location = new Point(1332, 20);
+            txtId.Name = "txtId";
+            txtId.PlaceholderText = "Id hàng hóa";
+            txtId.Size = new Size(77, 23);
+            txtId.TabIndex = 16;
+            txtId.Visible = false;
+            // 
             // btnRefresh
             // 
             btnRefresh.Enabled = false;
@@ -98,7 +107,7 @@
             btnSave.TabIndex = 14;
             btnSave.Text = "Lưu";
             btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
+            btnSave.Click += this.btnSave_Click;
             // 
             // txtMoTa
             // 
@@ -235,15 +244,6 @@
             dataGridView1.Size = new Size(1558, 443);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // txtId
-            // 
-            txtId.Location = new Point(1332, 20);
-            txtId.Name = "txtId";
-            txtId.PlaceholderText = "Id hàng hóa";
-            txtId.Size = new Size(77, 23);
-            txtId.TabIndex = 16;
-            txtId.Visible = false;
             // 
             // HangHoa
             // 

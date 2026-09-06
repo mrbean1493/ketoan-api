@@ -115,6 +115,65 @@ namespace ketoan.Client
 
             return result?.Data ?? new List<HangHoaDtoClient>();
         }
+
+        //2. POST Hàm thêm mới Hàng hóa
+        public async Task<ApiResponse<HangHoaDtoClient>> CreateHangHoaAsync(string tenHH, string moTa, string vietTat, int id_dvt)
+        {
+            var requestData = new { TenHH = tenHH, VietTat=vietTat,MoTa=moTa, id_dvt=id_dvt };
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Client.PostAsync("api/hang-hoa", content);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            // Kiểm tra nếu Server trả về chuỗi rỗng
+            if (string.IsNullOrWhiteSpace(jsonResult))
+            {
+                throw new Exception($"Server không trả về dữ liệu. Status code: {(int)response.StatusCode}");
+            }
+
+
+            // Nếu Server trả về lỗi 400 (Trùng tên hoặc ModelState invalid)
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<DonViTinhDtoClient>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Thêm mới thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<HangHoaDtoClient>>(jsonResult, _jsonOptions);
+        }
+        //3. PUT Hàm sửa Hàng hóa
+        public async Task<ApiResponse<DonViTinhDtoClient>> UpdateHangHoaAsync(int id, string tenHH, string moTa, string vietTat, int id_dvt)
+        {
+            var requestData = new { TenHH = tenHH, VietTat = vietTat, MoTa = moTa, id_dvt = id_dvt };
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Client.PutAsync($"api/hang-hoa/{id}", content);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<DonViTinhDtoClient>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Cập nhật thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<DonViTinhDtoClient>>(jsonResult, _jsonOptions);
+        }
+        //4. DELETE Hàm xóa Đơn vị tính
+        public async Task<ApiResponse<object>> DeleteHangHoaAsync(int id)
+        {
+            HttpResponseMessage response = await Client.DeleteAsync($"api/hang-hoa/{id}");
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Xóa thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+        }
     }
 
     public class ApiResponse<T>

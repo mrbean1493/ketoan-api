@@ -184,7 +184,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
             string tenHH = txtTenHHView.Text.Trim();
 
             DialogResult result = MessageBox.Show(
-    "Bạn có chắc chắn muốn xóa đơn vị tính " + tenHH + " ?",
+    "Bạn có chắc chắn muốn xóa hàng hóa " + tenHH + " ?",
     "Xác nhận",
     MessageBoxButtons.YesNo,
     MessageBoxIcon.Question
@@ -195,7 +195,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 btnDel.Enabled = false;
 
                 // 3. Gọi API xóa
-                var response = await _apiClient.DeleteDonViTinhAsync(id);
+                var response = await _apiClient.DeleteHangHoaAsync(id);
 
                 if (response != null && response.Success)
                 {
@@ -223,15 +223,139 @@ namespace ketoan.Client.FormsUI.Danhmuc
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             if (status == 1) 
             {
+                // 1. Kiểm tra dữ liệu đầu vào
+                string tenHH = txtTenHHView.Text.Trim();
+                if (string.IsNullOrEmpty(tenHH))
+                {
+                    MessageBox.Show("Vui lòng nhập tên hàng hóa!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTenHHView.Focus();
+                    return;
+                }
+                string vietTat = txtVietTatView.Text.Trim();
+                if (string.IsNullOrEmpty(vietTat))
+                {
+                    MessageBox.Show("Vui lòng nhập tên viết tắt!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtVietTatView.Focus();
+                    return;
+                }
 
+                if (cboDVT.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng chọn đơn vị tính!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 2. Ép kiểu SelectedValue sang int
+                int idDvt = Convert.ToInt32(cboDVT.SelectedValue);
+                try
+                {
+                    // 2. Tắt nút để tránh người dùng click liên tục
+                    btnAdd.Enabled = false;
+
+                    // 3. Gọi API thêm mới
+                    var response = await _apiClient.CreateHangHoaAsync(tenHH,txtMoTa.Text, vietTat, idDvt);
+
+                    if (response != null && response.Success)
+                    {
+                        MessageBox.Show(response.Message, "Thông báo",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // 4. Xóa trắng ô nhập liệu và tải lại danh sách trên DataGridView
+                        txtTenHHView.Text = "";
+                        txtVietTatView.Text = "";
+                        txtMoTa.Text = "";
+                        txtVietTat.Text = "";
+                        await LoadDataToGridView();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Hiển thị thông báo lỗi (Bao gồm cả lỗi trùng tên do Server trả về)
+                    MessageBox.Show(ex.Message, "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    // Mở lại nút sau khi xử lý xong
+                    btnAdd.Enabled = true;
+                    btnEdit.Enabled = true;
+                    btnDel.Enabled = true;
+                    btnSave.Enabled = false;
+                    status = 0;
+                }
             }
             else if (status == 2)
             {
+                // 1. Kiểm tra ID xem đã chọn dòng nào chưa
+                if (!int.TryParse(txtId.Text, out int id) || id <= 0)
+                {
+                    MessageBox.Show("Vui lòng chọn hàng hóa cần sửa từ danh sách!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                // 2. Kiểm tra tên nhập vào
+                string tenHH = txtTenHHView.Text.Trim();
+                if (string.IsNullOrEmpty(tenHH))
+                {
+                    MessageBox.Show("Vui lòng nhập tên hàng hóa!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTenHHView.Focus();
+                    return;
+                }
+                string vietTat = txtVietTatView.Text.Trim();
+                if (string.IsNullOrEmpty(vietTat))
+                {
+                    MessageBox.Show("Vui lòng nhập tên viết tắt!", "Cảnh báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtVietTatView.Focus();
+                    return;
+                }
+
+                if (cboDVT.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng chọn đơn vị tính!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 2. Ép kiểu SelectedValue sang int
+                int idDvt = Convert.ToInt32(cboDVT.SelectedValue);
+
+                try
+                {
+                    btnEdit.Enabled = false;
+
+                    // 3. Gọi API cập nhật
+                    var response = await _apiClient.UpdateHangHoaAsync(id, tenHH, txtMoTa.Text, vietTat, idDvt);
+
+                    if (response != null && response.Success)
+                    {
+                        MessageBox.Show(response.Message, "Thông báo",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // 4. Tải lại bảng dữ liệu
+                        await LoadDataToGridView();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    btnAdd.Enabled = true;
+                    btnEdit.Enabled = true;
+                    btnDel.Enabled = true;
+                    btnSave.Enabled = false;
+                    status = 0;
+                }
             }
             
         }
