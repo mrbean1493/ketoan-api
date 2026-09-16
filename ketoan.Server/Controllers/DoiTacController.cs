@@ -38,10 +38,18 @@ namespace ketoan.Server.Controllers
             if (!string.IsNullOrWhiteSpace(keyword))
             {
                 string kw = keyword.Trim().ToLower();
+                query = query.Where(x =>
+        EF.Functions.ILike(x.TenDoiTac, kw) ||
+        (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, kw)) ||
+        (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, kw)) ||
+        (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, kw))
+    );
+                /*
                 query = query.Where(x => x.TenDoiTac.ToLower().Contains(kw) ||
                                          x.MaDoiTac.ToLower().Contains(kw)||
                                          x.SoDienThoai.ToLower().Contains(kw)||
                                          x.SoDienThoai2.ToLower().Contains(kw));
+                */
             }
 
             var list = await query
