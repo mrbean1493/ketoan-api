@@ -1,4 +1,6 @@
+using ketoan.Client.Enums;
 using ketoan.Client.FormsUI.Hethong;
+using ketoan.Client.FormsUI.Nhaphang;
 
 namespace ketoan.Client
 {
@@ -14,6 +16,7 @@ namespace ketoan.Client
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new DangNhap());
+            //Application.Run(new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang));
         }
     }
 }

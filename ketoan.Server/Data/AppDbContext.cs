@@ -23,7 +23,12 @@ namespace ketoan.Server.Data
 
         public DbSet<HangHoa> HangHoas { get; set; }
 
+        public DbSet<DoiTac> DoiTacs { get; set; }
+
         public DbSet<TonKho> TonKhos { get; set; }
+
+        public DbSet<PhieuNhapXuat> PhieuNhapXuats { get; set; }
         public DbSet<ChiTietPhieuNhapXuat> ChiTietPhieuNhapXuats { get; set; }
+
     }
 }

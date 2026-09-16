@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ketoan.Client.DTOs
 {
-    internal class HangHoaDtoClient
+    public class HangHoaDtoClient
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }

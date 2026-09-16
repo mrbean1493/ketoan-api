@@ -15,7 +15,6 @@
   <ItemGroup>
     <Folder Include="FormsUI\Quy\" />
     <Folder Include="FormsUI\Xuathang\" />
-    <Folder Include="FormsUI\Nhaphang\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
+using ketoan.Client.Enums;
 using ketoan.Client.FormsUI.Danhmuc;
 using ketoan.Client.FormsUI.Hethong;
+using ketoan.Client.FormsUI.Nhaphang;
 using System;
 using System.Windows.Forms;
 namespace ketoan.Client
@@ -13,7 +15,7 @@ namespace ketoan.Client
             InitializeComponent();
             _frmDangNhap = frmDangNhap;
         }
-
+        /*
         private void OpenChildFormInTab<T>() where T : System.Windows.Forms.Form, new()
         {
             string tabKey = typeof(T).Name; // Dùng tên class Form làm Key định danh
@@ -24,6 +26,7 @@ namespace ketoan.Client
                 if (tab.Name == tabKey)
                 {
                     tabControlMain.SelectedTab = tab; // Active tab đang mở
+                    formChild.Dispose(); // Hủy form tạm vừa khởi tạo để tránh rò rỉ bộ nhớ
                     return;
                 }
             }
@@ -50,25 +53,64 @@ namespace ketoan.Client
 
             formChild.Show();
         }
+        */
+
+        private void OpenChildFormInTab(Form formChild, string tabKey)
+        {
+            // 1. Kiểm tra xem Tab theo tabKey này đã mở chưa
+            foreach (TabPage tab in tabControlMain.TabPages)
+            {
+                if (tab.Name == tabKey)
+                {
+                    tabControlMain.SelectedTab = tab; // Active tab đang mở
+                    formChild.Dispose(); // Hủy form tạm vừa khởi tạo để tránh rò rỉ bộ nhớ
+                    return;
+                }
+            }
+
+            // 2. Thiết lập thuộc tính nhúng Form con
+            formChild.TopLevel = false;
+            formChild.FormBorderStyle = FormBorderStyle.None;
+            formChild.Dock = DockStyle.Fill;
+
+            // 3. Tạo TabPage mới
+            TabPage newTabPage = new TabPage
+            {
+                Name = tabKey,           // Đặt Key riêng biệt (ví dụ: "DoiTac_NhaCungCap")
+                Text = formChild.Text    // Lấy tiêu đề từ Form con
+            };
+
+            // 4. Nhúng Form con vào TabPage và hiển thị
+            newTabPage.Controls.Add(formChild);
+            tabControlMain.TabPages.Add(newTabPage);
+            tabControlMain.SelectedTab = newTabPage;
+
+            formChild.Show();
+        }
+
 
         private void quyềnNgườiDùngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<Quyen>();
+            var form = new Quyen();
+            OpenChildFormInTab(form, "Quyen");
         }
 
         private void cấuHìnhChungToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<CauHinhChung>();
+            var form = new CauHinhChung();
+            OpenChildFormInTab(form, "CauHinhChung");
         }
 
         private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<DoiMatKhau>();
+            var form = new DoiMatKhau();
+            OpenChildFormInTab(form, "DoiMatKhau");
         }
 
         private void đăngNhậpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<DangNhap>();
+            var form = new DangNhap();
+            OpenChildFormInTab(form, "DangNhap");
         }
 
         private void tabControlMain_DrawItem(object sender, DrawItemEventArgs e)
@@ -211,12 +253,45 @@ namespace ketoan.Client
 
         private void đơnVịTínhToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<DonViTinh>();
+            var form = new DonViTinh();
+            OpenChildFormInTab(form, "DonViTinh");
         }
 
         private void hàngHóaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildFormInTab<HangHoa>();
+            //OpenChildFormInTab<HangHoa>();
+            var form = new HangHoa();
+            OpenChildFormInTab(form, "HangHoa");
+        }
+
+        private void nhàCungCấpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //OpenChildFormInTab<DoiTac>();
+            var form = new DoiTac(LoaiDoiTac.NhaCungCap);
+            OpenChildFormInTab(form, "DoiTac_NhaCungCap");
+        }
+
+        private void kháchHàngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new DoiTac(LoaiDoiTac.KhachHang);
+            OpenChildFormInTab(form, "DoiTac_KhachHang");
+        }
+
+        private void nhânViênToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void danhSáchPhiếuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new DanhSachPhieuNhapXuat();
+            OpenChildFormInTab(form, "DanhSachPhieuNhapXuat");
+        }
+
+        private void danhSáchPhiếuToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var form = new DanhSachPhieuNhapXuat();
+            OpenChildFormInTab(form, "DanhSachPhieuNhapXuat");
         }
     }
 }
