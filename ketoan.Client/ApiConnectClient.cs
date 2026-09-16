@@ -199,13 +199,13 @@ namespace ketoan.Client
             }
 
             // 2. Thêm tham số isNcc nếu có truyền
-            if (isNcc.HasValue)
+            if (isNcc.HasValue && isNcc==true)
             {
                 queryParams.Add($"isNcc={isNcc.Value.ToString().ToLower()}");
             }
 
             // 3. Thêm tham số isKh nếu có truyền
-            if (isKh.HasValue)
+            if (isKh.HasValue && isKh==true)
             {
                 queryParams.Add($"isKh={isKh.Value.ToString().ToLower()}");
             }

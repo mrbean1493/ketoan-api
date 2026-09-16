@@ -37,7 +37,8 @@ namespace ketoan.Server.Controllers
             // Nếu người dùng có truyền từ khóa tìm kiếm
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                string kw = keyword.Trim().ToLower();
+                //string kw = keyword.Trim().ToLower();
+                string kw = $"%{keyword.Trim()}%"; // Tạo Pattern tìm kiếm dạng %An%
                 query = query.Where(x =>
         EF.Functions.ILike(x.TenDoiTac, kw) ||
         (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, kw)) ||
