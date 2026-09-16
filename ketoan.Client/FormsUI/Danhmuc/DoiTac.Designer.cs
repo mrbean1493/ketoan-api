@@ -241,6 +241,7 @@
             Controls.Add(groupBox1);
             Name = "DoiTac";
             Text = "Đối tác";
+            Load += DoiTac_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();

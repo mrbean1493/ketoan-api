@@ -122,7 +122,17 @@ namespace ketoan.Client.FormsUI.Danhmuc
             try
             {
                 // 1. Gọi hàm GET từ ApiConnectClient
-                List<DoiTacDtoClient> listData = await _apiClient.GetDoiTacAsync();
+                List<DoiTacDtoClient> listData = new List<DoiTacDtoClient>();
+                if (_loaiDoiTac == LoaiDoiTac.KhachHang)
+                {
+                    listData = await _apiClient.GetDoiTacAsync(null,null,true);
+                }
+                else
+                {
+                    listData = await _apiClient.GetDoiTacAsync(null,true,null);
+                }
+                    
+                   
 
                 // 2. Cấu hình DataGridView tự động tạo cột theo thuộc tính của DTO
                 dataGridView1.AutoGenerateColumns = true;
@@ -213,7 +223,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                                 {
                                     MessageBox.Show("Cập nhật thông tin đối tác thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     await LoadDataToGridView(); // Tải lại DataGridView
-                                    
+
                                 }
                                 else
                                 {
@@ -356,6 +366,11 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     txtSDT2.Text = item.SoDienThoai2;
                 }
             }
+        }
+
+        private async void DoiTac_Load(object sender, EventArgs e)
+        {
+            await LoadDataToGridView();
         }
     }
 }

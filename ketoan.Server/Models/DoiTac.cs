@@ -7,6 +7,7 @@ namespace ketoan.Server.Models
     public class DoiTac
     {
         [Key]
+        [Column("id")]
         public int Id { get; set; }
 
         [Column("tendoitac")]
