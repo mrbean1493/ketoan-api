@@ -326,12 +326,14 @@ namespace ketoan.Client.FormsUI.Danhmuc
 
         private async Task SearchDoiTacAsync()
         {
-            string keyword = txtTenDoiTacView.Text.Trim();
+            //string keyword = txtTenDoiTacView.Text.Trim();
+
+            string keyword = string.IsNullOrWhiteSpace(txtTenDoiTac.Text) ? null : txtTenDoiTac.Text.Trim();
 
             // Gọi ApiConnectClient truyền keyword
             try
             {
-                var listDoiTac = await _apiClient.GetDoiTacAsync(keyword);
+                var listDoiTac = await _apiClient.GetDoiTacAsync(keyword,_loaiDoiTac==LoaiDoiTac.NhaCungCap,_loaiDoiTac==LoaiDoiTac.KhachHang);
                 dataGridView1.DataSource = listDoiTac;
 
                 if (listDoiTac.Count() > 0)
