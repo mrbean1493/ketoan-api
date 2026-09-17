@@ -38,19 +38,32 @@ namespace ketoan.Server.Controllers
             if (!string.IsNullOrWhiteSpace(keyword))
             {
                 //string kw = keyword.Trim().ToLower();
-                string kw = $"%{keyword.Trim()}%"; // Tạo Pattern tìm kiếm dạng %An%
+                //string kw = $"%{keyword.Trim()}%"; // Tạo Pattern tìm kiếm dạng %An%
+                /*
                 query = query.Where(x =>
         EF.Functions.ILike(x.TenDoiTac, kw) ||
         (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, kw)) ||
         (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, kw)) ||
         (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, kw))
     );
-                /*
-                query = query.Where(x => x.TenDoiTac.ToLower().Contains(kw) ||
-                                         x.MaDoiTac.ToLower().Contains(kw)||
-                                         x.SoDienThoai.ToLower().Contains(kw)||
-                                         x.SoDienThoai2.ToLower().Contains(kw));
                 */
+                // Sử dụng .ToLower() cho cả thuộc tính DB và từ khóa tìm kiếm
+                /*
+                query = query.Where(x =>
+                    (x.TenDoiTac != null && x.TenDoiTac.ToLower().Contains(kw)) ||
+                    (x.MaDoiTac != null && x.MaDoiTac.ToLower().Contains(kw)) ||
+                    (x.SoDienThoai != null && x.SoDienThoai.ToLower().Contains(kw)) ||
+                    (x.SoDienThoai2 != null && x.SoDienThoai2.ToLower().Contains(kw))
+                );
+                */
+                string kw = keyword.Trim();
+
+                query = query.Where(x =>
+                    EF.Functions.ILike(x.TenDoiTac, $"%{kw}%") ||
+                    (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, $"%{kw}%")) ||
+                    (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, $"%{kw}%")) ||
+                    (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, $"%{kw}%"))
+                );
             }
 
             var list = await query

@@ -7,6 +7,7 @@ namespace ketoan.Server.Models
     public class PhieuNhapXuat
     {
         [Key]
+        [Column("id")]
         public int Id { get; set; }
 
         [Column("id_doi_tac")]
@@ -14,6 +15,18 @@ namespace ketoan.Server.Models
 
         [Column("loai_phieu")]
         public int LoaiPhieu { get; set; }
+
+        [Column("ngay_lap")]
+        public DateTime NgayLap { get; set; }
+
+        [Column("ma_kho")]
+        public int MaKho { get; set; }
+
+        [Column("tong_tien")]
+        public int TongTien { get; set; }
+
+        [Column("ngay_cap_nhat")]
+        public DateTime NgayCapNhat { get; set; }
 
         //1: nhập hàng
         //2: trả hàng nhập
