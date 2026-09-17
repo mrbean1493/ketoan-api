@@ -121,7 +121,7 @@ namespace ketoan.Server.Controllers
                             Success = false,
                             IsRequireConfirm = true,
                             ExistingId = existingDoiTac.Id,
-                            Message = "Đối tác đã tồn tại dưới dạng Khách hàng. Bạn có muốn họ cũng là Nhà cung cấp không?"
+                            Message = "Đối tác đã tồn tại dưới dạng Nhà cung cấp. Bạn có muốn họ cũng là Khách hàng không?"
                         });
                     }
                 }
@@ -153,7 +153,7 @@ namespace ketoan.Server.Controllers
                             Success = false,
                             IsRequireConfirm = true,
                             ExistingId = existingDoiTac.Id,
-                            Message = "Đối tác đã tồn tại dưới dạng Nhà cung cấp. Bạn có muốn họ cũng là Khách hàng không?"
+                            Message = "Đối tác đã tồn tại dưới dạng Khách hàng. Bạn có muốn họ cũng là Nhà cung cấp không?"
                         });
                     }
                 }
