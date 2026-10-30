@@ -2,7 +2,7 @@
 {
     public class RequestPhieuNhapXuatDto
     {
-        public int Id { get; set; }
+        //public int Id { get; set; } tạm cmt
 
         public int LoaiPhieu { get; set; }
         public DateTime NgayLap { get; set; } = DateTime.Now;

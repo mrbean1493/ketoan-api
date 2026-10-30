@@ -338,9 +338,9 @@ namespace ketoan.Client.FormsUI.Nhaphang
             if (confirmResult == DialogResult.Yes)
             {
 
+                dataGridView1.EndEdit();
 
 
-                
                     var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
 
 
@@ -422,17 +422,17 @@ namespace ketoan.Client.FormsUI.Nhaphang
                         MessageBox.Show("Phiếu phải có ít nhất 1 dòng chi tiết hàng hóa hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-                    // 3.Đóng gói Request gửi API
-                    var request = new PhieuNhapXuatDtoClient
-                    {
-                        //MaPhieu = txtMaPhieu.Text.Trim(),
-                        NgayLap = dateTimePickerNgayNhap.Value,
-                        //DoiTacId = gridLookupDoiTac1. .SelectedValue != null ? Convert.ToInt32(cboDoiTac.SelectedValue) : null,
+                // 3.Đóng gói Request gửi API
+                var request = new PhieuNhapXuatDtoClient
+                {
+                    //MaPhieu = txtMaPhieu.Text.Trim(),
+                    NgayLap = dateTimePickerNgayNhap.Value,
+                    DoiTacId = gridLookupDoiTac1.SelectedDoiTac.Id,
                         //GhiChu = txtGhiChu.Text.Trim(),
                         //IsPhieuNhap = rdoPhieuNhap.Checked,
-                        LoaiPhieu= (int)_loaiPhieuNhapXuat,
-                        ChiTiets = danhSachChiTiet
-                    };
+                    LoaiPhieu = (int)_loaiPhieuNhapXuat,
+                    ChiTiets = danhSachChiTiet
+                };
 
                 if (txtSoPhieu.Text == "") //phiếu mới
                 {

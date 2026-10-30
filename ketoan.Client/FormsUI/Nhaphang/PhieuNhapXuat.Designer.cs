@@ -41,6 +41,11 @@
             lblSoPhieu = new Label();
             groupBox2 = new GroupBox();
             dataGridView1 = new DataGridView();
+            groupBox3 = new GroupBox();
+            lblTienBangChu = new Label();
+            button2 = new Button();
+            button1 = new Button();
+            lblTongTien = new Label();
             colSTT = new DataGridViewTextBoxColumn();
             colMaHH = new DataGridViewTextBoxColumn();
             colTenHH = new DataGridViewTextBoxColumn();
@@ -50,11 +55,6 @@
             colDongia = new DataGridViewTextBoxColumn();
             colThanhtien = new DataGridViewTextBoxColumn();
             col_id_dvt = new DataGridViewTextBoxColumn();
-            groupBox3 = new GroupBox();
-            lblTienBangChu = new Label();
-            button2 = new Button();
-            button1 = new Button();
-            lblTongTien = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -195,55 +195,6 @@
             dataGridView1.UserDeletedRow += dataGridView1_UserDeletedRow;
             dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
-            // colSTT
-            // 
-            colSTT.HeaderText = "STT";
-            colSTT.Name = "colSTT";
-            colSTT.Width = 50;
-            // 
-            // colMaHH
-            // 
-            colMaHH.HeaderText = "Mã hàng hóa";
-            colMaHH.Name = "colMaHH";
-            // 
-            // colTenHH
-            // 
-            colTenHH.HeaderText = "Tên hàng hóa";
-            colTenHH.Name = "colTenHH";
-            colTenHH.Width = 300;
-            // 
-            // colDVT
-            // 
-            colDVT.HeaderText = "ĐVT";
-            colDVT.Name = "colDVT";
-            // 
-            // colSoLo
-            // 
-            colSoLo.HeaderText = "Số lô";
-            colSoLo.Name = "colSoLo";
-            colSoLo.Width = 150;
-            // 
-            // colSL
-            // 
-            colSL.HeaderText = "Số lượng";
-            colSL.Name = "colSL";
-            // 
-            // colDongia
-            // 
-            colDongia.HeaderText = "Đơn giá";
-            colDongia.Name = "colDongia";
-            // 
-            // colThanhtien
-            // 
-            colThanhtien.HeaderText = "Thành tiền";
-            colThanhtien.Name = "colThanhtien";
-            // 
-            // col_id_dvt
-            // 
-            col_id_dvt.HeaderText = "Id_dvt";
-            col_id_dvt.Name = "col_id_dvt";
-            col_id_dvt.Visible = false;
-            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(lblTienBangChu);
@@ -298,6 +249,56 @@
             lblTongTien.TabIndex = 0;
             lblTongTien.Text = "Tổng tiền:";
             // 
+            // colSTT
+            // 
+            colSTT.HeaderText = "STT";
+            colSTT.Name = "colSTT";
+            colSTT.Width = 50;
+            // 
+            // colMaHH
+            // 
+            colMaHH.HeaderText = "Mã hàng hóa";
+            colMaHH.Name = "colMaHH";
+            // 
+            // colTenHH
+            // 
+            colTenHH.HeaderText = "Tên hàng hóa";
+            colTenHH.Name = "colTenHH";
+            colTenHH.Width = 300;
+            // 
+            // colDVT
+            // 
+            colDVT.HeaderText = "ĐVT";
+            colDVT.Name = "colDVT";
+            // 
+            // colSoLo
+            // 
+            colSoLo.DataPropertyName = "SoLo";
+            colSoLo.HeaderText = "Số lô";
+            colSoLo.Name = "colSoLo";
+            colSoLo.Width = 150;
+            // 
+            // colSL
+            // 
+            colSL.HeaderText = "Số lượng";
+            colSL.Name = "colSL";
+            // 
+            // colDongia
+            // 
+            colDongia.HeaderText = "Đơn giá";
+            colDongia.Name = "colDongia";
+            // 
+            // colThanhtien
+            // 
+            colThanhtien.HeaderText = "Thành tiền";
+            colThanhtien.Name = "colThanhtien";
+            // 
+            // col_id_dvt
+            // 
+            col_id_dvt.HeaderText = "Id_dvt";
+            col_id_dvt.Name = "col_id_dvt";
+            col_id_dvt.Visible = false;
+            // 
             // PhieuNhapXuat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -335,6 +336,9 @@
         private Button button2;
         private Button button1;
         private ClassComponent.GridLookupDoiTac gridLookupDoiTac1;
+        private Button btnAddHangHoa;
+        private Button btnAddDoiTac;
+        private Label lblTienBangChu;
         private DataGridViewTextBoxColumn colSTT;
         private DataGridViewTextBoxColumn colMaHH;
         private DataGridViewTextBoxColumn colTenHH;
@@ -343,9 +347,6 @@
         private DataGridViewTextBoxColumn colSL;
         private DataGridViewTextBoxColumn colDongia;
         private DataGridViewTextBoxColumn colThanhtien;
-        private Button btnAddHangHoa;
-        private Button btnAddDoiTac;
-        private Label lblTienBangChu;
         private DataGridViewTextBoxColumn col_id_dvt;
     }
 }

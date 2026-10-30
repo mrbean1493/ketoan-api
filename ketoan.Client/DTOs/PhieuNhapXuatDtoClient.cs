@@ -8,7 +8,7 @@ namespace ketoan.Client.DTOs
 {
     internal class PhieuNhapXuatDtoClient
     {
-        public string Id { get; set; }
+        //public string Id { get; set; } tạm cmt
         public DateTime NgayLap { get; set; } = DateTime.Now;
         public int DoiTacId { get; set; }
         //public string? GhiChu { get; set; }

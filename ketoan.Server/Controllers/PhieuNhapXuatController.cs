@@ -98,7 +98,7 @@ namespace ketoan.Server.Controllers
                     // A. Tạo Header (Cuống phiếu)
                     var phieu = new PhieuNhapXuat
                     {
-                        Id=dto.Id,
+                        //Id=dto.Id,
                         //MaPhieu = dto.MaPhieu,
                         NgayLap = dto.NgayLap.ToUniversalTime(),
                         IdDoiTac = dto.DoiTacId,
@@ -208,7 +208,7 @@ namespace ketoan.Server.Controllers
                     }
 
                     // BƯỚC 2: Cập nhật thông tin Header và thay thế Chi tiết cũ bằng Chi tiết mới
-                    phieuDb.Id = dto.Id;
+                    //phieuDb.Id = dto.Id;
                     phieuDb.NgayLap = dto.NgayLap.ToUniversalTime();
                     phieuDb.IdDoiTac = dto.DoiTacId;
                     //phieuDb.GhiChu = dto.GhiChu;

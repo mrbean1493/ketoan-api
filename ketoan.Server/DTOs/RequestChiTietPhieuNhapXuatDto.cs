@@ -1,10 +1,12 @@
-﻿namespace ketoan.Server.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace ketoan.Server.DTOs
 {
     public class RequestChiTietPhieuNhapXuatDto
     {
         public int HangHoaId { get; set; }
         public int DonViTinhId { get; set; }
-
+        [JsonPropertyName("so_lo")]
         public string SoLo { get; set; }
         public decimal SoLuong { get; set; }
         public decimal DonGia { get; set; }
