@@ -114,7 +114,8 @@ namespace ketoan.Server.Controllers
                     // B. Tạo Detail (Chi tiết phiếu)
                     var chiTiets = dto.ChiTiets.Select(ct => new ChiTietPhieuNhapXuat
                     {
-                        Id = phieu.Id,
+                        //Id = phieu.Id,
+                        PhieuNhapXuatId=phieu.Id,
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
                         SoLo=ct.SoLo,
