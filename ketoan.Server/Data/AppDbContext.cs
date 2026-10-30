@@ -20,6 +20,7 @@ namespace ketoan.Server.Data
 
 
             // Cấu hình cho bảng ChiTietPhieuNhapXuat
+            /*
             modelBuilder.Entity<ChiTietPhieuNhapXuat>(entity =>
             {
                 entity.ToTable("chitietphieunhapxuat");
@@ -38,6 +39,7 @@ namespace ketoan.Server.Data
                       .HasColumnName("id")
                       .ValueGeneratedOnAdd(); // <--- Báo cho EF Core biết cột này do DB tự tăng khi INSERT
             });
+            */
         }
 
         public DbSet<DonViTinh> DVTs { get; set; }

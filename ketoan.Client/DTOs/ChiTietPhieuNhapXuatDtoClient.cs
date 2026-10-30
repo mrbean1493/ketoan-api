@@ -9,8 +9,8 @@ namespace ketoan.Client.DTOs
 {
     internal class ChiTietPhieuNhapXuatDtoClient
     {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
+        //[JsonPropertyName("id")]
+        //public int Id { get; set; }
 
         [JsonPropertyName("id_hang_hoa")]
         public int IdHangHoa { get; set; }
