@@ -17,6 +17,27 @@ namespace ketoan.Server.Data
             // Định nghĩa Khóa chính gồm 2 cột (NguoiDungId, QuyenId) cho bảng trung gian
             modelBuilder.Entity<NguoiDungQuyen>()
                 .HasKey(nq => new { nq.NguoiDungId, nq.QuyenId });
+
+
+            // Cấu hình cho bảng ChiTietPhieuNhapXuat
+            modelBuilder.Entity<ChiTietPhieuNhapXuat>(entity =>
+            {
+                entity.ToTable("chitietphieunhapxuat");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                      .HasColumnName("id")
+                      .ValueGeneratedOnAdd(); // <--- Báo cho EF Core biết cột này do DB tự tăng khi INSERT
+            });
+
+            // Cấu hình cho bảng TonKho
+            modelBuilder.Entity<TonKho>(entity =>
+            {
+                entity.ToTable("tonkho");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                      .HasColumnName("id")
+                      .ValueGeneratedOnAdd(); // <--- Báo cho EF Core biết cột này do DB tự tăng khi INSERT
+            });
         }
 
         public DbSet<DonViTinh> DVTs { get; set; }
