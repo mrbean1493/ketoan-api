@@ -10,7 +10,7 @@ namespace ketoan.Client.ClassComponent
 {
     public class GridLookupHangHoa : IMessageFilter
     {// Biến cờ ngăn chặn bật Popup khi đang thực hiện gán dữ liệu tự động
-        public bool IsBusy { get; set; } = false;
+        public bool IsBusyHangHoa { get; set; } = false;
         private PopupForm popupForm;
         private DataGridView dgvSuggest;
         private DataGridView dgvParent; // DataGridView gốc chứa danh sách nhập hàng
@@ -111,7 +111,7 @@ namespace ketoan.Client.ClassComponent
 
         private void ParentCell_TextChanged(object sender, EventArgs e)
         {// Nếu đang trong quá trình gán dữ liệu từ code thì BỎ QUA không bật Popup
-            if (IsBusy) return;
+            if (IsBusyHangHoa) return;
             if (sender is TextBox txt)
             {
                 string keyword = txt.Text.Trim().ToLower();
@@ -184,6 +184,26 @@ namespace ketoan.Client.ClassComponent
         }
         private void ParentCell_KeyDown(object sender, KeyEventArgs e)
         {
+            // 1. ĐƯA PHÍM DELETE RA NGOÀI ĐỘC LẬP
+            if (e.KeyCode == Keys.Delete)
+            {
+                // Nếu popup đang mở thì ẩn đi trước cho gọn
+                if (popupForm.Visible)
+                {
+                    HidePopup();
+                }
+
+                // --- VIẾT CODE XÓA DÒNG CỦA DATAGRIDVIEW CHA TẠI ĐÂY ---
+                // Ví dụ: 
+                // if (dgvMain.CurrentRow != null) { dgvMain.Rows.Remove(dgvMain.CurrentRow); }
+                // -----------------------------------------------------
+
+                e.Handled = true;
+                e.SuppressKeyPress = true; // QUAN TRỌNG: Chặn đứng phím Del truyền xuống TextBox, không gây TextChanged
+                return; // Thoát hàm luôn, không chạy xuống dưới nữa
+            }
+
+
             if (popupForm.Visible && dgvSuggest.Rows.Count > 0)
             {
                 if (e.KeyCode == Keys.Down)
@@ -212,6 +232,11 @@ namespace ketoan.Client.ClassComponent
                     e.Handled = true;
                 }
                 else if (e.KeyCode == Keys.Escape)
+                {
+                    HidePopup();
+                    e.Handled = true;
+                }
+                else if (e.KeyCode == Keys.Delete)
                 {
                     HidePopup();
                     e.Handled = true;

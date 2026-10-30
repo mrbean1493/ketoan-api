@@ -18,18 +18,24 @@ namespace ketoan.Client.FormsUI.Nhaphang
         private readonly LoaiPhieuNhapXuat _loaiPhieuNhapXuat;
         private readonly ApiConnectClient _apiClient = new ApiConnectClient();
         int status = 0;
+        private BindingList<ChiTietPhieuNhapXuatDtoClient> _bindingListChiTiet;
+
+        // _currentPhieuId = null -> Chế độ Thêm mới
+        // _currentPhieuId > 0   -> Chế độ Sửa (Cập nhật)
+        private int? _currentPhieuId = null;
         public PhieuNhapXuat(LoaiPhieuNhapXuat loaiPhieuNhapXuat)
         {
             InitializeComponent();
             _loaiPhieuNhapXuat = loaiPhieuNhapXuat;
             _apiClient = new ApiConnectClient();
 
+
             CapNhatGiaoDien();
-            DuLieuTest();
+            LoadDoiTac();
 
         }
 
-        private async void DuLieuTest()
+        private async void LoadDoiTac()
         {
             dateTimePickerNgayNhap.Value = DateTime.Now;
             // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
@@ -50,9 +56,9 @@ namespace ketoan.Client.FormsUI.Nhaphang
     };
             if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
             {
-                listDoiTac = await _apiClient.GetDoiTacAsync(null,true,null);
+                listDoiTac = await _apiClient.GetDoiTacAsync(null, true, null);
             }
-            
+
 
 
             // 1. Nạp danh sách DTO của bạn vào Control
@@ -109,19 +115,25 @@ namespace ketoan.Client.FormsUI.Nhaphang
             }
         }
         private GridLookupHangHoa _lookupHangHoa;
-        private void PhieuNhapXuat_Load(object sender, EventArgs e)
+        private GridLookupDVT _lookupDVT;
+        private async void PhieuNhapXuat_Load(object sender, EventArgs e)
         {
-            // 1. Dữ liệu mẫu Hàng hóa
-            List<HangHoaDtoClient> listHangHoa = new List<HangHoaDtoClient>
-    {
-        new HangHoaDtoClient { Id = 101, VietTat = "HH01", TenHH = "Xi măng Nghi Sơn PCB40", TenDVT = "Bao" },
-        new HangHoaDtoClient { Id = 102, VietTat = "HH02", TenHH = "Thép Hòa Phát Φ12 dài 11.7m", TenDVT = "Cây" },
-        new HangHoaDtoClient { Id = 103, VietTat = "HH03", TenHH = "Gạch men Viglacera 60x60", TenDVT = "Hộp" }
-    };
+            // 1. Dữ liệu Hàng hóa và ĐVT
+            List<HangHoaDtoClient> listHangHoa = await _apiClient.GetHangHoaAsync();
+            List<DonViTinhDtoClient> listDVT = await _apiClient.GetDonViTinhAsync();
+
+            dataGridView1.AutoGenerateColumns = false;
+
+            _bindingListChiTiet= new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+            dataGridView1.DataSource = _bindingListChiTiet;
 
             // 2. Khởi tạo Helper và truyền DataGridView chi tiết vào
             _lookupHangHoa = new GridLookupHangHoa(dataGridView1);
             _lookupHangHoa.SetDataSourceHangHoa(listHangHoa);
+
+            _lookupDVT = new GridLookupDVT(dataGridView1);
+            _lookupDVT.SetDataSourceDVT(listDVT);
+
 
             // 3. Nhận sự kiện khi chọn 1 hàng hóa trên gợi ý
             _lookupHangHoa.HangHoaSelected += (s, ev) =>
@@ -129,7 +141,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 HangHoaDtoClient item = ev.SelectedProduct;
                 int r = ev.RowIndex;
                 // 1. Tắt tạm thời việc lắng nghe sự kiện để tránh bật lại Popup khi chuyển Cell
-                _lookupHangHoa.IsBusy = true;
+                _lookupHangHoa.IsBusyHangHoa = true;
                 try
                 {
                     // 1. Ép DataGridView kết thúc trạng thái chỉnh sửa hiện tại
@@ -142,6 +154,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     dataGridView1.Rows[r].Cells["colDongia"].Value = 0;
                     dataGridView1.Rows[r].Cells["colSL"].Value = 0;
                     dataGridView1.Rows[r].Cells["colThanhTien"].Value = 0;
+                    dataGridView1.Rows[r].Cells["col_id_dvt"].Value = item.id_dvt;
                     if (dataGridView1.Columns.Contains("colSoLo"))
                     {
                         dataGridView1.CurrentCell = dataGridView1.Rows[r].Cells["colSoLo"];
@@ -152,7 +165,34 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 finally
                 {
                     // 5. Bật lại sự kiện gợi ý
-                    _lookupHangHoa.IsBusy = false;
+                    _lookupHangHoa.IsBusyHangHoa = false;
+                }
+
+            };
+
+
+            // 3. Nhận sự kiện khi chọn 1 hàng hóa trên gợi ý
+            _lookupDVT.DVTSelected += (s, ev) =>
+            {
+                DonViTinhDtoClient itemDVT = ev.SelectedProductDVT;
+                int r = ev.RowIndex;
+                // 1. Tắt tạm thời việc lắng nghe sự kiện để tránh bật lại Popup khi chuyển Cell
+                _lookupDVT.IsBusyDVT = true;
+                try
+                {
+                    // 1. Ép DataGridView kết thúc trạng thái chỉnh sửa hiện tại
+                    dataGridView1.EndEdit();
+                    // Điền thông tin hàng hóa vào các ô của dòng tương ứng trên dgvChiTiet
+
+                    dataGridView1.Rows[r].Cells["col_id_dvt"].Value = itemDVT.Id;
+                    dataGridView1.Rows[r].Cells["colDVT"].Value = itemDVT.TenDVT;
+
+
+                }
+                finally
+                {
+                    // 5. Bật lại sự kiện gợi ý
+                    _lookupDVT.IsBusyDVT = false;
                 }
 
             };
@@ -248,12 +288,132 @@ namespace ketoan.Client.FormsUI.Nhaphang
             // Hiển thị ra TextBox tổng tiền (Định dạng N0 cho dễ nhìn, ví dụ: 1.500.000)
             lblTongTien.Text = "Tổng tiền: " + tongTien.ToString("N0");
 
-            lblTienBangChu.Text = "Tổng tiền bằng chữ: " +  DocTienHelper.DocTienBangChu(tongTien);
+            lblTienBangChu.Text = "Tổng tiền bằng chữ: " + DocTienHelper.DocTienBangChu(tongTien);
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
+
             TinhTongTien();
+        }
+
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Kiểm tra nếu người dùng bấm phím Delete (Del)
+            if (e.KeyCode == Keys.Delete)
+            {
+                // 1. Kiểm tra xem có dòng nào đang được chọn không
+                if (dataGridView1.CurrentRow != null && !dataGridView1.CurrentRow.IsNewRow)
+                {
+                    var bindingList = dataGridView1.DataSource as BindingList<ChiTietPhieuNhapXuatDtoClient>;
+                    if (bindingList != null)
+                    {
+                        // Xóa item khỏi BindingList (giao diện sẽ tự xóa dòng)
+                        var currentItem = dataGridView1.CurrentRow.DataBoundItem as ChiTietPhieuNhapXuatDtoClient;
+                        if (currentItem != null)
+                        {
+                            bindingList.Remove(currentItem);
+                        }
+                    }
+                    else
+                    {
+                        // Nếu dùng Unbound (không bind DataSource)
+                        dataGridView1.Rows.Remove(dataGridView1.CurrentRow);
+                    }
+
+                    // Đánh dấu là đã xử lý phím Delete để tránh tiếng 'Beep'
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmResult = MessageBox.Show(
+            "Bạn chắc chắn lưu thông tin phiếu nhập xuất không?",
+            "Xác nhận lưu phiếu nhập xuất",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question
+        );
+            if (confirmResult == DialogResult.Yes)
+            {
+
+
+
+                if (txtSoPhieu.Text == "") //phiếu mới
+                {
+                    //validate row
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+                        if(row.Cells["colSTT"].Value != null)
+                        {
+                            var maHH = row.Cells["colMaHH"].Value?.ToString();
+                            if (string.IsNullOrEmpty(maHH))
+                            {
+                                MessageBox.Show("Thiếu mã hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+
+                            var tenHH = row.Cells["colTenHH"].Value?.ToString();
+                            if (string.IsNullOrEmpty(tenHH))
+                            {
+                                MessageBox.Show("Thiếu tên hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+
+                            var dvt = row.Cells["colDVT"].Value?.ToString();
+                            if (string.IsNullOrEmpty(dvt))
+                            {
+                                MessageBox.Show("Thiếu đơn vị tính hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+
+                            var solo = row.Cells["colSoLo"].Value?.ToString();
+                            if (string.IsNullOrEmpty(solo))
+                            {
+                                MessageBox.Show("Thiếu số lô hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+
+                            var soluong = row.Cells["colSL"].Value?.ToString();
+                            if (string.IsNullOrEmpty(soluong))
+                            {
+                                MessageBox.Show("Thiếu số lượng hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+                            if (soluong=="0")
+                            {
+                                MessageBox.Show("Số lượng =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+
+
+                            var dongia = row.Cells["colDongia"].Value?.ToString();
+                            if (string.IsNullOrEmpty(dongia))
+                            {
+                                MessageBox.Show("Thiếu đơn giá hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+                            if (dongia == "0")
+                            {
+                                MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                                return;
+                            }
+                        }
+                    }
+                }
+                else //cập nhật phiếu
+                {
+
+                }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button1.PerformClick();
+            this.Close();
         }
     }
 }

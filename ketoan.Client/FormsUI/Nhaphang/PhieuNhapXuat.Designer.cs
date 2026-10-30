@@ -49,12 +49,12 @@
             colSL = new DataGridViewTextBoxColumn();
             colDongia = new DataGridViewTextBoxColumn();
             colThanhtien = new DataGridViewTextBoxColumn();
+            col_id_dvt = new DataGridViewTextBoxColumn();
             groupBox3 = new GroupBox();
             lblTienBangChu = new Label();
             button2 = new Button();
             button1 = new Button();
             lblTongTien = new Label();
-            col_id_dvt = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -155,6 +155,7 @@
             // 
             // txtSoPhieu
             // 
+            txtSoPhieu.Enabled = false;
             txtSoPhieu.Location = new Point(116, 22);
             txtSoPhieu.Name = "txtSoPhieu";
             txtSoPhieu.Size = new Size(101, 23);
@@ -192,6 +193,7 @@
             dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.UserDeletedRow += dataGridView1_UserDeletedRow;
+            dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
             // colSTT
             // 
@@ -236,6 +238,12 @@
             colThanhtien.HeaderText = "Thành tiền";
             colThanhtien.Name = "colThanhtien";
             // 
+            // col_id_dvt
+            // 
+            col_id_dvt.HeaderText = "Id_dvt";
+            col_id_dvt.Name = "col_id_dvt";
+            col_id_dvt.Visible = false;
+            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(lblTienBangChu);
@@ -268,6 +276,7 @@
             button2.TabIndex = 2;
             button2.Text = "Lưu và đóng form";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button1
             // 
@@ -277,6 +286,7 @@
             button1.TabIndex = 1;
             button1.Text = "Lưu";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // lblTongTien
             // 
@@ -287,12 +297,6 @@
             lblTongTien.Size = new Size(63, 15);
             lblTongTien.TabIndex = 0;
             lblTongTien.Text = "Tổng tiền:";
-            // 
-            // col_id_dvt
-            // 
-            col_id_dvt.HeaderText = "Id_dvt";
-            col_id_dvt.Name = "col_id_dvt";
-            col_id_dvt.Visible = false;
             // 
             // PhieuNhapXuat
             // 

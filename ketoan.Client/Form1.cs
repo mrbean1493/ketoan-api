@@ -293,5 +293,11 @@ namespace ketoan.Client
             var form = new DanhSachPhieuNhapXuat();
             OpenChildFormInTab(form, "DanhSachPhieuNhapXuat");
         }
+
+        private void nhậpKhoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang);
+            OpenChildFormInTab(form, "NhapKho");
+        }
     }
 }

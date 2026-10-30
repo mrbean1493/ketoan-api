@@ -23,10 +23,13 @@ namespace ketoan.Server.Models
         public int MaKho { get; set; }
 
         [Column("tong_tien")]
-        public int TongTien { get; set; }
+        public decimal TongTien { get; set; }
 
         [Column("ngay_cap_nhat")]
         public DateTime NgayCapNhat { get; set; }
+
+        // Navigation Properties
+        public List<ChiTietPhieuNhapXuat> ChiTiets { get; set; } = new();
 
         //1: nhập hàng
         //2: trả hàng nhập

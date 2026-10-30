@@ -301,6 +301,77 @@ namespace ketoan.Client
 
             return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
         }
+
+
+        // 1. Lấy toàn bộ phiếu
+        public async Task<ApiResponse<List<PhieuNhapXuatDtoClient>>> GetAllPhieuAsync()
+        {
+            var response = await Client.GetAsync("api/PhieuNhapXuat");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResponse<List<PhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
+        }
+
+        // 2. Lấy chi tiết 1 phiếu theo ID
+        public async Task<ApiResponse<PhieuNhapXuatDtoClient>> GetPhieuByIdAsync(int id)
+        {
+            var response = await Client.GetAsync($"api/PhieuNhapXuat/{id}");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResponse<PhieuNhapXuatDtoClient>>(json, _jsonOptions)!;
+        }
+
+        // 3. Tạo phiếu mới (POST)
+        public async Task<ApiResponse<object>> CreatePhieuAsync(PhieuNhapXuatDtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PostAsync("api/PhieuNhapXuat", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi lưu phiếu mới!");
+            }
+
+            return result!;
+        }
+
+        // 4. Cập nhật phiếu (PUT)
+        public async Task<ApiResponse<object>> UpdatePhieuAsync(int id, PhieuNhapXuatDtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PutAsync($"api/PhieuNhapXuat/{id}", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi cập nhật phiếu!");
+            }
+
+            return result!;
+        }
+
+        // 5. Xóa phiếu (DELETE)
+        public async Task<ApiResponse<object>> DeletePhieuAsync(int id)
+        {
+            var response = await Client.DeleteAsync($"api/PhieuNhapXuat/{id}");
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi xóa phiếu!");
+            }
+
+            return result!;
+        }
     }
 
     public class ApiResponse<T>
@@ -311,6 +382,8 @@ namespace ketoan.Client
         public T Data { get; set; }
         [JsonPropertyName("message")]
         public string Message { get; set; }
+
+        public int? Id { get; set; }
 
         // Thuộc tính phục vụ hỏi xác nhận ở Client
         public bool IsRequireConfirm { get; set; } = false;

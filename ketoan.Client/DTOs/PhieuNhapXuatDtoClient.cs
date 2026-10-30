@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ketoan.Client.DTOs
+{
+    internal class PhieuNhapXuatDtoClient
+    {
+        public string Id { get; set; }
+        public DateTime NgayLap { get; set; } = DateTime.Now;
+        public int DoiTacId { get; set; }
+        //public string? GhiChu { get; set; }
+        //public bool IsPhieuNhap { get; set; }
+
+        public int LoaiPhieu { get; set; }
+        // Danh sách chi tiết truyền lên
+        public List<ChiTietPhieuNhapXuatDtoClient> ChiTiets { get; set; } = new();
+    }
+}
