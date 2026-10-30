@@ -332,7 +332,10 @@ namespace ketoan.Client
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(result?.Message ?? "Lỗi khi lưu phiếu mới!");
+                // Hiển thị trực tiếp thông báo thô từ Server lên MessageBox để bạn đọc được ngay
+                throw new Exception($"Server trả về lỗi ({response.StatusCode}):\n{jsonResult}");
+
+                //throw new Exception(result?.Message ?? "Lỗi khi lưu phiếu mới!");
             }
 
             return result!;

@@ -327,7 +327,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             DialogResult confirmResult = MessageBox.Show(
             "Bạn chắc chắn lưu thông tin phiếu nhập xuất không?",
@@ -340,8 +340,10 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
 
 
-                if (txtSoPhieu.Text == "") //phiếu mới
-                {
+                
+                    var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
+
+
                     //validate row
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
@@ -368,6 +370,8 @@ namespace ketoan.Client.FormsUI.Nhaphang
                                 MessageBox.Show("Thiếu đơn vị tính hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
                                 return;
                             }
+                            var id_dvt = row.Cells["col_id_dvt"].Value?.ToString();
+
 
                             var solo = row.Cells["colSoLo"].Value?.ToString();
                             if (string.IsNullOrEmpty(solo))
@@ -400,12 +404,45 @@ namespace ketoan.Client.FormsUI.Nhaphang
                                 MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
                                 return;
                             }
+
+                            danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
+                            {
+                                IdHangHoa = Int32.Parse(maHH),
+                                Id_dvt = Int16.Parse(id_dvt),
+                                SoLuong = Decimal.Parse(soluong),
+                                SoLo = solo,
+                                DonGia = Decimal.Parse(dongia)
+                            });
+
                         }
                     }
+
+                    if (!danhSachChiTiet.Any())
+                    {
+                        MessageBox.Show("Phiếu phải có ít nhất 1 dòng chi tiết hàng hóa hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    // 3.Đóng gói Request gửi API
+                    var request = new PhieuNhapXuatDtoClient
+                    {
+                        //MaPhieu = txtMaPhieu.Text.Trim(),
+                        NgayLap = dateTimePickerNgayNhap.Value,
+                        //DoiTacId = gridLookupDoiTac1. .SelectedValue != null ? Convert.ToInt32(cboDoiTac.SelectedValue) : null,
+                        //GhiChu = txtGhiChu.Text.Trim(),
+                        //IsPhieuNhap = rdoPhieuNhap.Checked,
+                        LoaiPhieu= (int)_loaiPhieuNhapXuat,
+                        ChiTiets = danhSachChiTiet
+                    };
+
+                if (txtSoPhieu.Text == "") //phiếu mới
+                {
+                    var res = await _apiClient.CreatePhieuAsync(request);
+                    MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else //cập nhật phiếu
                 {
-
+                    var res = await _apiClient.UpdatePhieuAsync(Int32.Parse(txtSoPhieu.Text), request);
+                    MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
