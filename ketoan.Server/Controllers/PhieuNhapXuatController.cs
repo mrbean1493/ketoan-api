@@ -208,6 +208,7 @@ namespace ketoan.Server.Controllers
                     }
 
                     // BƯỚC 2: Cập nhật thông tin Header và thay thế Chi tiết cũ bằng Chi tiết mới
+                    //
                     //phieuDb.Id = dto.Id;
                     phieuDb.NgayLap = dto.NgayLap.ToUniversalTime();
                     phieuDb.IdDoiTac = dto.DoiTacId;
