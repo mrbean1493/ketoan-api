@@ -7,6 +7,7 @@ namespace ketoan.Server.Models
     public class ChiTietPhieuNhapXuat
     {
         [Key]
+        [Column("id")]
         public int Id { get; set; }
 
         [Column("id_hang_hoa")]
