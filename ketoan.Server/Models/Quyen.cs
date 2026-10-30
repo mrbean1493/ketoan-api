@@ -7,8 +7,9 @@ namespace ketoan.Server.Models
     public class Quyen
     {
         [Key]
-        [Column("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // <--- BỔ SUNG DÒNG NÀY ĐỂ BÁO EF CORE KHÔNG TỰ Ý INSERT CỘT ID
+        [Column("id")]
+        
         public int Id { get; set; }
 
         [Required]
