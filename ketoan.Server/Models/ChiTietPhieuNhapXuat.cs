@@ -10,6 +10,10 @@ namespace ketoan.Server.Models
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("phieu_nhap_xuat_id")] 
+        public int PhieuNhapXuatId { get; set; }
+
+
         [Column("id_hang_hoa")]
         public int IdHangHoa { get; set; }
 
