@@ -9,7 +9,7 @@
         public int DoiTacId { get; set; }
         //public string? GhiChu { get; set; }
         //public bool IsPhieuNhap { get; set; }
-
+        public decimal TongTien{ get; set; }
         // Lồng danh sách chi tiết phiếu
         public List<RequestChiTietPhieuNhapXuatDto> ChiTiets { get; set; } = new();
     }

@@ -438,6 +438,10 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 {
                     var res = await _apiClient.CreatePhieuAsync(request);
                     MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (res.Id != null)
+                    {
+                        txtSoPhieu.Text= res.Id.ToString();
+                    }
                 }
                 else //cập nhật phiếu
                 {
