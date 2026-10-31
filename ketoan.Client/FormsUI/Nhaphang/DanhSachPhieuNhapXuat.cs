@@ -16,5 +16,35 @@ namespace ketoan.Client.FormsUI.Nhaphang
         {
             InitializeComponent();
         }
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DanhSachPhieuNhapXuat_Load(object sender, EventArgs e)
+        {
+            LoadLoaiPhieu();
+        }
+
+        private void LoadLoaiPhieu()
+        {
+
+        }
     }
 }

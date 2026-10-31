@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            dataGridView1 = new DataGridView();
-            txtSoPhieu = new TextBox();
-            lblSoPhieu = new Label();
-            label1 = new Label();
-            gridLookupDoiTac1 = new ketoan.Client.ClassComponent.GridLookupDoiTac();
-            lblDoiTac = new Label();
-            comboBox1 = new ComboBox();
-            dateTimePickerNgayNhapFrom = new DateTimePicker();
-            lblNgayNhap = new Label();
+            btnXoa = new Button();
+            btnSua = new Button();
+            btnThem = new Button();
+            btnTimKiem = new Button();
             dateTimePicker1 = new DateTimePicker();
             label2 = new Label();
-            btnTimKiem = new Button();
-            btnThem = new Button();
-            btnSua = new Button();
-            btnXoa = new Button();
+            dateTimePickerNgayNhapFrom = new DateTimePicker();
+            lblNgayNhap = new Label();
+            cboLoaiPhieu = new ComboBox();
+            gridLookupDoiTac1 = new ketoan.Client.ClassComponent.GridLookupDoiTac();
+            lblDoiTac = new Label();
+            label1 = new Label();
+            txtSoPhieu = new TextBox();
+            lblSoPhieu = new Label();
+            dataGridView1 = new DataGridView();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -58,7 +58,7 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(dateTimePickerNgayNhapFrom);
             groupBox1.Controls.Add(lblNgayNhap);
-            groupBox1.Controls.Add(comboBox1);
+            groupBox1.Controls.Add(cboLoaiPhieu);
             groupBox1.Controls.Add(gridLookupDoiTac1);
             groupBox1.Controls.Add(lblDoiTac);
             groupBox1.Controls.Add(label1);
@@ -72,84 +72,45 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Tìm kiếm phiếu nhập xuất";
             // 
-            // dataGridView1
+            // btnXoa
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 149);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1113, 383);
-            dataGridView1.TabIndex = 1;
+            btnXoa.Location = new Point(988, 104);
+            btnXoa.Name = "btnXoa";
+            btnXoa.Size = new Size(75, 23);
+            btnXoa.TabIndex = 20;
+            btnXoa.Text = "Xóa bỏ";
+            btnXoa.UseVisualStyleBackColor = true;
+            btnXoa.Click += btnXoa_Click;
             // 
-            // txtSoPhieu
+            // btnSua
             // 
-            txtSoPhieu.Location = new Point(114, 26);
-            txtSoPhieu.Name = "txtSoPhieu";
-            txtSoPhieu.Size = new Size(133, 23);
-            txtSoPhieu.TabIndex = 3;
+            btnSua.Location = new Point(892, 104);
+            btnSua.Name = "btnSua";
+            btnSua.Size = new Size(75, 23);
+            btnSua.TabIndex = 19;
+            btnSua.Text = "Chỉnh sửa";
+            btnSua.UseVisualStyleBackColor = true;
+            btnSua.Click += btnSua_Click;
             // 
-            // lblSoPhieu
+            // btnThem
             // 
-            lblSoPhieu.AutoSize = true;
-            lblSoPhieu.Location = new Point(12, 29);
-            lblSoPhieu.Name = "lblSoPhieu";
-            lblSoPhieu.Size = new Size(53, 15);
-            lblSoPhieu.TabIndex = 2;
-            lblSoPhieu.Text = "Số phiếu";
+            btnThem.Location = new Point(796, 104);
+            btnThem.Name = "btnThem";
+            btnThem.Size = new Size(75, 23);
+            btnThem.TabIndex = 18;
+            btnThem.Text = "Thêm mới";
+            btnThem.UseVisualStyleBackColor = true;
+            btnThem.Click += btnThem_Click;
             // 
-            // label1
+            // btnTimKiem
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(11, 68);
-            label1.Name = "label1";
-            label1.Size = new Size(62, 15);
-            label1.TabIndex = 4;
-            label1.Text = "Loại phiếu";
-            // 
-            // gridLookupDoiTac1
-            // 
-            gridLookupDoiTac1.Location = new Point(114, 104);
-            gridLookupDoiTac1.Name = "gridLookupDoiTac1";
-            gridLookupDoiTac1.Size = new Size(637, 24);
-            gridLookupDoiTac1.TabIndex = 11;
-            // 
-            // lblDoiTac
-            // 
-            lblDoiTac.AutoSize = true;
-            lblDoiTac.Location = new Point(12, 110);
-            lblDoiTac.Name = "lblDoiTac";
-            lblDoiTac.Size = new Size(44, 15);
-            lblDoiTac.TabIndex = 10;
-            lblDoiTac.Text = "Đối tác";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(115, 66);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(132, 23);
-            comboBox1.TabIndex = 12;
-            // 
-            // dateTimePickerNgayNhapFrom
-            // 
-            dateTimePickerNgayNhapFrom.CustomFormat = "dd/MM/yyyy";
-            dateTimePickerNgayNhapFrom.Format = DateTimePickerFormat.Custom;
-            dateTimePickerNgayNhapFrom.Location = new Point(400, 26);
-            dateTimePickerNgayNhapFrom.Name = "dateTimePickerNgayNhapFrom";
-            dateTimePickerNgayNhapFrom.Size = new Size(100, 23);
-            dateTimePickerNgayNhapFrom.TabIndex = 14;
-            // 
-            // lblNgayNhap
-            // 
-            lblNgayNhap.AutoSize = true;
-            lblNgayNhap.Location = new Point(287, 29);
-            lblNgayNhap.Name = "lblNgayNhap";
-            lblNgayNhap.Size = new Size(108, 15);
-            lblNgayNhap.TabIndex = 13;
-            lblNgayNhap.Text = "Ngày nhập từ ngày";
+            btnTimKiem.Location = new Point(796, 26);
+            btnTimKiem.Name = "btnTimKiem";
+            btnTimKiem.Size = new Size(75, 23);
+            btnTimKiem.TabIndex = 17;
+            btnTimKiem.Text = "Tìm kiếm";
+            btnTimKiem.UseVisualStyleBackColor = true;
+            btnTimKiem.Click += btnTimKiem_Click;
             // 
             // dateTimePicker1
             // 
@@ -169,41 +130,84 @@
             label2.TabIndex = 15;
             label2.Text = "Ngày nhập đến ngày";
             // 
-            // btnTimKiem
+            // dateTimePickerNgayNhapFrom
             // 
-            btnTimKiem.Location = new Point(796, 26);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(75, 23);
-            btnTimKiem.TabIndex = 17;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = true;
+            dateTimePickerNgayNhapFrom.CustomFormat = "dd/MM/yyyy";
+            dateTimePickerNgayNhapFrom.Format = DateTimePickerFormat.Custom;
+            dateTimePickerNgayNhapFrom.Location = new Point(400, 26);
+            dateTimePickerNgayNhapFrom.Name = "dateTimePickerNgayNhapFrom";
+            dateTimePickerNgayNhapFrom.Size = new Size(100, 23);
+            dateTimePickerNgayNhapFrom.TabIndex = 14;
             // 
-            // btnThem
+            // lblNgayNhap
             // 
-            btnThem.Location = new Point(796, 104);
-            btnThem.Name = "btnThem";
-            btnThem.Size = new Size(75, 23);
-            btnThem.TabIndex = 18;
-            btnThem.Text = "Thêm mới";
-            btnThem.UseVisualStyleBackColor = true;
+            lblNgayNhap.AutoSize = true;
+            lblNgayNhap.Location = new Point(287, 29);
+            lblNgayNhap.Name = "lblNgayNhap";
+            lblNgayNhap.Size = new Size(108, 15);
+            lblNgayNhap.TabIndex = 13;
+            lblNgayNhap.Text = "Ngày nhập từ ngày";
             // 
-            // btnSua
+            // cboLoaiPhieu
             // 
-            btnSua.Location = new Point(892, 104);
-            btnSua.Name = "btnSua";
-            btnSua.Size = new Size(75, 23);
-            btnSua.TabIndex = 19;
-            btnSua.Text = "Chỉnh sửa";
-            btnSua.UseVisualStyleBackColor = true;
+            cboLoaiPhieu.FormattingEnabled = true;
+            cboLoaiPhieu.Location = new Point(115, 66);
+            cboLoaiPhieu.Name = "cboLoaiPhieu";
+            cboLoaiPhieu.Size = new Size(132, 23);
+            cboLoaiPhieu.TabIndex = 12;
             // 
-            // btnXoa
+            // gridLookupDoiTac1
             // 
-            btnXoa.Location = new Point(988, 104);
-            btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(75, 23);
-            btnXoa.TabIndex = 20;
-            btnXoa.Text = "Xóa bỏ";
-            btnXoa.UseVisualStyleBackColor = true;
+            gridLookupDoiTac1.Location = new Point(114, 104);
+            gridLookupDoiTac1.Name = "gridLookupDoiTac1";
+            gridLookupDoiTac1.Size = new Size(637, 24);
+            gridLookupDoiTac1.TabIndex = 11;
+            // 
+            // lblDoiTac
+            // 
+            lblDoiTac.AutoSize = true;
+            lblDoiTac.Location = new Point(12, 110);
+            lblDoiTac.Name = "lblDoiTac";
+            lblDoiTac.Size = new Size(44, 15);
+            lblDoiTac.TabIndex = 10;
+            lblDoiTac.Text = "Đối tác";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(11, 68);
+            label1.Name = "label1";
+            label1.Size = new Size(62, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Loại phiếu";
+            // 
+            // txtSoPhieu
+            // 
+            txtSoPhieu.Location = new Point(114, 26);
+            txtSoPhieu.Name = "txtSoPhieu";
+            txtSoPhieu.Size = new Size(133, 23);
+            txtSoPhieu.TabIndex = 3;
+            // 
+            // lblSoPhieu
+            // 
+            lblSoPhieu.AutoSize = true;
+            lblSoPhieu.Location = new Point(12, 29);
+            lblSoPhieu.Name = "lblSoPhieu";
+            lblSoPhieu.Size = new Size(53, 15);
+            lblSoPhieu.TabIndex = 2;
+            lblSoPhieu.Text = "Số phiếu";
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 149);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.Size = new Size(1113, 383);
+            dataGridView1.TabIndex = 1;
             // 
             // DanhSachPhieuNhapXuat
             // 
@@ -214,6 +218,7 @@
             Controls.Add(groupBox1);
             Name = "DanhSachPhieuNhapXuat";
             Text = "Danh sách phiếu nhập xuất";
+            Load += DanhSachPhieuNhapXuat_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -227,7 +232,7 @@
         private Label label1;
         private TextBox txtSoPhieu;
         private Label lblSoPhieu;
-        private ComboBox comboBox1;
+        private ComboBox cboLoaiPhieu;
         private ClassComponent.GridLookupDoiTac gridLookupDoiTac1;
         private Label lblDoiTac;
         private DateTimePicker dateTimePicker1;

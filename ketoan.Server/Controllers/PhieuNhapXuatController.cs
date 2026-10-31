@@ -224,6 +224,7 @@ namespace ketoan.Server.Controllers
                     var newChiTiets = dto.ChiTiets.Select(ct => new ChiTietPhieuNhapXuat
                     {
                         //Id = phieuDb.Id,
+
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
                         SoLo=ct.SoLo,
