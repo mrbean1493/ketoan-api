@@ -215,6 +215,7 @@ namespace ketoan.Server.Controllers
                     phieuDb.IdDoiTac = dto.DoiTacId;
                     //phieuDb.GhiChu = dto.GhiChu;
                     phieuDb.LoaiPhieu = dto.LoaiPhieu;
+                    phieuDb.NgayCapNhat = DateTime.Now;
                     phieuDb.TongTien = dto.ChiTiets.Sum(x => x.ThanhTien);
 
                     // Xóa sạch dòng cũ trong DB
@@ -224,7 +225,7 @@ namespace ketoan.Server.Controllers
                     var newChiTiets = dto.ChiTiets.Select(ct => new ChiTietPhieuNhapXuat
                     {
                         //Id = phieuDb.Id,
-
+                        PhieuNhapXuatId = phieuDb.Id,
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
                         SoLo=ct.SoLo,
