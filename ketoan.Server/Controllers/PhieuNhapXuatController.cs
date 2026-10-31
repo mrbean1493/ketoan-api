@@ -223,7 +223,7 @@ namespace ketoan.Server.Controllers
                     // Thêm danh sách dòng mới
                     var newChiTiets = dto.ChiTiets.Select(ct => new ChiTietPhieuNhapXuat
                     {
-                        Id = phieuDb.Id,
+                        //Id = phieuDb.Id,
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
                         SoLo=ct.SoLo,
