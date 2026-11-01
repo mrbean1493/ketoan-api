@@ -33,7 +33,7 @@
             btnSua = new Button();
             btnThem = new Button();
             btnTimKiem = new Button();
-            dateTimePicker1 = new DateTimePicker();
+            dateTimePickerNgayNhapTo = new DateTimePicker();
             label2 = new Label();
             dateTimePickerNgayNhapFrom = new DateTimePicker();
             lblNgayNhap = new Label();
@@ -54,7 +54,7 @@
             groupBox1.Controls.Add(btnSua);
             groupBox1.Controls.Add(btnThem);
             groupBox1.Controls.Add(btnTimKiem);
-            groupBox1.Controls.Add(dateTimePicker1);
+            groupBox1.Controls.Add(dateTimePickerNgayNhapTo);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(dateTimePickerNgayNhapFrom);
             groupBox1.Controls.Add(lblNgayNhap);
@@ -112,14 +112,14 @@
             btnTimKiem.UseVisualStyleBackColor = true;
             btnTimKiem.Click += btnTimKiem_Click;
             // 
-            // dateTimePicker1
+            // dateTimePickerNgayNhapTo
             // 
-            dateTimePicker1.CustomFormat = "dd/MM/yyyy";
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.Location = new Point(648, 26);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(100, 23);
-            dateTimePicker1.TabIndex = 16;
+            dateTimePickerNgayNhapTo.CustomFormat = "dd/MM/yyyy";
+            dateTimePickerNgayNhapTo.Format = DateTimePickerFormat.Custom;
+            dateTimePickerNgayNhapTo.Location = new Point(648, 26);
+            dateTimePickerNgayNhapTo.Name = "dateTimePickerNgayNhapTo";
+            dateTimePickerNgayNhapTo.Size = new Size(100, 23);
+            dateTimePickerNgayNhapTo.TabIndex = 16;
             // 
             // label2
             // 
@@ -160,6 +160,7 @@
             // 
             gridLookupDoiTac1.Location = new Point(114, 104);
             gridLookupDoiTac1.Name = "gridLookupDoiTac1";
+            gridLookupDoiTac1.SelectedId = null;
             gridLookupDoiTac1.Size = new Size(637, 24);
             gridLookupDoiTac1.TabIndex = 11;
             // 
@@ -235,7 +236,7 @@
         private ComboBox cboLoaiPhieu;
         private ClassComponent.GridLookupDoiTac gridLookupDoiTac1;
         private Label lblDoiTac;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dateTimePickerNgayNhapTo;
         private Label label2;
         private DateTimePicker dateTimePickerNgayNhapFrom;
         private Label lblNgayNhap;

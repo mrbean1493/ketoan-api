@@ -41,11 +41,6 @@
             lblSoPhieu = new Label();
             groupBox2 = new GroupBox();
             dataGridView1 = new DataGridView();
-            groupBox3 = new GroupBox();
-            lblTienBangChu = new Label();
-            button2 = new Button();
-            button1 = new Button();
-            lblTongTien = new Label();
             colSTT = new DataGridViewTextBoxColumn();
             colMaHH = new DataGridViewTextBoxColumn();
             colTenHH = new DataGridViewTextBoxColumn();
@@ -55,6 +50,12 @@
             colDongia = new DataGridViewTextBoxColumn();
             colThanhtien = new DataGridViewTextBoxColumn();
             col_id_dvt = new DataGridViewTextBoxColumn();
+            groupBox3 = new GroupBox();
+            lblTienBangChu = new Label();
+            btnLuuVaDong = new Button();
+            btnLuu = new Button();
+            lblTongTien = new Label();
+            btnLuuVaLamMoi = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -195,60 +196,6 @@
             dataGridView1.UserDeletedRow += dataGridView1_UserDeletedRow;
             dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
-            // groupBox3
-            // 
-            groupBox3.Controls.Add(lblTienBangChu);
-            groupBox3.Controls.Add(button2);
-            groupBox3.Controls.Add(button1);
-            groupBox3.Controls.Add(lblTongTien);
-            groupBox3.Dock = DockStyle.Fill;
-            groupBox3.Location = new Point(0, 429);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(1227, 140);
-            groupBox3.TabIndex = 2;
-            groupBox3.TabStop = false;
-            groupBox3.Text = ".";
-            // 
-            // lblTienBangChu
-            // 
-            lblTienBangChu.AutoSize = true;
-            lblTienBangChu.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTienBangChu.Location = new Point(13, 62);
-            lblTienBangChu.Name = "lblTienBangChu";
-            lblTienBangChu.Size = new Size(91, 15);
-            lblTienBangChu.TabIndex = 3;
-            lblTienBangChu.Text = "Tiền bằng chữ: ";
-            // 
-            // button2
-            // 
-            button2.Location = new Point(1041, 105);
-            button2.Name = "button2";
-            button2.Size = new Size(160, 23);
-            button2.TabIndex = 2;
-            button2.Text = "Lưu và đóng form";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(921, 105);
-            button1.Name = "button1";
-            button1.Size = new Size(101, 23);
-            button1.TabIndex = 1;
-            button1.Text = "Lưu";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
-            // lblTongTien
-            // 
-            lblTongTien.AutoSize = true;
-            lblTongTien.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTongTien.Location = new Point(1041, 19);
-            lblTongTien.Name = "lblTongTien";
-            lblTongTien.Size = new Size(63, 15);
-            lblTongTien.TabIndex = 0;
-            lblTongTien.Text = "Tổng tiền:";
-            // 
             // colSTT
             // 
             colSTT.HeaderText = "STT";
@@ -299,6 +246,71 @@
             col_id_dvt.Name = "col_id_dvt";
             col_id_dvt.Visible = false;
             // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(btnLuuVaLamMoi);
+            groupBox3.Controls.Add(lblTienBangChu);
+            groupBox3.Controls.Add(btnLuuVaDong);
+            groupBox3.Controls.Add(btnLuu);
+            groupBox3.Controls.Add(lblTongTien);
+            groupBox3.Dock = DockStyle.Fill;
+            groupBox3.Location = new Point(0, 429);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(1227, 140);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = ".";
+            // 
+            // lblTienBangChu
+            // 
+            lblTienBangChu.AutoSize = true;
+            lblTienBangChu.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblTienBangChu.Location = new Point(13, 62);
+            lblTienBangChu.Name = "lblTienBangChu";
+            lblTienBangChu.Size = new Size(91, 15);
+            lblTienBangChu.TabIndex = 3;
+            lblTienBangChu.Text = "Tiền bằng chữ: ";
+            // 
+            // btnLuuVaDong
+            // 
+            btnLuuVaDong.Location = new Point(1041, 105);
+            btnLuuVaDong.Name = "btnLuuVaDong";
+            btnLuuVaDong.Size = new Size(160, 23);
+            btnLuuVaDong.TabIndex = 2;
+            btnLuuVaDong.Text = "Lưu và đóng form";
+            btnLuuVaDong.UseVisualStyleBackColor = true;
+            btnLuuVaDong.Click += btnLuuVaDong_Click;
+            // 
+            // btnLuu
+            // 
+            btnLuu.Location = new Point(765, 105);
+            btnLuu.Name = "btnLuu";
+            btnLuu.Size = new Size(101, 23);
+            btnLuu.TabIndex = 1;
+            btnLuu.Text = "Lưu";
+            btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.Click += btnLuu_Click;
+            // 
+            // lblTongTien
+            // 
+            lblTongTien.AutoSize = true;
+            lblTongTien.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblTongTien.Location = new Point(1041, 19);
+            lblTongTien.Name = "lblTongTien";
+            lblTongTien.Size = new Size(63, 15);
+            lblTongTien.TabIndex = 0;
+            lblTongTien.Text = "Tổng tiền:";
+            // 
+            // btnLuuVaLamMoi
+            // 
+            btnLuuVaLamMoi.Location = new Point(872, 105);
+            btnLuuVaLamMoi.Name = "btnLuuVaLamMoi";
+            btnLuuVaLamMoi.Size = new Size(163, 23);
+            btnLuuVaLamMoi.TabIndex = 4;
+            btnLuuVaLamMoi.Text = "Lưu và Tạo mới";
+            btnLuuVaLamMoi.UseVisualStyleBackColor = true;
+            btnLuuVaLamMoi.Click += btnLuuVaLamMoi_Click;
+            // 
             // PhieuNhapXuat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -333,8 +345,8 @@
         private ComboBox cboKho;
         private Label lblKho;
         private Label lblTongTien;
-        private Button button2;
-        private Button button1;
+        private Button btnLuuVaDong;
+        private Button btnLuu;
         private ClassComponent.GridLookupDoiTac gridLookupDoiTac1;
         private Button btnAddHangHoa;
         private Button btnAddDoiTac;
@@ -348,5 +360,6 @@
         private DataGridViewTextBoxColumn colDongia;
         private DataGridViewTextBoxColumn colThanhtien;
         private DataGridViewTextBoxColumn col_id_dvt;
+        private Button btnLuuVaLamMoi;
     }
 }

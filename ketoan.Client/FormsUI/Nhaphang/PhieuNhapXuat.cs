@@ -23,23 +23,58 @@ namespace ketoan.Client.FormsUI.Nhaphang
         // _currentPhieuId = null -> Chế độ Thêm mới
         // _currentPhieuId > 0   -> Chế độ Sửa (Cập nhật)
         private int? _currentPhieuId = null;
-        public PhieuNhapXuat(LoaiPhieuNhapXuat loaiPhieuNhapXuat)
+        public PhieuNhapXuat(LoaiPhieuNhapXuat loaiPhieuNhapXuat,int idphieu=0)
         {
             InitializeComponent();
             _loaiPhieuNhapXuat = loaiPhieuNhapXuat;
             _apiClient = new ApiConnectClient();
-
-
+            idphieu = 23;
+            _currentPhieuId = idphieu;
             CapNhatGiaoDien();
+            
+
             LoadDoiTac();
 
         }
 
+        private async Task LoadDataToEditAsync(int phieuId)
+        {
+            try
+            {
+                // Gọi hàm từ tầng ApiConnect của bạn (giả sử tên biến instance là _apiConnect)
+                var result = await _apiClient.GetPhieuByIdAsync(phieuId);
+
+                if (result != null && result.Success && result.Data != null)
+                {
+                    var phieu = result.Data;
+
+                    // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                    dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                    // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                    gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                    // 2. Đổ danh sách chi tiết lên DataGridView
+                    dataGridView1.DataSource = null;
+                    dataGridView1.DataSource = phieu.ChiTiets; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+                }
+                else
+                {
+                    MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private async void LoadDoiTac()
         {
-            dateTimePickerNgayNhap.Value = DateTime.Now;
+            
             // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
-            List<DoiTacDtoClient> listDoiTac = new List<DoiTacDtoClient>
+            List<DoiTacDtoClient> listDoiTac = new List<DoiTacDtoClient>();
+/*
     {
         new DoiTacDtoClient { Id = 1, TenDoiTac = "Công ty TNHH Bánh Cánh Việt và Bánh Cánh Việt", SoDienThoai = "0988123456", SoDienThoai2="0988123456", MaDoiTac = "BCV" },
         new DoiTacDtoClient { Id = 2, TenDoiTac = "Công ty TNHH Salonpas", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
@@ -54,9 +89,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
         new DoiTacDtoClient { Id = 11, TenDoiTac = "Công ty TNHH Salonpas4 ", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
         new DoiTacDtoClient { Id = 12, TenDoiTac = "Công ty TNHH Digital5", SoDienThoai = "012345678", SoDienThoai2="01212121212", MaDoiTac = "XAY" },
     };
+*/
             if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
             {
                 listDoiTac = await _apiClient.GetDoiTacAsync(null, true, null);
+            }
+            else if(_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Xuathang)
+            {
+                listDoiTac = await _apiClient.GetDoiTacAsync(null, null, true);
             }
 
 
@@ -74,6 +114,10 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     int selectedId = selected.Id; // Dùng ID này gán vào PhieuNhap.NhaCungCapId
                 }
             };
+
+
+
+            //gridLookupDoiTac1.SelectedId = 1;
 
         }
         private void CapNhatGiaoDien()
@@ -118,14 +162,24 @@ namespace ketoan.Client.FormsUI.Nhaphang
         private GridLookupDVT _lookupDVT;
         private async void PhieuNhapXuat_Load(object sender, EventArgs e)
         {
+            dateTimePickerNgayNhap.Value = DateTime.Now;
+
+
             // 1. Dữ liệu Hàng hóa và ĐVT
-            List<HangHoaDtoClient> listHangHoa = await _apiClient.GetHangHoaAsync();
+            List<HangHoaDtoClient> listHangHoa = await _apiClient.GetHangHoaAsync(); //sẽ khá chậm
             List<DonViTinhDtoClient> listDVT = await _apiClient.GetDonViTinhAsync();
+
+
+            
 
             dataGridView1.AutoGenerateColumns = false;
 
-            _bindingListChiTiet= new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+            _bindingListChiTiet = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
             dataGridView1.DataSource = _bindingListChiTiet;
+
+            
+            await LoadDataToEditAsync((int)_currentPhieuId);
+
 
             // 2. Khởi tạo Helper và truyền DataGridView chi tiết vào
             _lookupHangHoa = new GridLookupHangHoa(dataGridView1);
@@ -227,6 +281,21 @@ namespace ketoan.Client.FormsUI.Nhaphang
             // Khi có thay đổi ở 1 trong các cột ảnh hưởng đến tiền
             if (colName == "colSL" || colName == "colDongia")
             {
+                var SLvalue = dataGridView1.Rows[e.RowIndex].Cells["colSL"].Value;
+                var DGvalue= dataGridView1.Rows[e.RowIndex].Cells["colDongia"].Value;
+
+                if (SLvalue == null || DGvalue == null) return;
+
+
+                if (!decimal.TryParse(SLvalue.ToString(),out decimal number)){
+                    MessageBox.Show("Cột số lượng phải điền dạng số","Cảnh báo");
+                    return;
+                }
+                if (!decimal.TryParse(DGvalue.ToString(), out decimal number2))
+                {
+                    MessageBox.Show("Cột đơn giá phải điền dạng số", "Cảnh báo");
+                    return;
+                }
                 TinhThanhTienDong(e.RowIndex);
             }
 
@@ -327,7 +396,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             }
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void btnLuu_Click(object sender, EventArgs e)
         {
             DialogResult confirmResult = MessageBox.Show(
             "Bạn chắc chắn lưu thông tin phiếu nhập xuất không?",
@@ -341,95 +410,95 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 dataGridView1.EndEdit();
 
 
-                    var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
+                var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
 
 
-                    //validate row
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                //validate row
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    if (row.Cells["colSTT"].Value != null)
                     {
-                        if (row.IsNewRow) continue;
-                        if(row.Cells["colSTT"].Value != null)
+                        var maHH = row.Cells["colMaHH"].Value?.ToString();
+                        if (string.IsNullOrEmpty(maHH))
                         {
-                            var maHH = row.Cells["colMaHH"].Value?.ToString();
-                            if (string.IsNullOrEmpty(maHH))
-                            {
-                                MessageBox.Show("Thiếu mã hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-
-                            var tenHH = row.Cells["colTenHH"].Value?.ToString();
-                            if (string.IsNullOrEmpty(tenHH))
-                            {
-                                MessageBox.Show("Thiếu tên hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-
-                            var dvt = row.Cells["colDVT"].Value?.ToString();
-                            if (string.IsNullOrEmpty(dvt))
-                            {
-                                MessageBox.Show("Thiếu đơn vị tính hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-                            var id_dvt = row.Cells["col_id_dvt"].Value?.ToString();
-
-
-                            var solo = row.Cells["colSoLo"].Value?.ToString();
-                            if (string.IsNullOrEmpty(solo))
-                            {
-                                MessageBox.Show("Thiếu số lô hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-
-                            var soluong = row.Cells["colSL"].Value?.ToString();
-                            if (string.IsNullOrEmpty(soluong))
-                            {
-                                MessageBox.Show("Thiếu số lượng hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-                            if (soluong=="0")
-                            {
-                                MessageBox.Show("Số lượng =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-
-
-                            var dongia = row.Cells["colDongia"].Value?.ToString();
-                            if (string.IsNullOrEmpty(dongia))
-                            {
-                                MessageBox.Show("Thiếu đơn giá hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-                            if (dongia == "0")
-                            {
-                                MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                                return;
-                            }
-
-                            danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
-                            {
-                                IdHangHoa = Int32.Parse(maHH),
-                                Id_dvt = Int16.Parse(id_dvt),
-                                SoLuong = Decimal.Parse(soluong),
-                                SoLo = solo,
-                                DonGia = Decimal.Parse(dongia)
-                            });
-
+                            MessageBox.Show("Thiếu mã hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
                         }
-                    }
 
-                    if (!danhSachChiTiet.Any())
-                    {
-                        MessageBox.Show("Phiếu phải có ít nhất 1 dòng chi tiết hàng hóa hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        var tenHH = row.Cells["colTenHH"].Value?.ToString();
+                        if (string.IsNullOrEmpty(tenHH))
+                        {
+                            MessageBox.Show("Thiếu tên hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+
+                        var dvt = row.Cells["colDVT"].Value?.ToString();
+                        if (string.IsNullOrEmpty(dvt))
+                        {
+                            MessageBox.Show("Thiếu đơn vị tính hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+                        var id_dvt = row.Cells["col_id_dvt"].Value?.ToString();
+
+
+                        var solo = row.Cells["colSoLo"].Value?.ToString();
+                        if (string.IsNullOrEmpty(solo))
+                        {
+                            MessageBox.Show("Thiếu số lô hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+
+                        var soluong = row.Cells["colSL"].Value?.ToString();
+                        if (string.IsNullOrEmpty(soluong))
+                        {
+                            MessageBox.Show("Thiếu số lượng hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+                        if (soluong == "0")
+                        {
+                            MessageBox.Show("Số lượng =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+
+
+                        var dongia = row.Cells["colDongia"].Value?.ToString();
+                        if (string.IsNullOrEmpty(dongia))
+                        {
+                            MessageBox.Show("Thiếu đơn giá hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+                        if (dongia == "0")
+                        {
+                            MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
+                            return;
+                        }
+
+                        danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
+                        {
+                            IdHangHoa = Int32.Parse(maHH),
+                            Id_dvt = Int16.Parse(id_dvt),
+                            SoLuong = Decimal.Parse(soluong),
+                            SoLo = solo,
+                            DonGia = Decimal.Parse(dongia)
+                        });
+
                     }
+                }
+
+                if (!danhSachChiTiet.Any())
+                {
+                    MessageBox.Show("Phiếu phải có ít nhất 1 dòng chi tiết hàng hóa hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 // 3.Đóng gói Request gửi API
                 var request = new PhieuNhapXuatDtoClient
                 {
                     //MaPhieu = txtMaPhieu.Text.Trim(),
                     NgayLap = dateTimePickerNgayNhap.Value,
                     DoiTacId = gridLookupDoiTac1.SelectedDoiTac.Id,
-                        //GhiChu = txtGhiChu.Text.Trim(),
-                        //IsPhieuNhap = rdoPhieuNhap.Checked,
+                    //GhiChu = txtGhiChu.Text.Trim(),
+                    //IsPhieuNhap = rdoPhieuNhap.Checked,
                     LoaiPhieu = (int)_loaiPhieuNhapXuat,
                     ChiTiets = danhSachChiTiet
                 };
@@ -440,7 +509,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (res.Id != null)
                     {
-                        txtSoPhieu.Text= res.Id.ToString();
+                        txtSoPhieu.Text = res.Id.ToString();
                     }
                 }
                 else //cập nhật phiếu
@@ -451,10 +520,18 @@ namespace ketoan.Client.FormsUI.Nhaphang
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnLuuVaDong_Click(object sender, EventArgs e)
         {
-            button1.PerformClick();
+            btnLuu.PerformClick();
             this.Close();
+        }
+
+        private void btnLuuVaLamMoi_Click(object sender, EventArgs e)
+        {
+            //btnLuu.PerformClick();
+            txtSoPhieu.Text = "";
+            gridLookupDoiTac1.SelectedId = 0;
+            //thiếu code reset dgv
         }
     }
 }

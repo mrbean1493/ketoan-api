@@ -284,43 +284,43 @@ namespace ketoan.Client
 
         private void danhSáchPhiếuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new DanhSachPhieuNhapXuat();
-            OpenChildFormInTab(form, "DanhSachPhieuNhapXuat");
+            var form = new DanhSachPhieuNhapXuat(true);
+            OpenChildFormInTab(form, "DanhSachPhieuNhap");
         }
 
         private void danhSáchPhiếuToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            var form = new DanhSachPhieuNhapXuat();
-            OpenChildFormInTab(form, "DanhSachPhieuNhapXuat");
+            var form = new DanhSachPhieuNhapXuat(false);
+            OpenChildFormInTab(form, "DanhSachPhieuXuat");
         }
 
         private void nhậpKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang,0);
             OpenChildFormInTab(form, "NhapKho");
         }
 
         private void trảHàngNhậpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahang);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahang,0);
             OpenChildFormInTab(form, "TraHang");
         }
 
         private void xuấtKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathang);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathang,0);
             OpenChildFormInTab(form, "XuatKho");
         }
 
         private void trảHàngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahangban);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahangban,0);
             OpenChildFormInTab(form, "TraHangBan");
         }
 
         private void xuấtHủyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathuy);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathuy, 0);
             OpenChildFormInTab(form, "XuatHuy");
         }
     }

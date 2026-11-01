@@ -16,6 +16,43 @@ namespace ketoan.Client.ClassComponent
         private PopupForm popupForm;
         private DataGridView dgvList;
 
+        // Thêm property này vào trong class GridLookupDoiTac (ví dụ đặt ở ngay dưới các khai báo biến)
+        public int? SelectedId
+        {
+            get => SelectedDoiTac?.Id; // Tùy thuộc vào tên thuộc tính ID trong DTO của bạn (ví dụ x.Id hoặc x.DoiTacId)
+            set
+            {
+                if (value.HasValue && value.Value > 0)
+                {
+                    // Tìm đối tác trong _dataSource khớp với ID truyền vào
+                    var found = _dataSource.FirstOrDefault(x => x.Id == value.Value);
+                    if (found != null)
+                    {
+                        SelectedDoiTac = found;
+
+                        // Hiển thị tên lên ô tìm kiếm mà không kích hoạt sự kiện TextChanged
+                        txtSearch.TextChanged -= TxtSearch_TextChanged;
+                        txtSearch.Text = found.TenDoiTac;
+                        txtSearch.TextChanged += TxtSearch_TextChanged;
+                    }
+                    else
+                    {
+                        SelectedDoiTac = null;
+                        txtSearch.TextChanged -= TxtSearch_TextChanged;
+                        txtSearch.Text = string.Empty;
+                        txtSearch.TextChanged += TxtSearch_TextChanged;
+                    }
+                }
+                else
+                {
+                    SelectedDoiTac = null;
+                    txtSearch.TextChanged -= TxtSearch_TextChanged;
+                    txtSearch.Text = string.Empty;
+                    txtSearch.TextChanged += TxtSearch_TextChanged;
+                }
+            }
+        }
+
         private List<DoiTacDtoClient> _dataSource = new List<DoiTacDtoClient>();
 
         public DoiTacDtoClient SelectedDoiTac { get; private set; }
