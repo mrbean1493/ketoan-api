@@ -83,7 +83,7 @@ namespace ketoan.Server.Controllers
                     Id = p.Id,
                     //MaPhieu = p.MaPhieu,
                     NgayLap = p.NgayLap,
-                    DoiTacId = p.IdDoiTac,
+                    DoiTacId = p.id_doi_tac,
                     TongTien = p.TongTien,
                     //GhiChu = p.GhiChu,
                     //IsPhieuNhap = p.IsPhieuNhap,

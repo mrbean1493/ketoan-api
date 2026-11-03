@@ -17,6 +17,7 @@ var app = builder.Build();
 // Bật Swagger UI để kiểm tra API
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
+    app.UseDeveloperExceptionPage(); // Giúp hiển thị chi tiết lỗi màu đỏ thay vì chỉ báo lỗi 500 chung chung
     app.UseSwagger();
     app.UseSwaggerUI();
 }
