@@ -13,7 +13,7 @@
         //public string? GhiChu { get; set; }
         //public bool IsPhieuNhap { get; set; }
 
-
+        public DateTime NgayCapNhat {  get; set; }
 
         // Lồng danh sách chi tiết phiếu trả về
         public List<ResponseChiTietPhieuNhapXuatDto> ChiTiets { get; set; } = new();

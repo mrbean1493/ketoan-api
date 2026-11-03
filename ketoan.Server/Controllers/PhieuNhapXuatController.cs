@@ -31,7 +31,7 @@ namespace ketoan.Server.Controllers
                     TongTien = p.TongTien,
                     //GhiChu = p.GhiChu,
                     //IsPhieuNhap = p.IsPhieuNhap
-                    LoaiPhieu= p.LoaiPhieu
+                    LoaiPhieu = p.LoaiPhieu
                 })
                 .OrderByDescending(p => p.NgayLap)
                 .ToListAsync();
@@ -62,6 +62,8 @@ namespace ketoan.Server.Controllers
                 //GhiChu = phieu.GhiChu,
                 //IsPhieuNhap = phieu.IsPhieuNhap,
                 LoaiPhieu = phieu.LoaiPhieu,
+                NgayCapNhat=phieu.NgayCapNhat,
+                
                 //ChiTiets = phieu.ChiTiets.Select(ct => new ResponseChiTietPhieuNhapXuatDto
                 ChiTiets = (from ct in phieu.ChiTiets
                             join h in _context.HangHoas on ct.IdHangHoa equals h.Id into hhGroup
@@ -70,19 +72,20 @@ namespace ketoan.Server.Controllers
                             from dvt in dvtGroup.DefaultIfEmpty()
                             select new ResponseChiTietPhieuNhapXuatDto
                             {
-                    Id = ct.Id,
+                                Id = ct.Id,
+                                IdHangHoa = ct.IdHangHoa,
                                 // Sử dụng toán tử kiểm tra null an toàn tuyệt đối
                                 MaHang = hh != null ? hh.VietTat : string.Empty,
                                 TenHangHoa = hh != null ? hh.TenHH : string.Empty,
-                    IdDvt = ct.IdDvt,
+                                IdDvt = ct.IdDvt,
                                 TenDonViTinh = dvt != null ? dvt.TenDVT : string.Empty,
-                                SoLo =ct.SoLo,
-                    SoLuong = ct.SoLuong,
-                    DonGia = ct.DonGia,
-                    ThanhTien = ct.ThanhTien
+                                SoLo = ct.SoLo,
+                                SoLuong = ct.SoLuong,
+                                DonGia = ct.DonGia,
+                                ThanhTien = ct.ThanhTien
 
 
-                }).ToList()
+                            }).ToList()
             };
 
             return Ok(new { Success = true, Data = responseDto });
@@ -124,10 +127,10 @@ namespace ketoan.Server.Controllers
                     var chiTiets = dto.ChiTiets.Select(ct => new ChiTietPhieuNhapXuat
                     {
                         //Id = phieu.Id,
-                        PhieuNhapXuatId=phieu.Id,
+                        PhieuNhapXuatId = phieu.Id,
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
-                        SoLo=ct.SoLo,
+                        SoLo = ct.SoLo,
                         SoLuong = ct.SoLuong,
                         DonGia = ct.DonGia,
                         ThanhTien = ct.ThanhTien
@@ -138,14 +141,14 @@ namespace ketoan.Server.Controllers
                     // C. Cập nhật Tồn kho
                     foreach (var item in dto.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.IdHangHoa == item.HangHoaId && x.SoLo==item.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.IdHangHoa == item.HangHoaId && x.SoLo == item.SoLo);
                         if (tonKho == null)
                         {
                             tonKho = new TonKho
                             {
                                 IdHangHoa = item.HangHoaId,
-                                SoLo=item.SoLo,
-                                SoLuong = (dto.LoaiPhieu==1 || dto.LoaiPhieu == 4) ? item.SoLuong : -item.SoLuong
+                                SoLo = item.SoLo,
+                                SoLuong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? item.SoLuong : -item.SoLuong
                             };
                             _context.TonKhos.Add(tonKho);
                         }
@@ -236,7 +239,7 @@ namespace ketoan.Server.Controllers
                         PhieuNhapXuatId = phieuDb.Id,
                         IdHangHoa = ct.HangHoaId,
                         IdDvt = ct.DonViTinhId,
-                        SoLo=ct.SoLo,
+                        SoLo = ct.SoLo,
                         SoLuong = ct.SoLuong,
                         DonGia = ct.DonGia,
                         ThanhTien = ct.ThanhTien
