@@ -12,7 +12,9 @@ namespace ketoan.Client.DTOs
         //[JsonPropertyName("id")]
         //public int Id { get; set; }
 
-        [JsonPropertyName("id_hang_hoa")]
+        // [JsonPropertyName("id_hang_hoa")]
+        // Khớp với "hangHoaId" từ Server trả về
+        [JsonPropertyName("hangHoaId")]
         public int IdHangHoa { get; set; }
 
         [JsonPropertyName("id_dvt")]

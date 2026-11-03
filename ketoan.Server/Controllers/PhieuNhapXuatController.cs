@@ -65,8 +65,8 @@ namespace ketoan.Server.Controllers
                 ChiTiets = phieu.ChiTiets.Select(ct => new ResponseChiTietPhieuNhapXuatDto
                 {
                     Id = ct.Id,
-                    HangHoaId = ct.IdHangHoa,
-                    DonViTinhId = ct.IdDvt,
+                    IdHangHoa = ct.IdHangHoa,
+                    IdDvt = ct.IdDvt,
                     SoLo=ct.SoLo,
                     SoLuong = ct.SoLuong,
                     DonGia = ct.DonGia,

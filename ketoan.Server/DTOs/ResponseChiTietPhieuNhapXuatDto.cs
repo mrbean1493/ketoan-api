@@ -3,12 +3,12 @@
     public class ResponseChiTietPhieuNhapXuatDto
     {
         public int Id { get; set; }
-        public int HangHoaId { get; set; }
+        public int IdHangHoa { get; set; }
         public string MaHang { get; set; } = string.Empty;
         public string TenHangHoa { get; set; } = string.Empty;
 
         public string SoLo { get; set; }
-        public int DonViTinhId { get; set; }
+        public int IdDvt { get; set; }
         public string TenDonViTinh { get; set; } = string.Empty;
         public decimal SoLuong { get; set; }
         public decimal DonGia { get; set; }
