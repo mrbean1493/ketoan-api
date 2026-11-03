@@ -1,10 +1,13 @@
-﻿namespace ketoan.Server.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace ketoan.Server.DTOs
 {
     public class ResponsePhieuNhapXuatDto
     {
         public int Id { get; set; }
         //public string MaPhieu { get; set; } = string.Empty;
         public DateTime NgayLap { get; set; }
+        [JsonPropertyName("id_doi_tac")] // <--- Khớp với key JSON từ client
         public int DoiTacId { get; set; }
         public string TenDoiTac { get; set; }
         public decimal TongTien { get; set; }
