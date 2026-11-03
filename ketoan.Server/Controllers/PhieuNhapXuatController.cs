@@ -39,6 +39,64 @@ namespace ketoan.Server.Controllers
             return Ok(new { Success = true, Data = phieus });
         }
 
+        // 1a GET: api/PhieuNhapXuat - Lấy danh sách phiếu (Danh mục)
+        [HttpGet]
+        public async Task<IActionResult> GetByLoaiPhieuVaNgay(int LoaiPhieu, DateTime fromD, DateTime toD, int DoiTac=0)
+        {
+            /*
+            var phieus = await _context.PhieuNhapXuats
+                .Select(p => new ResponsePhieuNhapXuatDto
+                {
+                    Id = p.Id,
+                    //MaPhieu = p.MaPhieu,
+                    NgayLap = p.NgayLap,
+                    DoiTacId = p.IdDoiTac,
+                    TongTien = p.TongTien,
+                    //GhiChu = p.GhiChu,
+                    //IsPhieuNhap = p.IsPhieuNhap
+                    LoaiPhieu = p.LoaiPhieu
+                })
+                .OrderByDescending(p => p.NgayLap)
+                .ToListAsync();
+            */
+            // 1. Khởi tạo câu truy vấn từ DbSet
+            var query = _context.PhieuNhapXuats.AsQueryable();
+
+            // 2. Lọc theo Loại phiếu
+            query = query.Where(p => p.LoaiPhieu == LoaiPhieu);
+
+            // 3. Lọc theo khoảng thời gian (Từ ngày -> Đến ngày)
+            // Lưu ý: Thêm .Date nếu muốn so sánh trọn vẹn ngày (không tính giờ phút giây)
+            query = query.Where(p => p.NgayLap.Date >= fromD.Date && p.NgayLap.Date <= toD.Date);
+
+            // 4. Lọc theo Đối tác (Nếu doiTac > 0 thì mới áp dụng điều kiện lọc)
+            if (DoiTac > 0)
+            {
+                query = query.Where(p => p.IdDoiTac == DoiTac);
+            }
+
+            // 5. Thực hiện Select ra DTO, sắp xếp giảm dần theo ngày lập và ToListAsync
+            var phieus = await query
+                .OrderByDescending(p => p.NgayLap)
+                .Select(p => new ResponsePhieuNhapXuatDto
+                {
+                    Id = p.Id,
+                    //MaPhieu = p.MaPhieu,
+                    NgayLap = p.NgayLap,
+                    DoiTacId = p.IdDoiTac,
+                    TongTien = p.TongTien,
+                    //GhiChu = p.GhiChu,
+                    //IsPhieuNhap = p.IsPhieuNhap,
+                    LoaiPhieu = p.LoaiPhieu
+                })
+                .ToListAsync();
+            return Ok(new { Success = true, Data = phieus });
+        }
+
+
+
+
+
         // 2. GET: api/PhieuNhapXuat/5 - Lấy chi tiết 1 phiếu (Bao gồm Cuống + Danh sách dòng)
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

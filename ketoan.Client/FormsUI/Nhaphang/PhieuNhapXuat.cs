@@ -47,6 +47,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 if (result != null && result.Success && result.Data != null)
                 {
                     var phieu = result.Data;
+                    txtSoPhieu.Text = phieuId.ToString();
 
                     // 1. Đổ dữ liệu lên Cuống phiếu (Header)
                     dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
@@ -56,7 +57,15 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                     // 2. Đổ danh sách chi tiết lên DataGridView
                     dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = phieu.ChiTiets; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+                    // 2. Tự động đánh số thứ tự cho từng phần tử
+                    int stt = 1;
+                    foreach (var item in phieu.ChiTiets)
+                    {
+                        item.STT = stt++;
+                    }
+                    var bindingList = new BindingList<ChiTietPhieuNhapXuatDtoClient>(phieu.ChiTiets);
+                    dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
 
 
 
@@ -185,8 +194,11 @@ namespace ketoan.Client.FormsUI.Nhaphang
             _bindingListChiTiet = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
             dataGridView1.DataSource = _bindingListChiTiet;
 
+            if (_currentPhieuId != 0)
+            {
+                await LoadDataToEditAsync((int)_currentPhieuId);
+            }
             
-            await LoadDataToEditAsync((int)_currentPhieuId);
 
 
             // 2. Khởi tạo Helper và truyền DataGridView chi tiết vào
@@ -213,9 +225,9 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     dataGridView1.Rows[r].Cells["colTenHH"].Value = item.TenHH;
                     dataGridView1.Rows[r].Cells["colDVT"].Value = item.TenDVT;
                     dataGridView1.Rows[r].Cells["colSoLo"].Value = "";
-                    dataGridView1.Rows[r].Cells["colDongia"].Value = 0;
-                    dataGridView1.Rows[r].Cells["colSL"].Value = 0;
-                    dataGridView1.Rows[r].Cells["colThanhTien"].Value = 0;
+                    dataGridView1.Rows[r].Cells["colDongia"].Value = 0m;
+                    dataGridView1.Rows[r].Cells["colSL"].Value = 0m;
+                    dataGridView1.Rows[r].Cells["colThanhTien"].Value = 0m;
                     dataGridView1.Rows[r].Cells["col_id_dvt"].Value = item.id_dvt;
                     if (dataGridView1.Columns.Contains("colSoLo"))
                     {
@@ -279,11 +291,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 if ((valMa != null && !string.IsNullOrWhiteSpace(valMa.ToString())) ||
                     (valTen != null && !string.IsNullOrWhiteSpace(valTen.ToString())))
                 {
+                    row.Cells["colSTT"].Value = e.RowIndex + 1;
+                    /*
                     if (row.Cells["colSTT"].Value == null || string.IsNullOrWhiteSpace(row.Cells["colSTT"].Value.ToString()))
                     {
                         // Đánh STT bằng Chỉ số dòng + 1
                         row.Cells["colSTT"].Value = e.RowIndex + 1;
                     }
+                    */
                 }
             }
             // Khi có thay đổi ở 1 trong các cột ảnh hưởng đến tiền
@@ -306,12 +321,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 }
                 TinhThanhTienDong(e.RowIndex);
             }
-
+            TinhTongTien();
+            /*
             // Khi cột Thành tiền thay đổi
             if (colName == "colThanhtien")
             {
                 TinhTongTien();
             }
+            */
         }
         // 1. Cập nhật Thành tiền ngay khi gõ phím (Real-time)
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -326,27 +343,35 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 }
             }
         }
+
         public void TinhThanhTienDong(int rowIndex)
         {
             var row = dataGridView1.Rows[rowIndex];
+            if (row.IsNewRow) return;
 
-            // Lấy giá trị an toàn (tránh lỗi null hoặc nhập chữ)
-            decimal soLuong = Convert.ToDecimal(row.Cells["colSL"].Value ?? 0);
-            decimal donGia = Convert.ToDecimal(row.Cells["colDongia"].Value ?? 0);
+            // Lấy object DTO đang được bind tại dòng hiện tại
+            var item = row.DataBoundItem as ChiTietPhieuNhapXuatDtoClient;
+            
             //decimal chietKhau = Convert.ToDecimal(row.Cells["colChietKhau"].Value ?? 0); // % Chiết khấu (nếu có)
-
-            // Công thức tính Thành tiền
-            decimal thanhTien = soLuong * donGia;
+            if (item != null)
+            {
+                // Lấy giá trị an toàn (tránh lỗi null hoặc nhập chữ)
+                decimal soLuong = Convert.ToDecimal(row.Cells["colSL"].Value ?? 0);
+                decimal donGia = Convert.ToDecimal(row.Cells["colDongia"].Value ?? 0);
+                item.ThanhTien = soLuong * donGia;
+            }
+                // Công thức tính Thành tiền
+                
 
             // Gán lại giá trị cho ô Thành tiền
-            row.Cells["colThanhtien"].Value = thanhTien;
+            //row.Cells["colThanhtien"].Value = thanhTien;
         }
 
         // 1. Hàm tính tổng Thành tiền cho tất cả các dòng trên DataGridView
         private void TinhTongTien()
         {
             decimal tongTien = 0;
-
+            /*
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 // Bỏ qua dòng trống mới (NewRow) nằm ở dưới cùng lưới
@@ -361,6 +386,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     }
                 }
             }
+            */
+            // Lấy trực tiếp danh sách từ DataSource của DataGridView
+            if (dataGridView1.DataSource is BindingList<ChiTietPhieuNhapXuatDtoClient> list)
+            {
+                // Dùng LINQ Sum để cộng dồn Thành Tiền của tất cả các dòng cực kỳ gọn gàng
+                tongTien = list.Sum(x => x.ThanhTien);
+            }
+
 
             // Hiển thị ra TextBox tổng tiền (Định dạng N0 cho dễ nhìn, ví dụ: 1.500.000)
             lblTongTien.Text = "Tổng tiền: " + tongTien.ToString("N0");
@@ -481,17 +514,24 @@ namespace ketoan.Client.FormsUI.Nhaphang
                             MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
                             return;
                         }
-
+                        var thanhtien = row.Cells["colThanhtien"].Value?.ToString();
                         danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
                         {
                             IdHangHoa = Int32.Parse(maHH),
                             Id_dvt = Int16.Parse(id_dvt),
                             SoLuong = Decimal.Parse(soluong),
                             SoLo = solo,
-                            DonGia = Decimal.Parse(dongia)
+                            DonGia = Decimal.Parse(dongia),
+                           ThanhTien=Decimal.Parse(thanhtien)
                         });
 
                     }
+                }
+                decimal tongTien = 0;
+                if (dataGridView1.DataSource is BindingList<ChiTietPhieuNhapXuatDtoClient> list)
+                {
+                    // Dùng LINQ Sum để cộng dồn Thành Tiền của tất cả các dòng cực kỳ gọn gàng
+                    tongTien = list.Sum(x => x.ThanhTien);
                 }
 
                 if (!danhSachChiTiet.Any())
@@ -505,6 +545,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     //MaPhieu = txtMaPhieu.Text.Trim(),
                     NgayLap = dateTimePickerNgayNhap.Value,
                     DoiTacId = gridLookupDoiTac1.SelectedDoiTac.Id,
+                    TongTien= tongTien,
                     //GhiChu = txtGhiChu.Text.Trim(),
                     //IsPhieuNhap = rdoPhieuNhap.Checked,
                     LoaiPhieu = (int)_loaiPhieuNhapXuat,
@@ -536,10 +577,20 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private void btnLuuVaLamMoi_Click(object sender, EventArgs e)
         {
-            //btnLuu.PerformClick();
+            btnLuu.PerformClick();
             txtSoPhieu.Text = "";
+            dateTimePickerNgayNhap.Value = DateTime.Now;
             gridLookupDoiTac1.SelectedId = 0;
-            //thiếu code reset dgv
+            // 1. Lấy trực tiếp BindingList từ DataSource hiện tại của DataGridView
+            if (dataGridView1.DataSource is BindingList<ChiTietPhieuNhapXuatDtoClient> list)
+            {
+                list.Clear(); // Xóa sạch toàn bộ các phần tử bên trong danh sách
+            }
+            else
+            {
+                // Trường hợp lần đầu mở form chưa gán DataSource thì tạo mới một BindingList rỗng
+                dataGridView1.DataSource = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+            }
         }
     }
 }

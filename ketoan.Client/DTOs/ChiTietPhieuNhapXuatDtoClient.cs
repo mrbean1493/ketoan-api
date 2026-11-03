@@ -9,6 +9,10 @@ namespace ketoan.Client.DTOs
 {
     internal class ChiTietPhieuNhapXuatDtoClient
     {
+
+        [JsonPropertyName("stt")]
+        public int STT { get; set; }
+
         //[JsonPropertyName("id")]
         //public int Id { get; set; }
 
@@ -16,6 +20,10 @@ namespace ketoan.Client.DTOs
         // Khớp với "hangHoaId" từ Server trả về
         //[JsonPropertyName("idHangHoa")]
         public int IdHangHoa { get; set; }
+
+
+        [JsonPropertyName("tenhanghoa")]
+        public string TenHH { get; set; }
 
         [JsonPropertyName("id_dvt")]
         public int Id_dvt { get; set; }
@@ -36,6 +44,6 @@ namespace ketoan.Client.DTOs
 
         // Tự động tính Thành tiền
         [JsonPropertyName("thanh_tien")]
-        public decimal ThanhTien => SoLuong * DonGia;
+        public decimal ThanhTien { get; set; }
     }
 }

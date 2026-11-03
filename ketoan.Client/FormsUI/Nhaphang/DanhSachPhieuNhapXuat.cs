@@ -58,10 +58,11 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private void DanhSachPhieuNhapXuat_Load(object sender, EventArgs e)
         {
-            dateTimePickerNgayNhapFrom.Value = DateTime.Now;
+            dateTimePickerNgayNhapFrom.Value = DateTime.Now.AddMonths(-3);
             dateTimePickerNgayNhapTo.Value = DateTime.Now;
 
-
+            //mặc định lấy danh sách phiếu nhập 3 tháng đổ lại
+            
 
         }
 
