@@ -59,6 +59,11 @@ namespace ketoan.Server.Controllers
                 .OrderByDescending(p => p.NgayLap)
                 .ToListAsync();
             */
+
+            // Ép kiểu DateTime sang UTC để Npgsql (PostgreSQL) chấp nhận kiểu 'timestamp with time zone'
+            DateTime fromUtc = DateTime.SpecifyKind(fromD, DateTimeKind.Utc);
+            DateTime toUtc = DateTime.SpecifyKind(toD, DateTimeKind.Utc);
+
             // 1. Khởi tạo câu truy vấn từ DbSet
             var query = _context.PhieuNhapXuats.AsQueryable();
 
