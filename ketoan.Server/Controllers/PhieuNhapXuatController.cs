@@ -72,7 +72,7 @@ namespace ketoan.Server.Controllers
 
             // 3. Lọc theo khoảng thời gian (Từ ngày -> Đến ngày)
             // Lưu ý: Thêm .Date nếu muốn so sánh trọn vẹn ngày (không tính giờ phút giây)
-            query = query.Where(p => p.NgayLap.Date >= fromD.Date && p.NgayLap.Date <= toD.Date);
+            query = query.Where(p => p.NgayLap >= fromUtc && p.NgayLap <= toUtc);
 
             // 4. Lọc theo Đối tác (Nếu doiTac > 0 thì mới áp dụng điều kiện lọc)
             if (DoiTac > 0)
