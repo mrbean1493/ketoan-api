@@ -55,7 +55,7 @@ namespace ketoan.Client
         }
         */
 
-        private void OpenChildFormInTab(Form formChild, string tabKey)
+        public void OpenChildFormInTab(Form formChild, string tabKey)
         {
             // 1. Kiểm tra xem Tab theo tabKey này đã mở chưa
             foreach (TabPage tab in tabControlMain.TabPages)

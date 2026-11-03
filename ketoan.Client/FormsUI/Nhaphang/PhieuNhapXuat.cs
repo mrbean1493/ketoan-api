@@ -28,7 +28,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             InitializeComponent();
             _loaiPhieuNhapXuat = loaiPhieuNhapXuat;
             _apiClient = new ApiConnectClient();
-            idphieu = 23;
+            //idphieu = 23;
             _currentPhieuId = idphieu;
             CapNhatGiaoDien();
             

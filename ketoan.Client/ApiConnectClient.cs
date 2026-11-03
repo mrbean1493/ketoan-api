@@ -311,6 +311,22 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<List<PhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
         }
 
+        // 1a. Lấy toàn bộ phiếu
+        public async Task<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>> GetByLoaiPhieuVaNgayAsync(int loaiPhieu,DateTime fr,DateTime t,int doitac)
+        {
+            // 1. Format ngày tháng sang chuỗi chuẩn ISO (yyyy-MM-ddTHH:mm:ss) để Server nhận diện chính xác
+            string fromDStr = fr.ToString("yyyy-MM-ddTHH:mm:ss");
+            string toDStr = t.ToString("yyyy-MM-ddTHH:mm:ss");
+
+            // 2. Ghép các tham số vào đường dẫn URL (Query String)
+            string url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            var response = await Client.GetAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
+        }
+
+
+
         // 2. Lấy chi tiết 1 phiếu theo ID
         public async Task<ApiResponse<PhieuNhapXuatDtoClient>> GetPhieuByIdAsync(int id)
         {

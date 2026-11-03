@@ -209,6 +209,7 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.Size = new Size(1113, 383);
             dataGridView1.TabIndex = 1;
+            dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // DanhSachPhieuNhapXuat
             // 
