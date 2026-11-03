@@ -57,6 +57,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     // 2. Đổ danh sách chi tiết lên DataGridView
                     dataGridView1.DataSource = null;
                     dataGridView1.DataSource = phieu.ChiTiets; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+
+
+                    var tongTien = phieu.TongTien;
+                    // Hiển thị ra TextBox tổng tiền (Định dạng N0 cho dễ nhìn, ví dụ: 1.500.000)
+                    lblTongTien.Text = "Tổng tiền: " + tongTien.ToString("N0");
+
+                    lblTienBangChu.Text = "Tổng tiền bằng chữ: " + DocTienHelper.DocTienBangChu(tongTien);
                 }
                 else
                 {
