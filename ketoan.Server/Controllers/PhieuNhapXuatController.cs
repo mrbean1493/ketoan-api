@@ -62,12 +62,21 @@ namespace ketoan.Server.Controllers
                 //GhiChu = phieu.GhiChu,
                 //IsPhieuNhap = phieu.IsPhieuNhap,
                 LoaiPhieu = phieu.LoaiPhieu,
-                ChiTiets = phieu.ChiTiets.Select(ct => new ResponseChiTietPhieuNhapXuatDto
-                {
+                //ChiTiets = phieu.ChiTiets.Select(ct => new ResponseChiTietPhieuNhapXuatDto
+                ChiTiets = (from ct in phieu.ChiTiets
+                            join h in _context.HangHoas on ct.IdHangHoa equals h.Id into hhGroup
+                            from hh in hhGroup.DefaultIfEmpty() // Dùng Left Join để tránh mất dữ liệu nếu lỡ khuyết
+                            join d in _context.DVTs on ct.IdDvt equals d.Id into dvtGroup
+                            from dvt in dvtGroup.DefaultIfEmpty()
+                            select new ResponseChiTietPhieuNhapXuatDto
+                            {
                     Id = ct.Id,
-                    IdHangHoa = ct.IdHangHoa,
+                                // Sử dụng toán tử kiểm tra null an toàn tuyệt đối
+                                MaHang = hh != null ? hh.VietTat : string.Empty,
+                                TenHangHoa = hh != null ? hh.TenHH : string.Empty,
                     IdDvt = ct.IdDvt,
-                    SoLo=ct.SoLo,
+                                TenDonViTinh = dvt != null ? dvt.TenDVT : string.Empty,
+                                SoLo =ct.SoLo,
                     SoLuong = ct.SoLuong,
                     DonGia = ct.DonGia,
                     ThanhTien = ct.ThanhTien
