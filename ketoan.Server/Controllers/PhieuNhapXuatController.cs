@@ -40,7 +40,7 @@ namespace ketoan.Server.Controllers
         }
 
         // 1a GET: api/PhieuNhapXuat - Lấy danh sách phiếu (Danh mục)
-        [HttpGet]
+        [HttpGet("filter")]
         public async Task<IActionResult> GetByLoaiPhieuVaNgay(int LoaiPhieu, DateTime fromD, DateTime toD, int DoiTac=0)
         {
             /*
