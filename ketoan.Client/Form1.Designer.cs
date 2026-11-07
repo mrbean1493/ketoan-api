@@ -56,6 +56,7 @@
             hỗTrợToolStripMenuItem = new ToolStripMenuItem();
             lblTrangThai = new Label();
             tabControlMain = new TabControl();
+            tínhLạiTồnKhoToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -224,7 +225,7 @@
             // 
             // báoCáoToolStripMenuItem
             // 
-            báoCáoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { báoCáoXuấtNhậpTồnToolStripMenuItem });
+            báoCáoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { báoCáoXuấtNhậpTồnToolStripMenuItem, tínhLạiTồnKhoToolStripMenuItem });
             báoCáoToolStripMenuItem.Name = "báoCáoToolStripMenuItem";
             báoCáoToolStripMenuItem.Size = new Size(61, 20);
             báoCáoToolStripMenuItem.Text = "Báo cáo";
@@ -263,6 +264,12 @@
             tabControlMain.DrawItem += tabControlMain_DrawItem;
             tabControlMain.SelectedIndexChanged += tabControlMain_SelectedIndexChanged;
             tabControlMain.MouseDown += tabControlMain_MouseDown;
+            // 
+            // tínhLạiTồnKhoToolStripMenuItem
+            // 
+            tínhLạiTồnKhoToolStripMenuItem.Name = "tínhLạiTồnKhoToolStripMenuItem";
+            tínhLạiTồnKhoToolStripMenuItem.Size = new Size(193, 22);
+            tínhLạiTồnKhoToolStripMenuItem.Text = "Tính lại tồn kho";
             // 
             // FormMain
             // 
@@ -313,5 +320,6 @@
         private ToolStripMenuItem danhSáchPhiếuToolStripMenuItem;
         private ToolStripMenuItem xuấtHủyToolStripMenuItem;
         private ToolStripMenuItem danhSáchPhiếuToolStripMenuItem1;
+        private ToolStripMenuItem tínhLạiTồnKhoToolStripMenuItem;
     }
 }
