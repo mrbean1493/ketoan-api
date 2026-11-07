@@ -36,6 +36,7 @@ namespace ketoan.Server.Controllers
                                 tenhanghoa = h.TenHH,
                                 id_dvt=h.id_dvt,
                                 tendvt = dvt != null ? dvt.TenDVT : "", // Thay TenDVT bằng tên cột thực tế trong bảng DVT của bạn
+                                so_lo = tk != null ? tk.so_lo : "",
                                 //DinhMuc = h.DinhMuc,
                                 so_luong = tk != null ? tk.so_luong : 0,
                                 //TenKho = tk != null ? tk.TenKho : "Chưa xác định"
