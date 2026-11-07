@@ -319,6 +319,7 @@ namespace ketoan.Server.Controllers
                             tonKho = new TonKho
                             {
                                 id_hang_hoa = newItem.HangHoaId,
+                                so_lo=newItem.SoLo,
                                 so_luong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? newItem.SoLuong : -newItem.SoLuong
                             };
                             _context.TonKhos.Add(tonKho);

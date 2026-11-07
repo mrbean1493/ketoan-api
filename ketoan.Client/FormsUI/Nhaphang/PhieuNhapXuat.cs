@@ -436,7 +436,79 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                 dataGridView1.EndEdit();
 
+                bool isThanhCong = await LuuDuLieuAsync();
 
+
+            }
+        }
+
+        private async void btnLuuVaDong_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmResult = MessageBox.Show(
+            "Bạn chắc chắn lưu thông tin phiếu nhập xuất không?",
+            "Xác nhận lưu phiếu nhập xuất",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question
+        );
+            if (confirmResult == DialogResult.Yes)
+            {
+
+                dataGridView1.EndEdit();
+
+                bool isThanhCong = await LuuDuLieuAsync();
+                if (isThanhCong)
+                {
+                    // 2. Gỡ bỏ TabPage chứa form này ra khỏi tabControlMain ở Form chính
+                    if (this.Parent is TabPage tabPage && tabPage.Parent is TabControl tabControl)
+                    {
+                        tabControl.TabPages.Remove(tabPage);
+                    }
+
+                    // 3. Đóng form con và giải phóng tài nguyên
+                    this.Close();
+                    this.Dispose();
+                }
+
+            }
+        }
+
+        private async void btnLuuVaLamMoi_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmResult = MessageBox.Show(
+            "Bạn chắc chắn lưu thông tin phiếu nhập xuất không?",
+            "Xác nhận lưu phiếu nhập xuất",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question
+        );
+            if (confirmResult == DialogResult.Yes)
+            {
+                dataGridView1.EndEdit();
+
+                bool isThanhCong = await LuuDuLieuAsync();
+                if (isThanhCong)
+                {
+                    txtSoPhieu.Text = "";
+                    dateTimePickerNgayNhap.Value = DateTime.Now;
+                    gridLookupDoiTac1.SelectedId = 0;
+                    // 1. Lấy trực tiếp BindingList từ DataSource hiện tại của DataGridView
+                    if (dataGridView1.DataSource is BindingList<ChiTietPhieuNhapXuatDtoClient> list)
+                    {
+                        list.Clear(); // Xóa sạch toàn bộ các phần tử bên trong danh sách
+                    }
+                    else
+                    {
+                        // Trường hợp lần đầu mở form chưa gán DataSource thì tạo mới một BindingList rỗng
+                        dataGridView1.DataSource = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+                    }
+                }
+            }
+        }
+
+
+        private async Task<bool> LuuDuLieuAsync()
+        {
+            try
+            {
                 var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
 
 
@@ -450,21 +522,21 @@ namespace ketoan.Client.FormsUI.Nhaphang
                         if (string.IsNullOrEmpty(maHH))
                         {
                             MessageBox.Show("Thiếu mã hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
 
                         var tenHH = row.Cells["colTenHH"].Value?.ToString();
                         if (string.IsNullOrEmpty(tenHH))
                         {
                             MessageBox.Show("Thiếu tên hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
 
                         var dvt = row.Cells["colDVT"].Value?.ToString();
                         if (string.IsNullOrEmpty(dvt))
                         {
                             MessageBox.Show("Thiếu đơn vị tính hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
                         var id_dvt = row.Cells["col_id_dvt"].Value?.ToString();
 
@@ -473,19 +545,19 @@ namespace ketoan.Client.FormsUI.Nhaphang
                         if (string.IsNullOrEmpty(solo))
                         {
                             MessageBox.Show("Thiếu số lô hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
 
                         var soluong = row.Cells["colSL"].Value?.ToString();
                         if (string.IsNullOrEmpty(soluong))
                         {
                             MessageBox.Show("Thiếu số lượng hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
                         if (soluong == "0")
                         {
                             MessageBox.Show("Số lượng =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
 
 
@@ -493,12 +565,12 @@ namespace ketoan.Client.FormsUI.Nhaphang
                         if (string.IsNullOrEmpty(dongia))
                         {
                             MessageBox.Show("Thiếu đơn giá hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
                         if (dongia == "0")
                         {
                             MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
-                            return;
+                            return false;
                         }
                         var thanhtien = row.Cells["colThanhtien"].Value?.ToString();
                         danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
@@ -523,7 +595,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 if (!danhSachChiTiet.Any())
                 {
                     MessageBox.Show("Phiếu phải có ít nhất 1 dòng chi tiết hàng hóa hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return false;
                 }
                 // 3.Đóng gói Request gửi API
                 var request = new PhieuNhapXuatDtoClient
@@ -545,44 +617,36 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     if (res.Id != null)
                     {
                         txtSoPhieu.Text = res.Id.ToString();
+                        return true;
                     }
+                    return false;
                 }
                 else //cập nhật phiếu
                 {
                     var res = await _apiClient.UpdatePhieuAsync(Int32.Parse(txtSoPhieu.Text), request);
-                    MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (res != null && res.Success) // Kiểm tra dựa trên property Success từ controller của bạn
+                    {
+                        MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show(res?.Message ?? "Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false; // Thất bại -> Trả về false để giữ form lại cho người dùng sửa
+                    }
                 }
             }
-        }
-
-        private void btnLuuVaDong_Click(object sender, EventArgs e)
-        {
-            btnLuu.PerformClick();
-            this.Close();
-        }
-
-        private void btnLuuVaLamMoi_Click(object sender, EventArgs e)
-        {
-            btnLuu.PerformClick();
-            txtSoPhieu.Text = "";
-            dateTimePickerNgayNhap.Value = DateTime.Now;
-            gridLookupDoiTac1.SelectedId = 0;
-            // 1. Lấy trực tiếp BindingList từ DataSource hiện tại của DataGridView
-            if (dataGridView1.DataSource is BindingList<ChiTietPhieuNhapXuatDtoClient> list)
+            catch (Exception ex)
             {
-                list.Clear(); // Xóa sạch toàn bộ các phần tử bên trong danh sách
-            }
-            else
-            {
-                // Trường hợp lần đầu mở form chưa gán DataSource thì tạo mới một BindingList rỗng
-                dataGridView1.DataSource = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+                MessageBox.Show($"Lỗi kết nối: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
         private void btnAddDoiTac_Click(object sender, EventArgs e)
         {
             // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
-            var formThem= new DoiTac(LoaiDoiTac.NhaCungCap);
+            var formThem = new DoiTac(LoaiDoiTac.NhaCungCap);
             if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
             {
                 formThem = new DoiTac(LoaiDoiTac.NhaCungCap); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
