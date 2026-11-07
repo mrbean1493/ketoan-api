@@ -26,11 +26,16 @@ namespace ketoan.Server.Controllers
                 var query = from h in _context.HangHoas
                             join t in _context.TonKhos on h.Id equals t.id_hang_hoa into tkGroup
                             from tk in tkGroup.DefaultIfEmpty() // Left join để lấy cả sản phẩm chưa phát sinh giao dịch tồn kho nếu cần
+                            // 2. Left Join với bảng Đơn vị tính (DVT) để lấy tên đơn vị tính
+                            join d in _context.DVTs on h.id_dvt equals d.Id into dvtGroup
+                            from dvt in dvtGroup.DefaultIfEmpty() // Dùng DefaultIfEmpty để phòng hờ hàng hóa chưa gắn đơn vị tính vẫn không bị mất dữ liệu
                             select new ResponseTonKhoDto
                             {
                                 id_hang_hoa = h.Id,
                                 viettat = h.VietTat,
                                 tenhanghoa = h.TenHH,
+                                id_dvt=h.id_dvt,
+                                tendvt = dvt != null ? dvt.TenDVT : "", // Thay TenDVT bằng tên cột thực tế trong bảng DVT của bạn
                                 //DinhMuc = h.DinhMuc,
                                 so_luong = tk != null ? tk.so_luong : 0,
                                 //TenKho = tk != null ? tk.TenKho : "Chưa xác định"
