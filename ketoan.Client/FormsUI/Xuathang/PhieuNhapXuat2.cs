@@ -37,6 +37,54 @@ namespace ketoan.Client.FormsUI.Xuathang
             LoadDoiTac();
         }
 
+        private async Task LoadDataToEditAsync(int phieuId)
+        {
+            try
+            {
+                // Gọi hàm từ tầng ApiConnect của bạn (giả sử tên biến instance là _apiConnect)
+                var result = await _apiClient.GetPhieuByIdAsync(phieuId);
+
+                if (result != null && result.Success && result.Data != null)
+                {
+                    var phieu = result.Data;
+                    txtSoPhieu.Text = phieuId.ToString();
+
+                    // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                    dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                    // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                    gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                    // 2. Đổ danh sách chi tiết lên DataGridView
+                    dataGridView1.DataSource = null;
+
+                    // 2. Tự động đánh số thứ tự cho từng phần tử
+                    int stt = 1;
+                    foreach (var item in phieu.ChiTiets)
+                    {
+                        item.STT = stt++;
+                    }
+                    var bindingList = new BindingList<ChiTietPhieuNhapXuatDtoClient>(phieu.ChiTiets);
+                    dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+
+
+                    var tongTien = phieu.TongTien;
+                    // Hiển thị ra TextBox tổng tiền (Định dạng N0 cho dễ nhìn, ví dụ: 1.500.000)
+                    lblTongTien.Text = "Tổng tiền: " + tongTien.ToString("N0");
+
+                    lblTienBangChu.Text = "Tổng tiền bằng chữ: " + DocTienHelper.DocTienBangChu(tongTien);
+                }
+                else
+                {
+                    MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private async void LoadDoiTac()
         {
 

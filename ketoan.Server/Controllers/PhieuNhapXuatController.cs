@@ -204,14 +204,14 @@ namespace ketoan.Server.Controllers
                     // C. Cập nhật Tồn kho
                     foreach (var item in dto.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.IdHangHoa == item.HangHoaId && x.SoLo == item.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.id_hang_hoa == item.HangHoaId && x.so_lo == item.SoLo);
                         if (tonKho == null)
                         {
                             tonKho = new TonKho
                             {
-                                IdHangHoa = item.HangHoaId,
-                                SoLo = item.SoLo,
-                                SoLuong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? item.SoLuong : -item.SoLuong
+                                id_hang_hoa = item.HangHoaId,
+                                so_lo = item.SoLo,
+                                so_luong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? item.SoLuong : -item.SoLuong
                             };
                             _context.TonKhos.Add(tonKho);
                         }
@@ -219,15 +219,15 @@ namespace ketoan.Server.Controllers
                         {
                             if (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4)
                             {
-                                tonKho.SoLuong += item.SoLuong;
+                                tonKho.so_luong += item.SoLuong;
                             }
                             else
                             {
-                                if (tonKho.SoLuong < item.SoLuong)
+                                if (tonKho.so_luong < item.SoLuong)
                                 {
                                     throw new Exception($"Mặt hàng ID {item.HangHoaId} không đủ tồn kho để xuất!");
                                 }
-                                tonKho.SoLuong -= item.SoLuong;
+                                tonKho.so_luong -= item.SoLuong;
                             }
                         }
                     }
@@ -273,13 +273,13 @@ namespace ketoan.Server.Controllers
                     // BƯỚC 1: Hoàn tác (Revert) tác động tồn kho của các dòng cũ
                     foreach (var oldItem in phieuDb.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.IdHangHoa == oldItem.IdHangHoa && t.SoLo == oldItem.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == oldItem.IdHangHoa && t.so_lo == oldItem.SoLo);
                         if (tonKho != null)
                         {
                             if (phieuDb.LoaiPhieu == 1 || phieuDb.LoaiPhieu == 4)
-                                tonKho.SoLuong -= oldItem.SoLuong; // Phiếu nhập cũ -> Trừ trả lại
+                                tonKho.so_luong -= oldItem.SoLuong; // Phiếu nhập cũ -> Trừ trả lại
                             else
-                                tonKho.SoLuong += oldItem.SoLuong; // Phiếu xuất cũ -> Cộng trả lại
+                                tonKho.so_luong += oldItem.SoLuong; // Phiếu xuất cũ -> Cộng trả lại
                         }
                     }
 
@@ -313,13 +313,13 @@ namespace ketoan.Server.Controllers
                     // BƯỚC 3: Áp dụng tác động tồn kho theo danh sách chi tiết mới
                     foreach (var newItem in dto.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.IdHangHoa == newItem.HangHoaId && t.SoLo == newItem.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == newItem.HangHoaId && t.so_lo == newItem.SoLo);
                         if (tonKho == null)
                         {
                             tonKho = new TonKho
                             {
-                                IdHangHoa = newItem.HangHoaId,
-                                SoLuong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? newItem.SoLuong : -newItem.SoLuong
+                                id_hang_hoa = newItem.HangHoaId,
+                                so_luong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? newItem.SoLuong : -newItem.SoLuong
                             };
                             _context.TonKhos.Add(tonKho);
                         }
@@ -327,15 +327,15 @@ namespace ketoan.Server.Controllers
                         {
                             if (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4)
                             {
-                                tonKho.SoLuong += newItem.SoLuong;
+                                tonKho.so_luong += newItem.SoLuong;
                             }
                             else
                             {
-                                if (tonKho.SoLuong < newItem.SoLuong)
+                                if (tonKho.so_luong < newItem.SoLuong)
                                 {
                                     throw new Exception($"Không đủ tồn kho cho mặt hàng ID {newItem.HangHoaId}!");
                                 }
-                                tonKho.SoLuong -= newItem.SoLuong;
+                                tonKho.so_luong -= newItem.SoLuong;
                             }
                         }
                     }
@@ -376,13 +376,13 @@ namespace ketoan.Server.Controllers
                     // Hoàn tác lại số lượng tồn kho trước khi xóa
                     foreach (var item in phieuDb.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.IdHangHoa == item.IdHangHoa && t.SoLo == item.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == item.IdHangHoa && t.so_lo == item.SoLo);
                         if (tonKho != null)
                         {
                             if (phieuDb.LoaiPhieu == 1 || phieuDb.LoaiPhieu == 4)
-                                tonKho.SoLuong -= item.SoLuong;
+                                tonKho.so_luong -= item.SoLuong;
                             else
-                                tonKho.SoLuong += item.SoLuong;
+                                tonKho.so_luong += item.SoLuong;
                         }
                     }
 

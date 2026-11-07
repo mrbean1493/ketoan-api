@@ -156,7 +156,7 @@ namespace ketoan.Server.Controllers
             }
 
             // 1. Kiểm tra xem có dữ liệu trong Tồn kho hay không
-            bool hasTonKho = await _context.TonKhos.AnyAsync(x => x.IdHangHoa == id );
+            bool hasTonKho = await _context.TonKhos.AnyAsync(x => x.id_hang_hoa == id );
             if (hasTonKho)
             {
                 return BadRequest(new ApiResponse<object>
