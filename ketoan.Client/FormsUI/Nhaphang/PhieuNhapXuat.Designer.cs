@@ -41,12 +41,6 @@
             lblSoPhieu = new Label();
             groupBox2 = new GroupBox();
             dataGridView1 = new DataGridView();
-            groupBox3 = new GroupBox();
-            btnLuuVaLamMoi = new Button();
-            lblTienBangChu = new Label();
-            btnLuuVaDong = new Button();
-            btnLuu = new Button();
-            lblTongTien = new Label();
             colSTT = new DataGridViewTextBoxColumn();
             colMaHH = new DataGridViewTextBoxColumn();
             colTenHH = new DataGridViewTextBoxColumn();
@@ -56,6 +50,12 @@
             colDongia = new DataGridViewTextBoxColumn();
             colThanhtien = new DataGridViewTextBoxColumn();
             col_id_dvt = new DataGridViewTextBoxColumn();
+            groupBox3 = new GroupBox();
+            btnLuuVaLamMoi = new Button();
+            lblTienBangChu = new Label();
+            btnLuuVaDong = new Button();
+            btnLuu = new Button();
+            lblTongTien = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -91,6 +91,7 @@
             btnAddHangHoa.TabIndex = 11;
             btnAddHangHoa.Text = "Thêm hàng hóa mới";
             btnAddHangHoa.UseVisualStyleBackColor = true;
+            btnAddHangHoa.Click += btnAddHangHoa_Click;
             // 
             // btnAddDoiTac
             // 
@@ -101,6 +102,7 @@
             btnAddDoiTac.TabIndex = 10;
             btnAddDoiTac.Text = "Thêm đối tác mới";
             btnAddDoiTac.UseVisualStyleBackColor = true;
+            btnAddDoiTac.Click += btnAddDoiTac_Click;
             // 
             // gridLookupDoiTac1
             // 
@@ -197,6 +199,64 @@
             dataGridView1.UserDeletedRow += dataGridView1_UserDeletedRow;
             dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
+            // colSTT
+            // 
+            colSTT.DataPropertyName = "STT";
+            colSTT.HeaderText = "STT";
+            colSTT.Name = "colSTT";
+            colSTT.Width = 50;
+            // 
+            // colMaHH
+            // 
+            colMaHH.DataPropertyName = "IdHangHoa";
+            colMaHH.HeaderText = "Mã hàng hóa";
+            colMaHH.Name = "colMaHH";
+            // 
+            // colTenHH
+            // 
+            colTenHH.DataPropertyName = "TenHH";
+            colTenHH.HeaderText = "Tên hàng hóa";
+            colTenHH.Name = "colTenHH";
+            colTenHH.Width = 300;
+            // 
+            // colDVT
+            // 
+            colDVT.DataPropertyName = "TenDVT";
+            colDVT.HeaderText = "ĐVT";
+            colDVT.Name = "colDVT";
+            // 
+            // colSoLo
+            // 
+            colSoLo.DataPropertyName = "SoLo";
+            colSoLo.HeaderText = "Số lô";
+            colSoLo.Name = "colSoLo";
+            colSoLo.Width = 150;
+            // 
+            // colSL
+            // 
+            colSL.DataPropertyName = "SoLuong";
+            colSL.HeaderText = "Số lượng";
+            colSL.Name = "colSL";
+            // 
+            // colDongia
+            // 
+            colDongia.DataPropertyName = "DonGia";
+            colDongia.HeaderText = "Đơn giá";
+            colDongia.Name = "colDongia";
+            // 
+            // colThanhtien
+            // 
+            colThanhtien.DataPropertyName = "ThanhTien";
+            colThanhtien.HeaderText = "Thành tiền";
+            colThanhtien.Name = "colThanhtien";
+            // 
+            // col_id_dvt
+            // 
+            col_id_dvt.DataPropertyName = "Id_dvt";
+            col_id_dvt.HeaderText = "Id_dvt";
+            col_id_dvt.Name = "col_id_dvt";
+            col_id_dvt.Visible = false;
+            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(btnLuuVaLamMoi);
@@ -261,64 +321,6 @@
             lblTongTien.Size = new Size(63, 15);
             lblTongTien.TabIndex = 0;
             lblTongTien.Text = "Tổng tiền:";
-            // 
-            // colSTT
-            // 
-            colSTT.DataPropertyName = "STT";
-            colSTT.HeaderText = "STT";
-            colSTT.Name = "colSTT";
-            colSTT.Width = 50;
-            // 
-            // colMaHH
-            // 
-            colMaHH.DataPropertyName = "IdHangHoa";
-            colMaHH.HeaderText = "Mã hàng hóa";
-            colMaHH.Name = "colMaHH";
-            // 
-            // colTenHH
-            // 
-            colTenHH.DataPropertyName = "TenHH";
-            colTenHH.HeaderText = "Tên hàng hóa";
-            colTenHH.Name = "colTenHH";
-            colTenHH.Width = 300;
-            // 
-            // colDVT
-            // 
-            colDVT.DataPropertyName = "TenDVT";
-            colDVT.HeaderText = "ĐVT";
-            colDVT.Name = "colDVT";
-            // 
-            // colSoLo
-            // 
-            colSoLo.DataPropertyName = "SoLo";
-            colSoLo.HeaderText = "Số lô";
-            colSoLo.Name = "colSoLo";
-            colSoLo.Width = 150;
-            // 
-            // colSL
-            // 
-            colSL.DataPropertyName = "SoLuong";
-            colSL.HeaderText = "Số lượng";
-            colSL.Name = "colSL";
-            // 
-            // colDongia
-            // 
-            colDongia.DataPropertyName = "DonGia";
-            colDongia.HeaderText = "Đơn giá";
-            colDongia.Name = "colDongia";
-            // 
-            // colThanhtien
-            // 
-            colThanhtien.DataPropertyName = "ThanhTien";
-            colThanhtien.HeaderText = "Thành tiền";
-            colThanhtien.Name = "colThanhtien";
-            // 
-            // col_id_dvt
-            // 
-            col_id_dvt.DataPropertyName = "Id_dvt";
-            col_id_dvt.HeaderText = "Id_dvt";
-            col_id_dvt.Name = "col_id_dvt";
-            col_id_dvt.Visible = false;
             // 
             // PhieuNhapXuat
             // 

@@ -252,6 +252,25 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     BindingList<ResponsePhieuNhapXuatDtoClient> bindingList = new BindingList<ResponsePhieuNhapXuatDtoClient>(phieu);
                     dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
 
+
+                    if (dataGridView1.Rows.Count > 0)
+                    {
+                        // Bỏ chọn tất cả các dòng trước đó (nếu có)
+                        dataGridView1.ClearSelection();
+
+                        // Chọn dòng đầu tiên (index = 0)
+                        dataGridView1.Rows[0].Selected = true;
+
+                        // (Tùy chọn) Đặt CurrentRow trỏ đến dòng đầu tiên để kích hoạt hightlight sáng dòng
+                        dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+
+                        // Tạo giả lập sự kiện CellEventArgs cho dòng 0, cột 0
+                        DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
+
+                        // Gọi trực tiếp hàm xử lý sự kiện CellClick của DataGridView
+                        dataGridView1_CellClick(dataGridView1, args);
+                    }
+
                 }
                 else
                 {
@@ -391,6 +410,30 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                     // Xử lý logic tiếp theo với idPhieu (ví dụ: gọi API lấy chi tiết phiếu theo ID)
                     // LoadChiTietPhieu(idPhieu);
+                    gridLookupDoiTac1.SelectedId = phieuDto.DoiTacId;
+
+                    if (phieuDto.LoaiPhieu == 1)//nhaphang
+                    {
+                        btnTraHang.Visible = true;
+                        btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                    }
+                    else if (phieuDto.LoaiPhieu == 2)//trahangnhap
+                    {
+                        btnTraHang.Visible = false;
+                    }
+                    else if (phieuDto.LoaiPhieu == 3)//xuathang
+                    {
+                        btnTraHang.Visible = true;
+                        btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                    }
+                    else if (phieuDto.LoaiPhieu == 4)//trahangxuat
+                    {
+                        btnTraHang.Visible = false;
+                    }
+                    else if (phieuDto.LoaiPhieu == 5)//xuathuy
+                    {
+                        btnTraHang.Visible = false;
+                    }
                 }
 
                 // Hoặc Cách B: Lấy gián tiếp qua tên cột (Nếu bạn đặt tên cột là "colId" hoặc property là "Id")

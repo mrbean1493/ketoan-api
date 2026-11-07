@@ -13,12 +13,12 @@ namespace ketoan.Server.Models
         public int Id { get; set; }
 
         [Column("id_hang_hoa")]
-        public int IdHangHoa { get; set; }
+        public int id_hang_hoa { get; set; }
 
         [Column("so_lo")]
-        public string SoLo { get; set; }
+        public string so_lo { get; set; }
 
         [Column("so_luong")]
-        public decimal SoLuong { get; set; }
+        public decimal so_luong { get; set; }
     }
 }

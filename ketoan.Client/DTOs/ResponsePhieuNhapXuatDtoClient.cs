@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ketoan.Client.DTOs
@@ -10,6 +11,7 @@ namespace ketoan.Client.DTOs
     {
         public int Id { get; set; }
         public DateTime NgayLap { get; set; } = DateTime.Now;
+        [JsonPropertyName("id_doi_tac")] // <--- Khớp với key JSON từ client
         public int DoiTacId { get; set; }
         //public string? GhiChu { get; set; }
         //public bool IsPhieuNhap { get; set; }

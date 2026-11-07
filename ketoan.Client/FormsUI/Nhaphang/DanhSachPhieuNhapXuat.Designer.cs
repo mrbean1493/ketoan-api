@@ -44,12 +44,14 @@
             txtSoPhieu = new TextBox();
             lblSoPhieu = new Label();
             dataGridView1 = new DataGridView();
+            btnTraHang = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnTraHang);
             groupBox1.Controls.Add(btnXoa);
             groupBox1.Controls.Add(btnSua);
             groupBox1.Controls.Add(btnThem);
@@ -67,16 +69,16 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1113, 149);
+            groupBox1.Size = new Size(1189, 149);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Tìm kiếm phiếu nhập xuất";
             // 
             // btnXoa
             // 
-            btnXoa.Location = new Point(988, 104);
+            btnXoa.Location = new Point(988, 96);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(75, 23);
+            btnXoa.Size = new Size(75, 39);
             btnXoa.TabIndex = 20;
             btnXoa.Text = "Xóa bỏ";
             btnXoa.UseVisualStyleBackColor = true;
@@ -84,9 +86,9 @@
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(892, 104);
+            btnSua.Location = new Point(892, 96);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(75, 23);
+            btnSua.Size = new Size(75, 39);
             btnSua.TabIndex = 19;
             btnSua.Text = "Chỉnh sửa";
             btnSua.UseVisualStyleBackColor = true;
@@ -94,9 +96,9 @@
             // 
             // btnThem
             // 
-            btnThem.Location = new Point(796, 104);
+            btnThem.Location = new Point(796, 96);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(75, 23);
+            btnThem.Size = new Size(75, 39);
             btnThem.TabIndex = 18;
             btnThem.Text = "Thêm mới";
             btnThem.UseVisualStyleBackColor = true;
@@ -207,15 +209,25 @@
             dataGridView1.Location = new Point(0, 149);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1113, 383);
+            dataGridView1.Size = new Size(1189, 383);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
+            // 
+            // btnTraHang
+            // 
+            btnTraHang.Location = new Point(1086, 96);
+            btnTraHang.Name = "btnTraHang";
+            btnTraHang.Size = new Size(91, 39);
+            btnTraHang.TabIndex = 21;
+            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+            btnTraHang.UseVisualStyleBackColor = true;
+            btnTraHang.Visible = false;
             // 
             // DanhSachPhieuNhapXuat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1113, 532);
+            ClientSize = new Size(1189, 532);
             Controls.Add(dataGridView1);
             Controls.Add(groupBox1);
             Name = "DanhSachPhieuNhapXuat";
@@ -245,5 +257,6 @@
         private Button btnSua;
         private Button btnThem;
         private Button btnTimKiem;
+        private Button btnTraHang;
     }
 }

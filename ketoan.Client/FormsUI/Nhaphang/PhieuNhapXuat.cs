@@ -1,6 +1,7 @@
 ﻿using ketoan.Client.ClassComponent;
 using ketoan.Client.DTOs;
 using ketoan.Client.Enums;
+using ketoan.Client.FormsUI.Danhmuc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,7 +24,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
         // _currentPhieuId = null -> Chế độ Thêm mới
         // _currentPhieuId > 0   -> Chế độ Sửa (Cập nhật)
         private int? _currentPhieuId = null;
-        public PhieuNhapXuat(LoaiPhieuNhapXuat loaiPhieuNhapXuat,int idphieu=0)
+        public PhieuNhapXuat(LoaiPhieuNhapXuat loaiPhieuNhapXuat, int idphieu = 0)
         {
             InitializeComponent();
             _loaiPhieuNhapXuat = loaiPhieuNhapXuat;
@@ -31,7 +32,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             //idphieu = 23;
             _currentPhieuId = idphieu;
             CapNhatGiaoDien();
-            
+
 
             LoadDoiTac();
 
@@ -88,30 +89,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private async void LoadDoiTac()
         {
-            
+
             // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
             List<DoiTacDtoClient> listDoiTac = new List<DoiTacDtoClient>();
-/*
-    {
-        new DoiTacDtoClient { Id = 1, TenDoiTac = "Công ty TNHH Bánh Cánh Việt và Bánh Cánh Việt", SoDienThoai = "0988123456", SoDienThoai2="0988123456", MaDoiTac = "BCV" },
-        new DoiTacDtoClient { Id = 2, TenDoiTac = "Công ty TNHH Salonpas", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
-        new DoiTacDtoClient { Id = 3, TenDoiTac = "Công ty TNHH Digital", SoDienThoai = "012345678", SoDienThoai2="01212121212", MaDoiTac = "XAY" },
-        new DoiTacDtoClient { Id = 4, TenDoiTac = "Công ty TNHH Bánh Cánh Việt 2 và tiki tiki tiki dat", SoDienThoai = "0988123456", SoDienThoai2="0988123456", MaDoiTac = "BCV" },
-        new DoiTacDtoClient { Id = 5, TenDoiTac = "Công ty TNHH Salonpas2", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
-        new DoiTacDtoClient { Id = 6, TenDoiTac = "Công ty TNHH Digital2", SoDienThoai = "012345678", SoDienThoai2="01212121212", MaDoiTac = "XAY" },
-        new DoiTacDtoClient { Id = 7, TenDoiTac = "Công ty TNHH Bánh Cánh Việt 3", SoDienThoai = "0988123456", SoDienThoai2="0988123456", MaDoiTac = "BCV" },
-        new DoiTacDtoClient { Id = 8, TenDoiTac = "Công ty TNHH Salonpas3", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
-        new DoiTacDtoClient { Id = 9, TenDoiTac = "Công ty TNHH Digital3", SoDienThoai = "012345678", SoDienThoai2="01212121212", MaDoiTac = "XAY" },
-        new DoiTacDtoClient { Id = 10, TenDoiTac = "Công ty TNHH Bánh Cánh Việt 4", SoDienThoai = "0988123456", SoDienThoai2="0988123456", MaDoiTac = "BCV" },
-        new DoiTacDtoClient { Id = 11, TenDoiTac = "Công ty TNHH Salonpas4 ", SoDienThoai = "1111111111", SoDienThoai2="222222222222", MaDoiTac = "BVS" },
-        new DoiTacDtoClient { Id = 12, TenDoiTac = "Công ty TNHH Digital5", SoDienThoai = "012345678", SoDienThoai2="01212121212", MaDoiTac = "XAY" },
-    };
-*/
-            if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
+            if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang || _loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Trahang)
             {
                 listDoiTac = await _apiClient.GetDoiTacAsync(null, true, null);
             }
-            else if(_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Xuathang)
+            else if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Xuathang || _loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Trahangban)
             {
                 listDoiTac = await _apiClient.GetDoiTacAsync(null, null, true);
             }
@@ -187,7 +172,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             List<DonViTinhDtoClient> listDVT = await _apiClient.GetDonViTinhAsync();
 
 
-            
+
 
             dataGridView1.AutoGenerateColumns = false;
 
@@ -198,7 +183,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
             {
                 await LoadDataToEditAsync((int)_currentPhieuId);
             }
-            
+
 
 
             // 2. Khởi tạo Helper và truyền DataGridView chi tiết vào
@@ -305,13 +290,14 @@ namespace ketoan.Client.FormsUI.Nhaphang
             if (colName == "colSL" || colName == "colDongia")
             {
                 var SLvalue = dataGridView1.Rows[e.RowIndex].Cells["colSL"].Value;
-                var DGvalue= dataGridView1.Rows[e.RowIndex].Cells["colDongia"].Value;
+                var DGvalue = dataGridView1.Rows[e.RowIndex].Cells["colDongia"].Value;
 
                 if (SLvalue == null || DGvalue == null) return;
 
 
-                if (!decimal.TryParse(SLvalue.ToString(),out decimal number)){
-                    MessageBox.Show("Cột số lượng phải điền dạng số","Cảnh báo");
+                if (!decimal.TryParse(SLvalue.ToString(), out decimal number))
+                {
+                    MessageBox.Show("Cột số lượng phải điền dạng số", "Cảnh báo");
                     return;
                 }
                 if (!decimal.TryParse(DGvalue.ToString(), out decimal number2))
@@ -351,7 +337,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
             // Lấy object DTO đang được bind tại dòng hiện tại
             var item = row.DataBoundItem as ChiTietPhieuNhapXuatDtoClient;
-            
+
             //decimal chietKhau = Convert.ToDecimal(row.Cells["colChietKhau"].Value ?? 0); // % Chiết khấu (nếu có)
             if (item != null)
             {
@@ -360,8 +346,8 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 decimal donGia = Convert.ToDecimal(row.Cells["colDongia"].Value ?? 0);
                 item.ThanhTien = soLuong * donGia;
             }
-                // Công thức tính Thành tiền
-                
+            // Công thức tính Thành tiền
+
 
             // Gán lại giá trị cho ô Thành tiền
             //row.Cells["colThanhtien"].Value = thanhTien;
@@ -522,7 +508,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                             SoLuong = Decimal.Parse(soluong),
                             SoLo = solo,
                             DonGia = Decimal.Parse(dongia),
-                           ThanhTien=Decimal.Parse(thanhtien)
+                            ThanhTien = Decimal.Parse(thanhtien)
                         });
 
                     }
@@ -545,7 +531,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     //MaPhieu = txtMaPhieu.Text.Trim(),
                     NgayLap = dateTimePickerNgayNhap.Value,
                     DoiTacId = gridLookupDoiTac1.SelectedDoiTac.Id,
-                    TongTien= tongTien,
+                    TongTien = tongTien,
                     //GhiChu = txtGhiChu.Text.Trim(),
                     //IsPhieuNhap = rdoPhieuNhap.Checked,
                     LoaiPhieu = (int)_loaiPhieuNhapXuat,
@@ -590,6 +576,46 @@ namespace ketoan.Client.FormsUI.Nhaphang
             {
                 // Trường hợp lần đầu mở form chưa gán DataSource thì tạo mới một BindingList rỗng
                 dataGridView1.DataSource = new BindingList<ChiTietPhieuNhapXuatDtoClient>();
+            }
+        }
+
+        private void btnAddDoiTac_Click(object sender, EventArgs e)
+        {
+            // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+            var formThem= new DoiTac(LoaiDoiTac.NhaCungCap);
+            if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
+            {
+                formThem = new DoiTac(LoaiDoiTac.NhaCungCap); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+            }
+            else
+            {
+                formThem = new DoiTac(LoaiDoiTac.KhachHang); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+            }
+
+            // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+            var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+            if (mainForm != null)
+            {
+                // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                mainForm.OpenChildFormInTab(formThem, "DoiTac");
+            }
+        }
+
+        private void btnAddHangHoa_Click(object sender, EventArgs e)
+        {
+            // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+            var formThem = new HangHoa(); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+
+            // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+            var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+            if (mainForm != null)
+            {
+                // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                mainForm.OpenChildFormInTab(formThem, "HangHoa");
             }
         }
     }

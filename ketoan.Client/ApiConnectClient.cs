@@ -391,6 +391,18 @@ namespace ketoan.Client
 
             return result!;
         }
+
+        // 1. GET: Lấy danh sách Đơn vị tính
+        public async Task<List<HangTonKhoDtoClient>> GetHangTonKhoAsync()
+        {
+            HttpResponseMessage response = await Client.GetAsync("api/ton-kho");
+            response.EnsureSuccessStatusCode();
+
+            string json = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ApiResponse<List<HangTonKhoDtoClient>>>(json, _jsonOptions);
+
+            return result?.Data ?? new List<HangTonKhoDtoClient>();
+        }
     }
 
     public class ApiResponse<T>
