@@ -92,7 +92,7 @@ namespace ketoan.Server.Controllers
             */
 
             // Trả về OkThay vì CreatedAtAction để đảm bảo JSON luôn được ghi vào Response
-            return Ok(new ApiResponseKho<ResponseKhoDto>
+            return Ok(new ApiResponse<ResponseKhoDto>
             {
                 Success = true,
                 Data = result,
@@ -107,7 +107,7 @@ namespace ketoan.Server.Controllers
             var model = await _context.Khos.FindAsync(id);
             if (model == null)
             {
-                return NotFound(new ApiResponseKho<object> { Success = false, Message = "Không tìm thấy dữ liệu" });
+                return NotFound(new ApiResponse<object> { Success = false, Message = "Không tìm thấy dữ liệu" });
             }
 
             string tenKhoTrimmed = dto.ten_kho.Trim();
@@ -118,7 +118,7 @@ namespace ketoan.Server.Controllers
 
             if (isExist)
             {
-                return BadRequest(new ApiResponseKho<object>
+                return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
                     Message = $"Tên kho '{tenKhoTrimmed}' đã tồn tại!"
@@ -132,7 +132,7 @@ namespace ketoan.Server.Controllers
             model.so_dien_thoai_2 = dto.so_dien_thoai_2.Trim();
             await _context.SaveChangesAsync();
 
-            return Ok(new ApiResponseKho<string> { Success = true, Message = "Cập nhật thành công" });
+            return Ok(new ApiResponse<string> { Success = true, Message = "Cập nhật thành công" });
         }
 
         // 4. DELETE: api/kho/5
@@ -150,7 +150,7 @@ namespace ketoan.Server.Controllers
 
             if (isUsedInPhieuXuatNhap)
             {
-                return BadRequest(new ApiResponseKho<object>
+                return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
                     Message = $"Kho '{model.ten_kho}' đã phát sinh dữ liệu trong phiếu nhập xuất, không thể xóa!"
@@ -162,7 +162,7 @@ namespace ketoan.Server.Controllers
             _context.Khos.Remove(model);
             await _context.SaveChangesAsync();
 
-            return Ok(new ApiResponseKho<string> { Success = true, Message = "Xóa thành công" });
+            return Ok(new ApiResponse<string> { Success = true, Message = "Xóa thành công" });
         }
     }
 }

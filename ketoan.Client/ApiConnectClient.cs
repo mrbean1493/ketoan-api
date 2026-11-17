@@ -108,10 +108,10 @@ namespace ketoan.Client
             return result?.Data ?? new List<KhoDtoClient>();
         }
 
-        //2. POST Hàm thêm mới Đơn vị tính
-        public async Task<ApiResponse<KhoDtoClient>> CreateKhoAsync(string tenKho)
+        //2. POST Hàm thêm mới Kho
+        public async Task<ApiResponse<KhoDtoClient>> CreateKhoAsync(string tenKho,string diachi,string sdt, string sdt2)
         {
-            var requestData = new { ten_kho = tenKho };
+            var requestData = new { ten_kho = tenKho, dia_chi=diachi, so_dien_thoai=sdt, so_dien_thoai_2=sdt2 };
             string jsonContent = JsonSerializer.Serialize(requestData);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -135,10 +135,10 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
         }
 
-        //3. PUT Hàm sửa Đơn vị tính
-        public async Task<ApiResponse<KhoDtoClient>> UpdateKhoAsync(int id, string tenKho)
+        //3. PUT Hàm sửa Kho
+        public async Task<ApiResponse<KhoDtoClient>> UpdateKhoAsync(int id, string tenKho, string diachi, string sdt, string sdt2)
         {
-            var requestData = new { ten_kho = tenKho };
+            var requestData = new { ten_kho = tenKho, dia_chi = diachi, so_dien_thoai = sdt, so_dien_thoai_2 = sdt2 };
             string jsonContent = JsonSerializer.Serialize(requestData);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -154,7 +154,7 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
         }
 
-        //4. DELETE Hàm xóa Đơn vị tính
+        //4. DELETE Hàm xóa Kho
         public async Task<ApiResponse<object>> DeleteKhoAsync(int id)
         {
             HttpResponseMessage response = await Client.DeleteAsync($"api/kho/{id}");

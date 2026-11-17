@@ -336,7 +336,8 @@ namespace ketoan.Client
 
         private void khoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = new Kho();
+            OpenChildFormInTab(form, "Kho");
         }
     }
 }
