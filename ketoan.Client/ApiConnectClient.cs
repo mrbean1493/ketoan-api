@@ -355,7 +355,7 @@ namespace ketoan.Client
         }
 
         //3. PUT Hàm sửa Đối tác
-        public async Task<ApiResponse<DoiTacDtoClient>> UpdateDoiTacAsync(int id, string tenDoiTac, string sdt, string sdt2, string maDoiTac, string diachi)
+        public async Task<ApiResponse<object>> UpdateDoiTacAsync(int id, string tenDoiTac, string sdt, string sdt2, string maDoiTac, string diachi)
         {
             var requestData = new { TenDoiTac = tenDoiTac, SoDienThoai = sdt, SoDienThoai2 = sdt2, MaDoiTac = maDoiTac , dia_chi=diachi};
             string jsonContent = JsonSerializer.Serialize(requestData);
@@ -366,11 +366,11 @@ namespace ketoan.Client
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorResult = JsonSerializer.Deserialize<ApiResponse<DoiTacDtoClient>>(jsonResult, _jsonOptions);
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
                 throw new Exception(errorResult?.Message ?? "Cập nhật thất bại.");
             }
 
-            return JsonSerializer.Deserialize<ApiResponse<DoiTacDtoClient>>(jsonResult, _jsonOptions);
+            return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
         }
         //4. DELETE Hàm xóa Đối tác
         public async Task<ApiResponse<object>> DeleteDoiTacAsync(int id)
