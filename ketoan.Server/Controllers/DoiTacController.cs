@@ -76,7 +76,7 @@ namespace ketoan.Server.Controllers
                     {
                         Id = x.Id,
                         TenDoiTac = x.TenDoiTac,
-                        dia_chi = x.dia_chi,
+                        dia_chi = x.dia_chi??"",
                         SoDienThoai = x.SoDienThoai,
                         SoDienThoai2 = x.SoDienThoai2,
                         MaDoiTac = x.MaDoiTac
