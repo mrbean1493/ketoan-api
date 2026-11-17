@@ -57,13 +57,16 @@ namespace ketoan.Server.Controllers
                 );
                 */
                 string kw = keyword.Trim();
-
+                query = query.Where(x => x.TenDoiTac.ToLower().Contains(kw) || x.MaDoiTac.ToLower().Contains(kw));
+                
+                /*
                 query = query.Where(x =>
                     EF.Functions.ILike(x.TenDoiTac, $"%{kw}%") ||
                     (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, $"%{kw}%")) ||
                     (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, $"%{kw}%")) ||
                     (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, $"%{kw}%"))
                 );
+                */
             }
 
             var list = await query

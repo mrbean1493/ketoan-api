@@ -19,5 +19,7 @@ namespace ketoan.Client.DTOs
         public string SoDienThoai2 { get; set; }
 
         public string MaDoiTac { get; set; }
+
+        public string dia_chi { get; set; }
     }
 }

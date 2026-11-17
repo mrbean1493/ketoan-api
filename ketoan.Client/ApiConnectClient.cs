@@ -300,9 +300,9 @@ namespace ketoan.Client
         }
 
         //2. POST Hàm thêm mới Đối tác
-        public async Task<ApiResponse<DoiTacDtoClient>> CreateDoiTacAsync(string tenDoiTac,string maDoiTac, string sdt, string sdt2,LoaiDoiTac loaiDoiTac)
+        public async Task<ApiResponse<DoiTacDtoClient>> CreateDoiTacAsync(string tenDoiTac,string maDoiTac, string sdt, string sdt2,string diachi,LoaiDoiTac loaiDoiTac)
         {
-            var requestData = new { TenDoiTac = tenDoiTac, SoDienThoai = sdt, SoDienThoai2 = sdt2, MaDoiTac = maDoiTac, loaiDoiTac=loaiDoiTac};
+            var requestData = new { TenDoiTac = tenDoiTac, SoDienThoai = sdt, SoDienThoai2 = sdt2, MaDoiTac = maDoiTac, dia_chi=diachi, loaiDoiTac=loaiDoiTac};
             string jsonContent = JsonSerializer.Serialize(requestData);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -344,9 +344,9 @@ namespace ketoan.Client
         }
 
         //3. PUT Hàm sửa Đối tác
-        public async Task<ApiResponse<DoiTacDtoClient>> UpdateDoiTacAsync(int id, string tenDoiTac, string sdt, string sdt2, string maDoiTac)
+        public async Task<ApiResponse<DoiTacDtoClient>> UpdateDoiTacAsync(int id, string tenDoiTac, string sdt, string sdt2, string maDoiTac, string diachi)
         {
-            var requestData = new { TenDoiTac = tenDoiTac, SoDienThoai = sdt, SoDienThoai2 = sdt2, MaDoiTac = maDoiTac };
+            var requestData = new { TenDoiTac = tenDoiTac, SoDienThoai = sdt, SoDienThoai2 = sdt2, MaDoiTac = maDoiTac , dia_chi=diachi};
             string jsonContent = JsonSerializer.Serialize(requestData);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 

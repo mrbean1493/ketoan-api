@@ -23,7 +23,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
             _loaiDoiTac = loaiDoiTac;
             _apiClient = new ApiConnectClient();
 
-            CapNhatGiaoDien();
+            //CapNhatGiaoDien();
         }
 
         private void CapNhatGiaoDien()
@@ -62,8 +62,17 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 Width = 300
             });
 
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "madoitac",
+                Name = "colVietTat",
+                HeaderText = "Tên viết tắt",
+                Width = 300
+            });
+
+
             // 3. Cột Địa chỉ
-            /*
+
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "dia_chi",
@@ -72,7 +81,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 Width = 200,
                 Visible = true
             });
-            */
+            
             // 4. Cột Địa chỉ
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -101,14 +110,17 @@ namespace ketoan.Client.FormsUI.Danhmuc
             btnDel.Enabled = false;
             status = 1;
 
+            txtTenDoiTacView.Focus();
             txtTenDoiTacView.Text = "";
             txtVietTatView.Text = "";
+            txtDiaChi.Text = "";
             txtSDT.Text = "";
             txtSDT2.Text = "";
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            txtTenDoiTacView.Focus();
             btnAdd.Enabled = false;
             btnEdit.Enabled = false;
             btnDel.Enabled = false;
@@ -150,6 +162,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     txtId.Clear();
                     txtTenDoiTacView.Text = "";
                     txtVietTatView.Text = "";
+                    txtDiaChi.Text = "";
                     txtSDT.Text = "";
                     txtSDT2.Text = "";
 
@@ -240,7 +253,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     btnAdd.Enabled = false;
 
                     // 3. Gọi API thêm mới
-                    var response = await _apiClient.CreateDoiTacAsync(tenDoiTac, vietTat, txtSDT.Text, txtSDT2.Text, _loaiDoiTac);
+                    var response = await _apiClient.CreateDoiTacAsync(tenDoiTac, vietTat, txtSDT.Text, txtSDT2.Text,txtDiaChi.Text, _loaiDoiTac);
 
                     if (response != null && response.Success)
                     {
@@ -250,6 +263,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         // 4. Xóa trắng ô nhập liệu và tải lại danh sách trên DataGridView
                         txtTenDoiTacView.Text = "";
                         txtVietTatView.Text = "";
+                        txtDiaChi.Text = "";
                         txtSDT.Text = "";
                         txtSDT2.Text = "";
                         await LoadDataToGridView();
@@ -334,7 +348,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     btnEdit.Enabled = false;
 
                     // 3. Gọi API cập nhật
-                    var response = await _apiClient.UpdateDoiTacAsync(id, txtTenDoiTacView.Text, txtSDT.Text, txtSDT2.Text, txtVietTatView.Text);
+                    var response = await _apiClient.UpdateDoiTacAsync(id, txtTenDoiTacView.Text, txtSDT.Text, txtSDT2.Text, txtVietTatView.Text,txtDiaChi.Text);
 
                     if (response != null && response.Success)
                     {
@@ -415,6 +429,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     txtId.Text = item.Id.ToString();
                     txtTenDoiTacView.Text = item.TenDoiTac.ToString();
                     txtVietTatView.Text = item.MaDoiTac;
+                    txtDiaChi.Text = item.dia_chi;
                     txtSDT.Text = item.SoDienThoai;
                     txtSDT2.Text = item.SoDienThoai2;
                 }

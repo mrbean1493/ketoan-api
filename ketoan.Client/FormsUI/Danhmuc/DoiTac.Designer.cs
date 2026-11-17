@@ -46,12 +46,16 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
+            txtDiaChi = new TextBox();
+            lblDiaChi = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(txtDiaChi);
+            groupBox1.Controls.Add(lblDiaChi);
             groupBox1.Controls.Add(txtId);
             groupBox1.Controls.Add(btnRefresh);
             groupBox1.Controls.Add(btnSave);
@@ -71,7 +75,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1422, 121);
+            groupBox1.Size = new Size(1422, 143);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
@@ -109,29 +113,29 @@
             // 
             // txtSDT
             // 
-            txtSDT.Location = new Point(708, 51);
+            txtSDT.Location = new Point(436, 81);
             txtSDT.Name = "txtSDT";
-            txtSDT.Size = new Size(165, 23);
+            txtSDT.Size = new Size(128, 23);
             txtSDT.TabIndex = 13;
             // 
             // txtVietTatView
             // 
             txtVietTatView.Location = new Point(98, 81);
             txtVietTatView.Name = "txtVietTatView";
-            txtVietTatView.Size = new Size(465, 23);
+            txtVietTatView.Size = new Size(233, 23);
             txtVietTatView.TabIndex = 11;
             // 
             // txtTenDoiTacView
             // 
             txtTenDoiTacView.Location = new Point(98, 52);
             txtTenDoiTacView.Name = "txtTenDoiTacView";
-            txtTenDoiTacView.Size = new Size(465, 23);
+            txtTenDoiTacView.Size = new Size(694, 23);
             txtTenDoiTacView.TabIndex = 10;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(655, 88);
+            label4.Location = new Point(601, 87);
             label4.Name = "label4";
             label4.Size = new Size(33, 15);
             label4.TabIndex = 9;
@@ -140,7 +144,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(655, 56);
+            label3.Location = new Point(389, 87);
             label3.Name = "label3";
             label3.Size = new Size(27, 15);
             label3.TabIndex = 8;
@@ -166,9 +170,9 @@
             // 
             // txtSDT2
             // 
-            txtSDT2.Location = new Point(708, 80);
+            txtSDT2.Location = new Point(654, 81);
             txtSDT2.Name = "txtSDT2";
-            txtSDT2.Size = new Size(165, 23);
+            txtSDT2.Size = new Size(138, 23);
             txtSDT2.TabIndex = 5;
             // 
             // btnTimKiem
@@ -225,12 +229,28 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 121);
+            dataGridView1.Location = new Point(0, 143);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1422, 341);
+            dataGridView1.Size = new Size(1422, 319);
             dataGridView1.TabIndex = 2;
             dataGridView1.CellClick += dataGridView1_CellClick;
+            // 
+            // txtDiaChi
+            // 
+            txtDiaChi.Location = new Point(98, 110);
+            txtDiaChi.Name = "txtDiaChi";
+            txtDiaChi.Size = new Size(694, 23);
+            txtDiaChi.TabIndex = 18;
+            // 
+            // lblDiaChi
+            // 
+            lblDiaChi.AutoSize = true;
+            lblDiaChi.Location = new Point(14, 113);
+            lblDiaChi.Name = "lblDiaChi";
+            lblDiaChi.Size = new Size(43, 15);
+            lblDiaChi.TabIndex = 17;
+            lblDiaChi.Text = "Địa chỉ";
             // 
             // DoiTac
             // 
@@ -268,5 +288,7 @@
         private Button btnEdit;
         private Button btnAdd;
         private DataGridView dataGridView1;
+        private TextBox txtDiaChi;
+        private Label lblDiaChi;
     }
 }
