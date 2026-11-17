@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string TenDoiTac { get; set; }
 
-        public string dia_chi { get; set; }
+        public string? dia_chi { get; set; }
 
         public string SoDienThoai { get; set; }
 
