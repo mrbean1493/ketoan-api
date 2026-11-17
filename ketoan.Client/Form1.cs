@@ -172,10 +172,22 @@ namespace ketoan.Client
             for (int i = 0; i < tabControlMain.TabPages.Count; i++)
             {
                 Rectangle tabRect = tabControlMain.GetTabRect(i);
-                Rectangle closeButton = new Rectangle(tabRect.Right - 15, tabRect.Top + 4, 12, 12);
-
+                //Rectangle closeButton = new Rectangle(tabRect.Right - 15, tabRect.Top + 4, 12, 12);
+                // Vị trí vẽ nút "x" trong sự kiện DrawItem của bạn (cách mép phải 18px)
+                Rectangle closeButton = new Rectangle(tabRect.Right - 18, tabRect.Y + (tabRect.Height - 16) / 2, 16, 16);
                 if (closeButton.Contains(e.Location))
                 {
+                    // Hủy/Dispose form con bên trong tab trước khi xóa để tránh rò rỉ bộ nhớ
+                    if (tabControlMain.TabPages[i].Controls.Count > 0)
+                    {
+                        if (tabControlMain.TabPages[i].Controls[0] is Form frmChild)
+                        {
+                            frmChild.Close();
+                            frmChild.Dispose();
+                        }
+                    }
+
+
                     tabControlMain.TabPages.RemoveAt(i);
                     break;
                 }

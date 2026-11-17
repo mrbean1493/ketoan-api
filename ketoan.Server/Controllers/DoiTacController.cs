@@ -224,7 +224,7 @@ namespace ketoan.Server.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok(new ApiResponseDoiTac<object> { Success = true, Message = "Cập nhật loại đối tác thành công!" });
+            return Ok(new ApiResponse<object> { Success = true, Message = "Cập nhật loại đối tác thành công!" });
         }
 
 
@@ -261,7 +261,7 @@ namespace ketoan.Server.Controllers
             model.MaDoiTac = dto.MaDoiTac;
             await _context.SaveChangesAsync();
 
-            return Ok(new ApiResponse<string> { Success = true, Message = "Cập nhật thành công" });
+            return Ok(new ApiResponse<object> { Success = true, Message = "Cập nhật thành công" });
         }
 
         // 4. DELETE: api/doi-tac/5
