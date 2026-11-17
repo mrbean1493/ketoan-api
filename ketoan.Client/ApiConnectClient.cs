@@ -291,9 +291,20 @@ namespace ketoan.Client
             }
 
             HttpResponseMessage response = await Client.GetAsync(url);
-            response.EnsureSuccessStatusCode();
+
+            //response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();
+
+            // Nếu server trả về mã lỗi (400, 500...)
+            if (!response.IsSuccessStatusCode)
+            {
+                var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(json, _jsonOptions);
+                throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
+            }
+
+
+
             var result = JsonSerializer.Deserialize<ApiResponse<List<DoiTacDtoClient>>>(json, _jsonOptions);
 
             return result?.Data ?? new List<DoiTacDtoClient>();
