@@ -71,6 +71,7 @@ namespace ketoan.Server.Controllers
                 {
                     Id = x.Id,
                     TenDoiTac = x.TenDoiTac,
+                    dia_chi=x.dia_chi,
                     SoDienThoai = x.SoDienThoai,
                     SoDienThoai2 = x.SoDienThoai2,
                     MaDoiTac = x.MaDoiTac
@@ -165,6 +166,7 @@ namespace ketoan.Server.Controllers
             var model = new DoiTac
             {
                 TenDoiTac = dto.TenDoiTac.Trim(),
+                dia_chi=dto.dia_chi,
                 SoDienThoai = dto.SoDienThoai.Trim(),
                 SoDienThoai2 = dto.SoDienThoai2.Trim(),
                 MaDoiTac = dto.MaDoiTac,
@@ -179,6 +181,7 @@ namespace ketoan.Server.Controllers
             {
                 Id = model.Id,
                 TenDoiTac = model.TenDoiTac,
+                dia_chi=model.dia_chi,
                 SoDienThoai = model.SoDienThoai.Trim(),
                 SoDienThoai2 = model.SoDienThoai2.Trim(),
                 MaDoiTac = model.MaDoiTac
@@ -240,6 +243,7 @@ namespace ketoan.Server.Controllers
 
 
             model.TenDoiTac = dto.TenDoiTac.Trim();
+            model.dia_chi = dto.dia_chi.Trim();
             model.SoDienThoai = dto.SoDienThoai.Trim();
             model.SoDienThoai2 = dto.SoDienThoai2.Trim();
             model.MaDoiTac = dto.MaDoiTac;

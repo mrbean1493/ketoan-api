@@ -17,6 +17,8 @@ namespace ketoan.Client.FormsUI.Danhmuc
         public Kho()
         {
             InitializeComponent();
+
+            CapNhatGiaoDien();
         }
         int status = 0;
         // Khai báo đối tượng kết nối API
@@ -24,6 +26,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
         private void btnAdd_Click(object sender, EventArgs e)
         {
             txtKho.Text = "";
+            txtKho.Focus();
             txtDiaChi.Text = "";
             txtSDT.Text = "";
             txtSDT2.Text = "";
@@ -36,6 +39,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            txtKho.Focus();
             btnAdd.Enabled = false;
             btnEdit.Enabled = false;
             btnDel.Enabled = false;
@@ -115,7 +119,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     btnAdd.Enabled = false;
 
                     // 3. Gọi API thêm mới
-                    var response = await _apiClient.CreateKhoAsync(tenKho);
+                    var response = await _apiClient.CreateKhoAsync(tenKho,txtDiaChi.Text,txtSDT.Text,txtSDT2.Text);
 
                     if (response != null && response.Success)
                     {
@@ -172,7 +176,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     btnEdit.Enabled = false;
 
                     // 3. Gọi API cập nhật
-                    var response = await _apiClient.UpdateKhoAsync(id, tenKho);
+                    var response = await _apiClient.UpdateKhoAsync(id, tenKho, txtDiaChi.Text, txtSDT.Text, txtSDT2.Text);
 
                     if (response != null && response.Success)
                     {
@@ -263,6 +267,58 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     txtSDT2.Text = item.so_dien_thoai_2;
                 }
             }
+        }
+
+        private void CapNhatGiaoDien()
+        {
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.Columns.Clear();
+
+            // 1. Cột Mã/ID (Ẩn đi hoặc hiển thị tùy bạn)
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Id", // Tên property trong DTO
+                Name = "colId",
+                HeaderText = "Mã kho",
+                Visible = true // Ẩn cột Id nếu không cần hiển thị cho người dùng xem
+            });
+
+            // 2. Cột Tên kho
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "ten_kho",
+                Name = "colTenKho",
+                HeaderText = "Tên kho",
+                Width = 150
+            });
+
+            // 3. Cột Địa chỉ
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "dia_chi",
+                Name = "colDiaChi",
+                HeaderText = "Địa chỉ",
+                Width = 200,
+                Visible = true
+            });
+            // 4. Cột Địa chỉ
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "so_dien_thoai",
+                Name = "colSDT",
+                HeaderText = "SĐT",
+                Width = 70,
+                Visible = true
+            });
+            // 3. Cột Địa chỉ
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "so_dien_thoai_2",
+                Name = "colSDT2",
+                HeaderText = "SĐT2",
+                Width = 70,
+                Visible = true
+            });
         }
     }
 }

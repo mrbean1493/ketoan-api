@@ -77,7 +77,7 @@
             txtSDT2.Location = new Point(313, 104);
             txtSDT2.Name = "txtSDT2";
             txtSDT2.Size = new Size(158, 23);
-            txtSDT2.TabIndex = 28;
+            txtSDT2.TabIndex = 22;
             // 
             // label2
             // 
@@ -93,7 +93,7 @@
             txtSDT.Location = new Point(72, 105);
             txtSDT.Name = "txtSDT";
             txtSDT.Size = new Size(148, 23);
-            txtSDT.TabIndex = 26;
+            txtSDT.TabIndex = 21;
             // 
             // lblSDT
             // 
@@ -109,7 +109,7 @@
             txtDiaChi.Location = new Point(72, 75);
             txtDiaChi.Name = "txtDiaChi";
             txtDiaChi.Size = new Size(399, 23);
-            txtDiaChi.TabIndex = 24;
+            txtDiaChi.TabIndex = 20;
             // 
             // lblDiaChi
             // 
@@ -125,7 +125,7 @@
             txtRefresh.Location = new Point(423, 12);
             txtRefresh.Name = "txtRefresh";
             txtRefresh.Size = new Size(75, 23);
-            txtRefresh.TabIndex = 22;
+            txtRefresh.TabIndex = 5;
             txtRefresh.Text = "Refresh";
             txtRefresh.UseVisualStyleBackColor = true;
             txtRefresh.Click += txtRefresh_Click;
@@ -144,7 +144,7 @@
             btnSave.Location = new Point(320, 12);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 20;
+            btnSave.TabIndex = 4;
             btnSave.Text = "Lưu";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
@@ -170,7 +170,7 @@
             btnDel.Location = new Point(217, 12);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(75, 23);
-            btnDel.TabIndex = 17;
+            btnDel.TabIndex = 3;
             btnDel.Text = "Xóa";
             btnDel.UseVisualStyleBackColor = true;
             btnDel.Click += btnDel_Click;
@@ -180,7 +180,7 @@
             btnEdit.Location = new Point(116, 12);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(75, 23);
-            btnEdit.TabIndex = 16;
+            btnEdit.TabIndex = 2;
             btnEdit.Text = "Sửa";
             btnEdit.UseVisualStyleBackColor = true;
             btnEdit.Click += btnEdit_Click;
@@ -190,7 +190,7 @@
             btnAdd.Location = new Point(17, 12);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
-            btnAdd.TabIndex = 15;
+            btnAdd.TabIndex = 1;
             btnAdd.Text = "Thêm";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;

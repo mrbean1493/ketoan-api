@@ -9,6 +9,8 @@ namespace ketoan.Server.DTOs
         [Required(ErrorMessage = "Tên đối tác không được để trống")]
         public string TenDoiTac { get; set; }
 
+        public string dia_chi { get; set; }
+
         public string SoDienThoai { get; set; }
 
         public string SoDienThoai2 { get; set; }

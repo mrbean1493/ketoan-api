@@ -40,6 +40,57 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 //lblTieuDe.Text = "DANH SÁCH NHÀ CUNG CẤP";
                 txtTenDoiTacView.Text = "Tên nhà cung cấp";
             }
+
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.Columns.Clear();
+
+            // 1. Cột Mã/ID (Ẩn đi hoặc hiển thị tùy bạn)
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Id", // Tên property trong DTO
+                Name = "colId",
+                HeaderText = "Mã đối tác",
+                Visible = true // Ẩn cột Id nếu không cần hiển thị cho người dùng xem
+            });
+
+            // 2. Cột Tên kho
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "tendoitac",
+                Name = "colTenDoiTac",
+                HeaderText = "Tên đối tác",
+                Width = 300
+            });
+
+            // 3. Cột Địa chỉ
+            /*
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "dia_chi",
+                Name = "colDiaChi",
+                HeaderText = "Địa chỉ",
+                Width = 200,
+                Visible = true
+            });
+            */
+            // 4. Cột Địa chỉ
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "sodienthoai",
+                Name = "colSDT",
+                HeaderText = "SĐT",
+                Width = 70,
+                Visible = true
+            });
+            // 3. Cột Địa chỉ
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "sodienthoai2",
+                Name = "colSDT2",
+                HeaderText = "SĐT2",
+                Width = 70,
+                Visible = true
+            });
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

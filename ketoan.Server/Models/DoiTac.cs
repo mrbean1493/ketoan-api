@@ -14,6 +14,9 @@ namespace ketoan.Server.Models
         [Column("tendoitac")]
         public string TenDoiTac { get; set; }
 
+        [Column("dia_chi")]
+        public string dia_chi { get; set; }
+
         [Column("sodienthoai")]
         public string SoDienThoai { get; set; }
 
