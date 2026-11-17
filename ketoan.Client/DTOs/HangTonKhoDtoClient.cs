@@ -11,16 +11,17 @@ namespace ketoan.Client.DTOs
     {
         [JsonPropertyName("id_hang_hoa")]
         public int id_hang_hoa { get; set; }
-        [JsonPropertyName("tenHH")]
+        [JsonPropertyName("tenhanghoa")]
         public string TenHH { get; set; }
 
+        [JsonPropertyName("viettat")]
         public string VietTat { get; set; }
         public string MoTa { get; set; }
 
         public int id_dvt { get; set; }
-
+        [JsonPropertyName("tendvt")]
         public string TenDVT { get; set; }
-
+        public string so_lo { get; set; }
         public decimal so_luong { get; set; }
     }
 }

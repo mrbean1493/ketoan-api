@@ -2,6 +2,7 @@ using ketoan.Client.Enums;
 using ketoan.Client.FormsUI.Danhmuc;
 using ketoan.Client.FormsUI.Hethong;
 using ketoan.Client.FormsUI.Nhaphang;
+using ketoan.Client.FormsUI.Xuathang;
 using System;
 using System.Windows.Forms;
 namespace ketoan.Client
@@ -111,6 +112,8 @@ namespace ketoan.Client
         {
             var form = new DangNhap();
             OpenChildFormInTab(form, "DangNhap");
+
+            lblTrangThai.Text = "Tài khoản đăng nhập:" + QuanLyPhien.TenDangNhap + " - Database - Bản build";
         }
 
         private void tabControlMain_DrawItem(object sender, DrawItemEventArgs e)
@@ -189,7 +192,14 @@ namespace ketoan.Client
             tabControlMain.ItemSize = new Size(150, 30);
             tabControlMain.SizeMode = TabSizeMode.Fixed;
 
-            //if(QuanLyPhien.NgaySinh!=null)
+
+            lblTrangThai.Text = "Tài khoản đăng nhập: " + QuanLyPhien.TenDangNhap + " / " + QuanLyPhien.TenNguoiDung + " - Database:??? - Bản build:???";
+            if (QuanLyPhien.NgaySinh != null && QuanLyPhien.NgaySinh == DateOnly.FromDateTime(DateTime.Now))
+            {
+                MessageBox.Show("Chúc mừng sinh nhật " + QuanLyPhien.TenNguoiDung + " tràn đầy sức khỏe, hạnh phúc, may mắn và thành công nhé!", "Chúc mừng");
+            }
+
+
         }
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -296,32 +306,37 @@ namespace ketoan.Client
 
         private void nhậpKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang,0);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Nhaphang, 0);
             OpenChildFormInTab(form, "NhapKho");
         }
 
         private void trảHàngNhậpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahang,0);
+            var form = new PhieuNhapXuat2(LoaiPhieuNhapXuat.Trahang, 0);
             OpenChildFormInTab(form, "TraHang");
         }
 
         private void xuấtKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathang,0);
+            var form = new PhieuNhapXuat2(LoaiPhieuNhapXuat.Xuathang, 0);
             OpenChildFormInTab(form, "XuatKho");
         }
 
         private void trảHàngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahangban,0);
+            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Trahangban, 0);
             OpenChildFormInTab(form, "TraHangBan");
         }
 
         private void xuấtHủyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PhieuNhapXuat(LoaiPhieuNhapXuat.Xuathuy, 0);
+            var form = new PhieuNhapXuat2(LoaiPhieuNhapXuat.Xuathuy, 0);
             OpenChildFormInTab(form, "XuatHuy");
+        }
+
+        private void khoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

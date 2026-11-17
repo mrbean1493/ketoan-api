@@ -44,6 +44,8 @@ namespace ketoan.Server.Data
 
         public DbSet<DonViTinh> DVTs { get; set; }
 
+        public DbSet<Kho> Khos { get; set; }
+
         public DbSet<HangHoa> HangHoas { get; set; }
 
         public DbSet<DoiTac> DoiTacs { get; set; }
@@ -52,6 +54,9 @@ namespace ketoan.Server.Data
 
         public DbSet<PhieuNhapXuat> PhieuNhapXuats { get; set; }
         public DbSet<ChiTietPhieuNhapXuat> ChiTietPhieuNhapXuats { get; set; }
+
+        public DbSet<PhieuThuChi> PhieuThuChis { get; set; }
+        public DbSet<ChiTietPhieuThuChi> ChiTietPhieuThuChis { get; set; }
 
     }
 }

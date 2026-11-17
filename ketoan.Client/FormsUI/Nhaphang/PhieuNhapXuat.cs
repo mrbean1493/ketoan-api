@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ketoan.Client.FormsUI.Nhaphang.DanhSachPhieuNhapXuat;
 
 namespace ketoan.Client.FormsUI.Nhaphang
 {
@@ -36,6 +37,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
             LoadDoiTac();
 
+            LoadHTTT();
         }
 
         private async Task LoadDataToEditAsync(int phieuId)
@@ -122,6 +124,31 @@ namespace ketoan.Client.FormsUI.Nhaphang
             //gridLookupDoiTac1.SelectedId = 1;
 
         }
+
+        public class HTTT
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+        private async void LoadHTTT()
+        {
+            cboHTTT.DataSource = null;
+            List<HTTT> listHTTT = new List<HTTT>();
+
+
+            listHTTT.Add(new HTTT() { Id = 1, Name = "Chuyển khoản" });
+            listHTTT.Add(new HTTT() { Id = 2, Name = "Tiền mặt" });
+            listHTTT.Add(new HTTT() { Id = 3, Name = "CK/TM" });
+
+
+
+            cboHTTT.DataSource = listHTTT;
+            cboHTTT.DisplayMember = "Name";
+            cboHTTT.ValueMember = "Id";
+            cboHTTT.SelectedIndex = 0;
+        }
+
+
         private void CapNhatGiaoDien()
         {
             if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
@@ -354,6 +381,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
         }
 
         // 1. Hàm tính tổng Thành tiền cho tất cả các dòng trên DataGridView
+        decimal tongThanhTien = 0;
         private void TinhTongTien()
         {
             decimal tongTien = 0;
@@ -380,7 +408,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 tongTien = list.Sum(x => x.ThanhTien);
             }
 
-
+            tongThanhTien = tongTien;
             // Hiển thị ra TextBox tổng tiền (Định dạng N0 cho dễ nhìn, ví dụ: 1.500.000)
             lblTongTien.Text = "Tổng tiền: " + tongTien.ToString("N0");
 
@@ -435,8 +463,11 @@ namespace ketoan.Client.FormsUI.Nhaphang
             {
 
                 dataGridView1.EndEdit();
-
-                bool isThanhCong = await LuuDuLieuAsync();
+                if (txtConNo.Text.Contains('-'))
+                {
+                    MessageBox.Show("Tiền nợ phải lớn hơn 0. Vui lòng kiểm tra lại tiền thanh toán và tiền trả lại!", "Cảnh báo");return;
+                }
+                //bool isThanhCong = await LuuDuLieuAsync();
 
 
             }
@@ -507,6 +538,9 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private async Task<bool> LuuDuLieuAsync()
         {
+            //int zzz = (int)cboKho.SelectedValue;
+            
+
             try
             {
                 var danhSachChiTiet = new List<ChiTietPhieuNhapXuatDtoClient>();
@@ -572,6 +606,21 @@ namespace ketoan.Client.FormsUI.Nhaphang
                             MessageBox.Show("Đơn giá =0 hàng hóa dòng STT" + row.Cells["colSTT"].Value, "Cảnh báo");
                             return false;
                         }
+
+                        if (txtDaTT.Text == "")
+                        {
+                            MessageBox.Show("Tiền đã Thanh toán tối thiểu =0 nếu chưa thanh toán", "Cảnh báo");
+                            return false;
+                        }
+
+                        if (txtTraLai.Text == "")
+                        {
+                            MessageBox.Show("Tiền đã Trả lại tối thiểu =0", "Cảnh báo");
+                            return false;
+                        }
+
+
+
                         var thanhtien = row.Cells["colThanhtien"].Value?.ToString();
                         danhSachChiTiet.Add(new ChiTietPhieuNhapXuatDtoClient
                         {
@@ -603,6 +652,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     //MaPhieu = txtMaPhieu.Text.Trim(),
                     NgayLap = dateTimePickerNgayNhap.Value,
                     DoiTacId = gridLookupDoiTac1.SelectedDoiTac.Id,
+                    ma_kho=(int)cboKho.SelectedValue,
                     TongTien = tongTien,
                     //GhiChu = txtGhiChu.Text.Trim(),
                     //IsPhieuNhap = rdoPhieuNhap.Checked,
@@ -680,6 +730,35 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
                 //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
                 mainForm.OpenChildFormInTab(formThem, "HangHoa");
+            }
+        }
+
+        private void txtDaTT_TextChanged(object sender, EventArgs e)
+        {
+            TinhTienNo();
+        }
+
+        private void TinhTienNo()
+        {
+            // Kiểm tra và lấy giá trị từ TextBox 1
+            // Nếu ô trống hoặc không phải là số hợp lệ thì mặc định coi như 0 (hoặc xử lý theo ý bạn)
+            bool isSo1HopLe = decimal.TryParse(txtDaTT.Text.Trim(), out decimal so1);
+            bool isSo2HopLe = decimal.TryParse(txtTraLai.Text.Trim(), out decimal so2);
+
+            // Nếu cả 2 ô đều đang có dữ liệu số hợp lệ thì tiến hành tính toán
+            if (isSo1HopLe && isSo2HopLe)
+            {
+                // VÍ DỤ: TextBox3 = TextBox1 * TextBox2 (Bạn có thể thay đổi phép tính +, -, / tùy ý)
+                decimal conNo = tongThanhTien - so1;
+
+                // Hiển thị kết quả ra TextBox3 (Định dạng phân cách hàng nghìn nếu cần)
+                txtConNo.Text = conNo.ToString("N0");
+            }
+            else
+            {
+                // Nếu người dùng nhập sai định dạng hoặc xóa trống một trong hai ô, có thể làm sạch TextBox3
+                // (Hoặc hiển thị cảnh báo nhẹ nếu muốn)
+                txtConNo.Text = "0";
             }
         }
     }

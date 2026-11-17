@@ -1,6 +1,7 @@
 ﻿using ketoan.Client.ClassComponent;
 using ketoan.Client.DTOs;
 using ketoan.Client.Enums;
+using ketoan.Client.FormsUI.Xuathang;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +27,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
             LoadLoaiPhieu(isNhapKho);
             LoadDoiTac(isNhapKho);
+            LoadKho();
             CapNhatGiaoDien(isNhapKho);
         }
 
@@ -38,37 +40,88 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 {
                     iddoitac = 0;
                 }
-                var result = await _apiClient.GetByLoaiPhieuVaNgayAsync(cboLoaiPhieu.SelectedIndex + 1, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+                
 
-                if (result != null && result.Success && result.Data != null)
+                if((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    var phieu = result.Data;
+                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
 
-                    // 1. Đổ dữ liệu lên Cuống phiếu (Header)
-                    // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
-
-                    // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
-                    //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
-
-                    // 2. Đổ danh sách chi tiết lên DataGridView
-                    dataGridView1.DataSource = null;
-
-                    // 2. Tự động đánh số thứ tự cho từng phần tử
-                    /*
-                    int stt = 1;
-                    foreach (var item in phieu.)
+                    if (result != null && result.Success && result.Data != null)
                     {
-                        item.STT = stt++;
-                    }
-                    */
-                    BindingList<ResponsePhieuNhapXuatDtoClient> bindingList = new BindingList<ResponsePhieuNhapXuatDtoClient>(phieu);
-                    dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+                        var phieu = result.Data;
 
+                        // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                        // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                        // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                        //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                        // 2. Đổ danh sách chi tiết lên DataGridView
+                        dataGridView1.DataSource = null;
+
+                        // 2. Tự động đánh số thứ tự cho từng phần tử
+                        /*
+                        int stt = 1;
+                        foreach (var item in phieu.)
+                        {
+                            item.STT = stt++;
+                        }
+                        */
+
+                        
+                            BindingList<ResponsePhieuNhapXuatDtoClient> bindingList = new BindingList<ResponsePhieuNhapXuatDtoClient>(phieu);
+                            dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+                        
+
+
+
+                    }
+                    else
+                    {
+                        MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+
+                    if (result != null && result.Success && result.Data != null)
+                    {
+                        var phieu = result.Data;
+
+                        // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                        // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                        // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                        //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                        // 2. Đổ danh sách chi tiết lên DataGridView
+                        dataGridView1.DataSource = null;
+
+                        // 2. Tự động đánh số thứ tự cho từng phần tử
+                        /*
+                        int stt = 1;
+                        foreach (var item in phieu.)
+                        {
+                            item.STT = stt++;
+                        }
+                        */
+
+
+                            BindingList<ResponsePhieuNhapXuat2DtoClient> bindingList = new BindingList<ResponsePhieuNhapXuat2DtoClient>(phieu);
+                            dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+
+
+
+                    }
+                    else
+                    {
+                        MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
+
+
             }
             catch (Exception ex)
             {
@@ -82,50 +135,104 @@ namespace ketoan.Client.FormsUI.Nhaphang
             LoaiPhieuNhapXuat lpnx = new LoaiPhieuNhapXuat();
             string NameForm = "NhapKho";
             // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
-            if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
+
+            if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
             {
-                //int idPhieu = phieu.Id;
-                // Thực hiện các thao tác tiếp theo với idPhieu
-                if (phieu.LoaiPhieu == 1)
+                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Nhaphang;
-                    NameForm = "NhapKho";
+                    //int idPhieu = phieu.Id;
+                    // Thực hiện các thao tác tiếp theo với idPhieu
+                    if (phieu.LoaiPhieu == 1)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Nhaphang;
+                        NameForm = "NhapKho";
+                    }
+                    else if (phieu.LoaiPhieu == 2)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahang;
+                        NameForm = "TraHang";
+                    }
+                    else if (phieu.LoaiPhieu == 3)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathang;
+                        NameForm = "XuatHang";
+                    }
+                    else if (phieu.LoaiPhieu == 4)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahangban;
+                        NameForm = "TraHangBan";
+                    }
+                    else if (phieu.LoaiPhieu == 5)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathuy;
+                        NameForm = "XuatHuy";
+                    }
                 }
-                else if (phieu.LoaiPhieu == 2)
+
+
+                // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+                var formThem = new PhieuNhapXuat(lpnx, 0); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+
+                // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+                var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+                if (mainForm != null)
                 {
-                    lpnx=LoaiPhieuNhapXuat.Trahang;
-                    NameForm = "TraHang";
+                    // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                    //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                    mainForm.OpenChildFormInTab(formThem, NameForm);
                 }
-                else if (phieu.LoaiPhieu == 3)
+            }
+            else
+            {
+                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuat2DtoClient phieu)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Xuathang;
-                    NameForm = "XuatHang";
+                    //int idPhieu = phieu.Id;
+                    // Thực hiện các thao tác tiếp theo với idPhieu
+                    if (phieu.LoaiPhieu == 1)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Nhaphang;
+                        NameForm = "NhapKho";
+                    }
+                    else if (phieu.LoaiPhieu == 2)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahang;
+                        NameForm = "TraHang";
+                    }
+                    else if (phieu.LoaiPhieu == 3)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathang;
+                        NameForm = "XuatHang";
+                    }
+                    else if (phieu.LoaiPhieu == 4)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahangban;
+                        NameForm = "TraHangBan";
+                    }
+                    else if (phieu.LoaiPhieu == 5)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathuy;
+                        NameForm = "XuatHuy";
+                    }
                 }
-                else if (phieu.LoaiPhieu == 4)
+
+
+                // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+                var formThem = new PhieuNhapXuat2(lpnx, 0); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+
+                // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+                var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+                if (mainForm != null)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Trahangban;
-                    NameForm = "TraHangBan";
-                }
-                else if (phieu.LoaiPhieu == 5)
-                {
-                    lpnx = LoaiPhieuNhapXuat.Xuathuy;
-                    NameForm = "XuatHuy";
+                    // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                    //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                    mainForm.OpenChildFormInTab(formThem, NameForm);
                 }
             }
 
 
-            // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
-            var formThem = new PhieuNhapXuat(lpnx, 0); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
-
-            // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
-            var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
-
-            if (mainForm != null)
-            {
-                // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
-                //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
-                mainForm.OpenChildFormInTab(formThem, NameForm);
-            }
+                
         }
 
         private void btnSua_Click(object sender, EventArgs e)
@@ -134,51 +241,106 @@ namespace ketoan.Client.FormsUI.Nhaphang
             LoaiPhieuNhapXuat lpnx = new LoaiPhieuNhapXuat();
             string NameForm = "NhapKho";
             int idphieu = 0;
-            // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
-            if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
+
+            if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
             {
-                idphieu = phieu.Id;
-                // Thực hiện các thao tác tiếp theo với idPhieu
-                if (phieu.LoaiPhieu == 1)
+                // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
+                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Nhaphang;
-                    NameForm = "NhapKho";
+                    idphieu = phieu.Id;
+                    // Thực hiện các thao tác tiếp theo với idPhieu
+                    if (phieu.LoaiPhieu == 1)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Nhaphang;
+                        NameForm = "NhapKho";
+                    }
+                    else if (phieu.LoaiPhieu == 2)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahang;
+                        NameForm = "TraHang";
+                    }
+                    else if (phieu.LoaiPhieu == 3)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathang;
+                        NameForm = "XuatHang";
+                    }
+                    else if (phieu.LoaiPhieu == 4)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahangban;
+                        NameForm = "TraHangBan";
+                    }
+                    else if (phieu.LoaiPhieu == 5)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathuy;
+                        NameForm = "XuatHuy";
+                    }
                 }
-                else if (phieu.LoaiPhieu == 2)
+
+
+                // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+                var formThem = new PhieuNhapXuat(lpnx, idphieu); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+
+                // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+                var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+                if (mainForm != null)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Trahang;
-                    NameForm = "TraHang";
+                    // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                    //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                    mainForm.OpenChildFormInTab(formThem, NameForm);
                 }
-                else if (phieu.LoaiPhieu == 3)
+            }
+            else
+            {
+                // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
+                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuat2DtoClient phieu)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Xuathang;
-                    NameForm = "XuatHang";
+                    idphieu = phieu.Id;
+                    // Thực hiện các thao tác tiếp theo với idPhieu
+                    if (phieu.LoaiPhieu == 1)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Nhaphang;
+                        NameForm = "NhapKho";
+                    }
+                    else if (phieu.LoaiPhieu == 2)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahang;
+                        NameForm = "TraHang";
+                    }
+                    else if (phieu.LoaiPhieu == 3)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathang;
+                        NameForm = "XuatHang";
+                    }
+                    else if (phieu.LoaiPhieu == 4)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Trahangban;
+                        NameForm = "TraHangBan";
+                    }
+                    else if (phieu.LoaiPhieu == 5)
+                    {
+                        lpnx = LoaiPhieuNhapXuat.Xuathuy;
+                        NameForm = "XuatHuy";
+                    }
                 }
-                else if (phieu.LoaiPhieu == 4)
+
+
+                // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
+                var formThem = new PhieuNhapXuat2(lpnx, idphieu); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
+
+                // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
+                var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
+
+                if (mainForm != null)
                 {
-                    lpnx = LoaiPhieuNhapXuat.Trahangban;
-                    NameForm = "TraHangBan";
-                }
-                else if (phieu.LoaiPhieu == 5)
-                {
-                    lpnx = LoaiPhieuNhapXuat.Xuathuy;
-                    NameForm = "XuatHuy";
+                    // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
+                    //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
+                    mainForm.OpenChildFormInTab(formThem, NameForm);
                 }
             }
 
 
-            // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
-            var formThem = new PhieuNhapXuat(lpnx, idphieu); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
-
-            // 2. Tìm Form chính (MainForm) đang mở trong ứng dụng
-            var mainForm = Application.OpenForms.OfType<FormMain>().FirstOrDefault(); // Thay MainForm bằng tên class Form chính của bạn
-
-            if (mainForm != null)
-            {
-                // 3. Gọi hàm mở tab của Form chính (đặt một tabKey duy nhất cho form thêm mới)
-                //string uniqueTabKey = $"PhieuNhapXuat_Them_{DateTime.Now.Ticks}"; // Dùng Ticks để mỗi lần bấm mở ra một tab mới không bị trùng
-                mainForm.OpenChildFormInTab(formThem, NameForm);
-            }
+                
         }
 
         private async void btnXoa_Click(object sender, EventArgs e)
@@ -194,14 +356,25 @@ namespace ketoan.Client.FormsUI.Nhaphang
             {
                 var selectedRow = dataGridView1.CurrentRow;
                 int idphieu = 0;
-                // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
-                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
+
+                if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    idphieu = phieu.Id;
+                    // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
+                    if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieu)
+                    {
+                        idphieu = phieu.Id;
+                    }
+                }
+                else
+                {
+                    // Cách B: Lấy qua đối tượng BindingList được gán (An toàn và chuẩn xác nhất nếu dùng DTO)
+                    if (selectedRow.DataBoundItem is ResponsePhieuNhapXuat2DtoClient phieu)
+                    {
+                        idphieu = phieu.Id;
+                    }
                 }
 
-
-                    var response = await _apiClient.DeletePhieuAsync(idphieu);
+                var response = await _apiClient.DeletePhieuAsync(idphieu);
 
                 if (response != null && response.Success)
                 {
@@ -210,6 +383,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                     btnTimKiem.PerformClick();
                 }
+
             }
         }
 
@@ -226,56 +400,115 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 {
                     iddoitac = 0;
                 }
-                var result = await _apiClient.GetByLoaiPhieuVaNgayAsync(cboLoaiPhieu.SelectedIndex + 1, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
 
-                if (result != null && result.Success && result.Data != null)
+                if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    var phieu = result.Data;
+                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
 
-                    // 1. Đổ dữ liệu lên Cuống phiếu (Header)
-                    // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
-
-                    // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
-                    //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
-
-                    // 2. Đổ danh sách chi tiết lên DataGridView
-                    dataGridView1.DataSource = null;
-
-                    // 2. Tự động đánh số thứ tự cho từng phần tử
-                    /*
-                    int stt = 1;
-                    foreach (var item in phieu.)
+                    if (result != null && result.Success && result.Data != null)
                     {
-                        item.STT = stt++;
+                        var phieu = result.Data;
+
+                        // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                        // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                        // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                        //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                        // 2. Đổ danh sách chi tiết lên DataGridView
+                        dataGridView1.DataSource = null;
+
+                        // 2. Tự động đánh số thứ tự cho từng phần tử
+                        /*
+                        int stt = 1;
+                        foreach (var item in phieu.)
+                        {
+                            item.STT = stt++;
+                        }
+                        */
+                        BindingList<ResponsePhieuNhapXuatDtoClient> bindingList = new BindingList<ResponsePhieuNhapXuatDtoClient>(phieu);
+                        dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+
+                        if (dataGridView1.Rows.Count > 0)
+                        {
+                            // Bỏ chọn tất cả các dòng trước đó (nếu có)
+                            dataGridView1.ClearSelection();
+
+                            // Chọn dòng đầu tiên (index = 0)
+                            dataGridView1.Rows[0].Selected = true;
+
+                            // (Tùy chọn) Đặt CurrentRow trỏ đến dòng đầu tiên để kích hoạt hightlight sáng dòng
+                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+
+                            // Tạo giả lập sự kiện CellEventArgs cho dòng 0, cột 0
+                            DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
+
+                            // Gọi trực tiếp hàm xử lý sự kiện CellClick của DataGridView
+                            dataGridView1_CellClick(dataGridView1, args);
+                        }
+
                     }
-                    */
-                    BindingList<ResponsePhieuNhapXuatDtoClient> bindingList = new BindingList<ResponsePhieuNhapXuatDtoClient>(phieu);
-                    dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
-
-
-                    if (dataGridView1.Rows.Count > 0)
+                    else
                     {
-                        // Bỏ chọn tất cả các dòng trước đó (nếu có)
-                        dataGridView1.ClearSelection();
-
-                        // Chọn dòng đầu tiên (index = 0)
-                        dataGridView1.Rows[0].Selected = true;
-
-                        // (Tùy chọn) Đặt CurrentRow trỏ đến dòng đầu tiên để kích hoạt hightlight sáng dòng
-                        dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
-
-                        // Tạo giả lập sự kiện CellEventArgs cho dòng 0, cột 0
-                        DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
-
-                        // Gọi trực tiếp hàm xử lý sự kiện CellClick của DataGridView
-                        dataGridView1_CellClick(dataGridView1, args);
+                        MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-
                 }
                 else
                 {
-                    MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+
+                    if (result != null && result.Success && result.Data != null)
+                    {
+                        var phieu = result.Data;
+
+                        // 1. Đổ dữ liệu lên Cuống phiếu (Header)
+                        // dateTimePickerNgayNhap.Value = phieu.NgayLap.ToLocalTime(); // Chuyển UTC về giờ máy local
+
+                        // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
+                        //gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                        // 2. Đổ danh sách chi tiết lên DataGridView
+                        dataGridView1.DataSource = null;
+
+                        // 2. Tự động đánh số thứ tự cho từng phần tử
+                        /*
+                        int stt = 1;
+                        foreach (var item in phieu.)
+                        {
+                            item.STT = stt++;
+                        }
+                        */
+                        BindingList<ResponsePhieuNhapXuat2DtoClient> bindingList = new BindingList<ResponsePhieuNhapXuat2DtoClient>(phieu);
+                        dataGridView1.DataSource = bindingList; // phieu.ChiTiets là List<ChiTietPhieuDtoClient>
+
+
+                        if (dataGridView1.Rows.Count > 0)
+                        {
+                            // Bỏ chọn tất cả các dòng trước đó (nếu có)
+                            dataGridView1.ClearSelection();
+
+                            // Chọn dòng đầu tiên (index = 0)
+                            dataGridView1.Rows[0].Selected = true;
+
+                            // (Tùy chọn) Đặt CurrentRow trỏ đến dòng đầu tiên để kích hoạt hightlight sáng dòng
+                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+
+                            // Tạo giả lập sự kiện CellEventArgs cho dòng 0, cột 0
+                            DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
+
+                            // Gọi trực tiếp hàm xử lý sự kiện CellClick của DataGridView
+                            dataGridView1_CellClick(dataGridView1, args);
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show(result?.Message ?? "Không thể tải dữ liệu phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
+
+                    
             }
             catch (Exception ex)
             {
@@ -284,24 +517,32 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         }
 
+        public class LoaiPhieu
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
         private void LoadLoaiPhieu(bool isNhapKho)
         {
 
             cboLoaiPhieu.DataSource = null;
-            List<string> listLoaiPhieu = new List<string>();
+            List<LoaiPhieu> listLoaiPhieu = new List<LoaiPhieu>();
 
             if (isNhapKho)
             {
-                listLoaiPhieu.Add("Nhập kho");
-                listLoaiPhieu.Add("Trả hàng");
+                listLoaiPhieu.Add(new LoaiPhieu() { Id = 1, Name = "Nhập kho" });
+                listLoaiPhieu.Add(new LoaiPhieu() { Id = 2, Name = "Trả hàng" });
             }
             else
             {
-                listLoaiPhieu.Add("Xuất kho");
-                listLoaiPhieu.Add("Trả hàng xuất");
-                listLoaiPhieu.Add("Xuất hủy");
+                listLoaiPhieu.Add(new LoaiPhieu() { Id = 3, Name = "Xuất kho" });
+                listLoaiPhieu.Add(new LoaiPhieu() { Id = 4, Name = "Trả hàng xuất" });
+                listLoaiPhieu.Add(new LoaiPhieu() { Id = 5, Name = "Xuất hủy" });
             }
             cboLoaiPhieu.DataSource = listLoaiPhieu;
+            cboLoaiPhieu.DisplayMember = "Name";
+            cboLoaiPhieu.ValueMember = "Id";
+            cboLoaiPhieu.SelectedIndex = 0;
         }
 
         private async void LoadDoiTac(bool isNhapKho)
@@ -331,6 +572,16 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     int selectedId = selected.Id; // Dùng ID này gán vào PhieuNhap.NhaCungCapId
                 }
             };
+        }
+
+        private async void LoadKho()
+        {
+            // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
+            List<KhoDtoClient> listKho = new List<KhoDtoClient>();
+            listKho = await _apiClient.GetKhoAsync();
+            cboKho.DataSource = listKho;
+            cboKho.ValueMember = "Id";
+            cboKho.DisplayMember = "ten_kho";
         }
 
         private void CapNhatGiaoDien(bool isNhapKho)
@@ -403,37 +654,78 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 // 2. Lấy dữ liệu của dòng đang được click bằng cách ép kiểu DataSource về đúng object DTO
                 var selectedRow = dataGridView1.Rows[e.RowIndex];
 
-                // Cách A: Lấy trực tiếp từ đối tượng DataBoundItem (Khuyên dùng, cực kỳ an toàn và chuẩn xác)
-                if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieuDto)
+                if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    txtSoPhieu.Text = phieuDto.Id.ToString();
+                    // Cách A: Lấy trực tiếp từ đối tượng DataBoundItem (Khuyên dùng, cực kỳ an toàn và chuẩn xác)
+                    if (selectedRow.DataBoundItem is ResponsePhieuNhapXuatDtoClient phieuDto)
+                    {
+                        txtSoPhieu.Text = phieuDto.Id.ToString();
 
-                    // Xử lý logic tiếp theo với idPhieu (ví dụ: gọi API lấy chi tiết phiếu theo ID)
-                    // LoadChiTietPhieu(idPhieu);
-                    gridLookupDoiTac1.SelectedId = phieuDto.DoiTacId;
+                        // Xử lý logic tiếp theo với idPhieu (ví dụ: gọi API lấy chi tiết phiếu theo ID)
+                        // LoadChiTietPhieu(idPhieu);
+                        gridLookupDoiTac1.SelectedId = phieuDto.DoiTacId;
 
-                    if (phieuDto.LoaiPhieu == 1)//nhaphang
-                    {
-                        btnTraHang.Visible = true;
-                        btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                        if (phieuDto.LoaiPhieu == 1)//nhaphang
+                        {
+                            btnTraHang.Visible = true;
+                            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                        }
+                        else if (phieuDto.LoaiPhieu == 2)//trahangnhap
+                        {
+                            btnTraHang.Visible = false;
+                        }
+                        else if (phieuDto.LoaiPhieu == 3)//xuathang
+                        {
+                            btnTraHang.Visible = true;
+                            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                        }
+                        else if (phieuDto.LoaiPhieu == 4)//trahangxuat
+                        {
+                            btnTraHang.Visible = false;
+                        }
+                        else if (phieuDto.LoaiPhieu == 5)//xuathuy
+                        {
+                            btnTraHang.Visible = false;
+                        }
                     }
-                    else if (phieuDto.LoaiPhieu == 2)//trahangnhap
+                }
+                else
+                {
+                    // Cách A: Lấy trực tiếp từ đối tượng DataBoundItem (Khuyên dùng, cực kỳ an toàn và chuẩn xác)
+                    if (selectedRow.DataBoundItem is ResponsePhieuNhapXuat2DtoClient phieuDto)
                     {
-                        btnTraHang.Visible = false;
+                        txtSoPhieu.Text = phieuDto.Id.ToString();
+
+                        // Xử lý logic tiếp theo với idPhieu (ví dụ: gọi API lấy chi tiết phiếu theo ID)
+                        // LoadChiTietPhieu(idPhieu);
+                        gridLookupDoiTac1.SelectedId = phieuDto.DoiTacId;
+
+                        if (phieuDto.LoaiPhieu == 1)//nhaphang
+                        {
+                            btnTraHang.Visible = true;
+                            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                        }
+                        else if (phieuDto.LoaiPhieu == 2)//trahangnhap
+                        {
+                            btnTraHang.Visible = false;
+                        }
+                        else if (phieuDto.LoaiPhieu == 3)//xuathang
+                        {
+                            btnTraHang.Visible = true;
+                            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+                        }
+                        else if (phieuDto.LoaiPhieu == 4)//trahangxuat
+                        {
+                            btnTraHang.Visible = false;
+                        }
+                        else if (phieuDto.LoaiPhieu == 5)//xuathuy
+                        {
+                            btnTraHang.Visible = false;
+                        }
                     }
-                    else if (phieuDto.LoaiPhieu == 3)//xuathang
-                    {
-                        btnTraHang.Visible = true;
-                        btnTraHang.Text = "Trả hàng phiếu đã chọn";
-                    }
-                    else if (phieuDto.LoaiPhieu == 4)//trahangxuat
-                    {
-                        btnTraHang.Visible = false;
-                    }
-                    else if (phieuDto.LoaiPhieu == 5)//xuathuy
-                    {
-                        btnTraHang.Visible = false;
-                    }
+
+
+
                 }
 
                 // Hoặc Cách B: Lấy gián tiếp qua tên cột (Nếu bạn đặt tên cột là "colId" hoặc property là "Id")

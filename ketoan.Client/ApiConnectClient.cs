@@ -96,6 +96,80 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
         }
 
+        // 1. GET: Lấy danh sách Kho
+        public async Task<List<KhoDtoClient>> GetKhoAsync()
+        {
+            HttpResponseMessage response = await Client.GetAsync("api/kho");
+            response.EnsureSuccessStatusCode();
+
+            string json = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ApiResponse<List<KhoDtoClient>>>(json, _jsonOptions);
+
+            return result?.Data ?? new List<KhoDtoClient>();
+        }
+
+        //2. POST Hàm thêm mới Đơn vị tính
+        public async Task<ApiResponse<KhoDtoClient>> CreateKhoAsync(string tenKho)
+        {
+            var requestData = new { ten_kho = tenKho };
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Client.PostAsync("api/kho", content);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            // Kiểm tra nếu Server trả về chuỗi rỗng
+            if (string.IsNullOrWhiteSpace(jsonResult))
+            {
+                throw new Exception($"Server không trả về dữ liệu. Status code: {(int)response.StatusCode}");
+            }
+
+
+            // Nếu Server trả về lỗi 400 (Trùng tên hoặc ModelState invalid)
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Thêm mới thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
+        }
+
+        //3. PUT Hàm sửa Đơn vị tính
+        public async Task<ApiResponse<KhoDtoClient>> UpdateKhoAsync(int id, string tenKho)
+        {
+            var requestData = new { ten_kho = tenKho };
+            string jsonContent = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Client.PutAsync($"api/kho/{id}", content);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Cập nhật thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<KhoDtoClient>>(jsonResult, _jsonOptions);
+        }
+
+        //4. DELETE Hàm xóa Đơn vị tính
+        public async Task<ApiResponse<object>> DeleteKhoAsync(int id)
+        {
+            HttpResponseMessage response = await Client.DeleteAsync($"api/kho/{id}");
+            string jsonResult = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+                throw new Exception(errorResult?.Message ?? "Xóa thất bại.");
+            }
+
+            return JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+        }
+
+
         // 1. GET: Lấy danh sách Hàng Hóa
         public async Task<List<HangHoaDtoClient>> GetHangHoaAsync(string? keyword = null)
         {
@@ -311,7 +385,7 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<List<PhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
         }
 
-        // 1a. Lấy toàn bộ phiếu
+        // 1a. Lấy toàn bộ phiếu nhập
         public async Task<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>> GetByLoaiPhieuVaNgayAsync(int loaiPhieu,DateTime fr,DateTime t,int doitac)
         {
             // 1. Format ngày tháng sang chuỗi chuẩn ISO (yyyy-MM-ddTHH:mm:ss) để Server nhận diện chính xác
@@ -325,9 +399,23 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
         }
 
+        // 1b. Lấy toàn bộ phiếu xuất
+        public async Task<ApiResponse<List<ResponsePhieuNhapXuat2DtoClient>>> GetByLoaiPhieuVaNgay2Async(int loaiPhieu, DateTime fr, DateTime t, int doitac)
+        {
+            // 1. Format ngày tháng sang chuỗi chuẩn ISO (yyyy-MM-ddTHH:mm:ss) để Server nhận diện chính xác
+            string fromDStr = fr.ToString("yyyy-MM-ddTHH:mm:ss");
+            string toDStr = t.ToString("yyyy-MM-ddTHH:mm:ss");
+
+            // 2. Ghép các tham số vào đường dẫn URL (Query String)
+            string url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            var response = await Client.GetAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResponse<List<ResponsePhieuNhapXuat2DtoClient>>>(json, _jsonOptions)!;
+        }
 
 
-        // 2. Lấy chi tiết 1 phiếu theo ID
+
+        // 2. Lấy chi tiết 1 phiếu nhập theo ID
         public async Task<ApiResponse<PhieuNhapXuatDtoClient>> GetPhieuByIdAsync(int id)
         {
             var response = await Client.GetAsync($"api/PhieuNhapXuat/{id}");
@@ -335,7 +423,15 @@ namespace ketoan.Client
             return JsonSerializer.Deserialize<ApiResponse<PhieuNhapXuatDtoClient>>(json, _jsonOptions)!;
         }
 
-        // 3. Tạo phiếu mới (POST)
+        // 2b. Lấy chi tiết 1 phiếu xuất theo ID
+        public async Task<ApiResponse<PhieuNhapXuat2DtoClient>> GetPhieuById2Async(int id)
+        {
+            var response = await Client.GetAsync($"api/PhieuNhapXuat/{id}");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResponse<PhieuNhapXuat2DtoClient>>(json, _jsonOptions)!;
+        }
+
+        // 3. Tạo phiếu nhập mới (POST)
         public async Task<ApiResponse<object>> CreatePhieuAsync(PhieuNhapXuatDtoClient request)
         {
             string jsonContent = JsonSerializer.Serialize(request);
@@ -357,8 +453,49 @@ namespace ketoan.Client
             return result!;
         }
 
-        // 4. Cập nhật phiếu (PUT)
+        // 3. Tạo phiếu xuất mới (POST)
+        public async Task<ApiResponse<object>> CreatePhieu2Async(PhieuNhapXuat2DtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PostAsync("api/PhieuNhapXuat", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Hiển thị trực tiếp thông báo thô từ Server lên MessageBox để bạn đọc được ngay
+                //throw new Exception($"Server trả về lỗi ({response.StatusCode}):\n{jsonResult}");
+
+                throw new Exception(result?.Message ?? "Lỗi khi lưu phiếu mới!");
+            }
+
+            return result!;
+        }
+
+        // 4. Cập nhật phiếu nhập (PUT)
         public async Task<ApiResponse<object>> UpdatePhieuAsync(int id, PhieuNhapXuatDtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PutAsync($"api/PhieuNhapXuat/{id}", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi cập nhật phiếu!");
+            }
+
+            return result!;
+        }
+
+        // 4b. Cập nhật phiếu xuất (PUT)
+        public async Task<ApiResponse<object>> UpdatePhieu2Async(int id, PhieuNhapXuat2DtoClient request)
         {
             string jsonContent = JsonSerializer.Serialize(request);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -392,10 +529,10 @@ namespace ketoan.Client
             return result!;
         }
 
-        // 1. GET: Lấy danh sách Đơn vị tính
+        // 1. GET: Lấy danh sách hàng tồn kho
         public async Task<List<HangTonKhoDtoClient>> GetHangTonKhoAsync()
         {
-            HttpResponseMessage response = await Client.GetAsync("api/ton-kho");
+            HttpResponseMessage response = await Client.GetAsync("api/tonkho/danh-sach");
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();

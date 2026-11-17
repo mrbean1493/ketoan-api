@@ -60,10 +60,12 @@ namespace ketoan.Client.ClassComponent
 
             // Định nghĩa cột gợi ý hàng hóa
             dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "id_hang_hoa", HeaderText = "Mã hàng", Width = 80 });
-            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "VietTat", HeaderText = "Viết tắt", Width = 80 });
+            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "viettat", HeaderText = "Viết tắt", Width = 80 });
             dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TenHH", HeaderText = "Tên hàng hóa", Width = 200 });
-            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TenDVT", HeaderText = "ĐVT", Width = 60 });
-            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "so_luong", HeaderText = "Số lượng", Width = 120 });
+            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "id_dvt", HeaderText = "id_dvt",Visible=false });
+            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "tendvt", HeaderText = "ĐVT", Width = 60 });
+            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "so_lo", HeaderText = "Số lô", Width = 60 });
+            dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "so_luong", HeaderText = "Số lượng tồn", Width = 120 });
             //dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DonGia", HeaderText = "Đơn giá", Width = 90, DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } });
             //dgvSuggest.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TonKho", HeaderText = "Tồn", Width = 60, DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } });
 
@@ -320,7 +322,7 @@ namespace ketoan.Client.ClassComponent
             Point cellScreenLocation = dgvParent.PointToScreen(new Point(cellRect.Left, cellRect.Bottom));
 
             // 3. Thiết lập kích thước Popup
-            int width = Math.Max(cellRect.Width, 500);
+            int width = Math.Max(cellRect.Width, 900);
             int height = 220;
 
             popupForm.ShowPopup(cellScreenLocation, new Size(width, height));

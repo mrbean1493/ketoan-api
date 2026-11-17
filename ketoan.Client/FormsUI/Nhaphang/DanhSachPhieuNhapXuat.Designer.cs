@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnTraHang = new Button();
             btnXoa = new Button();
             btnSua = new Button();
             btnThem = new Button();
@@ -44,13 +45,16 @@
             txtSoPhieu = new TextBox();
             lblSoPhieu = new Label();
             dataGridView1 = new DataGridView();
-            btnTraHang = new Button();
+            cboKho = new ComboBox();
+            lblKho = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cboKho);
+            groupBox1.Controls.Add(lblKho);
             groupBox1.Controls.Add(btnTraHang);
             groupBox1.Controls.Add(btnXoa);
             groupBox1.Controls.Add(btnSua);
@@ -73,6 +77,16 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Tìm kiếm phiếu nhập xuất";
+            // 
+            // btnTraHang
+            // 
+            btnTraHang.Location = new Point(1086, 96);
+            btnTraHang.Name = "btnTraHang";
+            btnTraHang.Size = new Size(91, 39);
+            btnTraHang.TabIndex = 21;
+            btnTraHang.Text = "Trả hàng phiếu đã chọn";
+            btnTraHang.UseVisualStyleBackColor = true;
+            btnTraHang.Visible = false;
             // 
             // btnXoa
             // 
@@ -213,15 +227,22 @@
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
             // 
-            // btnTraHang
+            // cboKho
             // 
-            btnTraHang.Location = new Point(1086, 96);
-            btnTraHang.Name = "btnTraHang";
-            btnTraHang.Size = new Size(91, 39);
-            btnTraHang.TabIndex = 21;
-            btnTraHang.Text = "Trả hàng phiếu đã chọn";
-            btnTraHang.UseVisualStyleBackColor = true;
-            btnTraHang.Visible = false;
+            cboKho.FormattingEnabled = true;
+            cboKho.Location = new Point(400, 66);
+            cboKho.Name = "cboKho";
+            cboKho.Size = new Size(348, 23);
+            cboKho.TabIndex = 23;
+            // 
+            // lblKho
+            // 
+            lblKho.AutoSize = true;
+            lblKho.Location = new Point(286, 68);
+            lblKho.Name = "lblKho";
+            lblKho.Size = new Size(28, 15);
+            lblKho.TabIndex = 22;
+            lblKho.Text = "Kho";
             // 
             // DanhSachPhieuNhapXuat
             // 
@@ -258,5 +279,7 @@
         private Button btnThem;
         private Button btnTimKiem;
         private Button btnTraHang;
+        private ComboBox cboKho;
+        private Label lblKho;
     }
 }

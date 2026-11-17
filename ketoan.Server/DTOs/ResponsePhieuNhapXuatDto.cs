@@ -10,6 +10,10 @@ namespace ketoan.Server.DTOs
         [JsonPropertyName("id_doi_tac")] // <--- Khớp với key JSON từ client
         public int DoiTacId { get; set; }
         public string TenDoiTac { get; set; }
+
+        public int ma_kho { get; set; }
+
+        public string ten_kho { get; set; }
         public decimal TongTien { get; set; }
 
         public int LoaiPhieu { get; set; }

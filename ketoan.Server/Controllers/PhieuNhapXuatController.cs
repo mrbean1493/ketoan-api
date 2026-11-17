@@ -29,6 +29,7 @@ namespace ketoan.Server.Controllers
                     NgayLap = p.NgayLap,
                     DoiTacId = p.IdDoiTac,
                     TongTien = p.TongTien,
+                    ma_kho = p.MaKho,
                     //GhiChu = p.GhiChu,
                     //IsPhieuNhap = p.IsPhieuNhap
                     LoaiPhieu = p.LoaiPhieu
@@ -41,7 +42,7 @@ namespace ketoan.Server.Controllers
 
         // 1a GET: api/PhieuNhapXuat - Lấy danh sách phiếu (Danh mục)
         [HttpGet("filter")]
-        public async Task<IActionResult> GetByLoaiPhieuVaNgay(int LoaiPhieu, DateTime fromD, DateTime toD, int DoiTac=0)
+        public async Task<IActionResult> GetByLoaiPhieuVaNgay(int LoaiPhieu, DateTime fromD, DateTime toD, int DoiTac=0,int Kho=0)
         {
             /*
             var phieus = await _context.PhieuNhapXuats
@@ -80,6 +81,11 @@ namespace ketoan.Server.Controllers
                 query = query.Where(p => p.IdDoiTac == DoiTac);
             }
 
+            if (Kho > 0)
+            {
+                query = query.Where(p => p.MaKho == Kho);
+            }
+
             // 5. Thực hiện Select ra DTO, sắp xếp giảm dần theo ngày lập và ToListAsync
             var phieus = await query
                 .OrderByDescending(p => p.NgayLap)
@@ -90,6 +96,7 @@ namespace ketoan.Server.Controllers
                     NgayLap = p.NgayLap,
                     DoiTacId = p.IdDoiTac,
                     TongTien = p.TongTien,
+                    ma_kho=p.MaKho,
                     //GhiChu = p.GhiChu,
                     //IsPhieuNhap = p.IsPhieuNhap,
                     LoaiPhieu = p.LoaiPhieu
@@ -122,6 +129,7 @@ namespace ketoan.Server.Controllers
                 NgayLap = phieu.NgayLap,
                 DoiTacId = phieu.IdDoiTac,
                 TongTien = phieu.TongTien,
+                ma_kho = phieu.MaKho,
                 //GhiChu = phieu.GhiChu,
                 //IsPhieuNhap = phieu.IsPhieuNhap,
                 LoaiPhieu = phieu.LoaiPhieu,
@@ -177,6 +185,7 @@ namespace ketoan.Server.Controllers
                         //MaPhieu = dto.MaPhieu,
                         NgayLap = dto.NgayLap.ToUniversalTime(),
                         IdDoiTac = dto.DoiTacId,
+                        MaKho = dto.ma_kho,
                         //GhiChu = dto.GhiChu,
                         //IsPhieuNhap = dto.IsPhieuNhap,
                         LoaiPhieu = dto.LoaiPhieu,
@@ -204,12 +213,13 @@ namespace ketoan.Server.Controllers
                     // C. Cập nhật Tồn kho
                     foreach (var item in dto.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.id_hang_hoa == item.HangHoaId && x.so_lo == item.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(x => x.id_hang_hoa == item.HangHoaId && x.so_lo == item.SoLo && x.ma_kho==dto.ma_kho);
                         if (tonKho == null)
                         {
                             tonKho = new TonKho
                             {
                                 id_hang_hoa = item.HangHoaId,
+                                ma_kho=dto.ma_kho,
                                 so_lo = item.SoLo,
                                 so_luong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? item.SoLuong : -item.SoLuong
                             };
@@ -273,7 +283,7 @@ namespace ketoan.Server.Controllers
                     // BƯỚC 1: Hoàn tác (Revert) tác động tồn kho của các dòng cũ
                     foreach (var oldItem in phieuDb.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == oldItem.IdHangHoa && t.so_lo == oldItem.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == oldItem.IdHangHoa && t.so_lo == oldItem.SoLo && t.ma_kho == dto.ma_kho);
                         if (tonKho != null)
                         {
                             if (phieuDb.LoaiPhieu == 1 || phieuDb.LoaiPhieu == 4)
@@ -288,6 +298,7 @@ namespace ketoan.Server.Controllers
                     //phieuDb.Id = dto.Id;
                     phieuDb.NgayLap = dto.NgayLap.ToUniversalTime();
                     phieuDb.IdDoiTac = dto.DoiTacId;
+                    phieuDb.MaKho=dto.ma_kho;
                     //phieuDb.GhiChu = dto.GhiChu;
                     phieuDb.LoaiPhieu = dto.LoaiPhieu;
                     phieuDb.NgayCapNhat = DateTime.UtcNow;
@@ -313,13 +324,14 @@ namespace ketoan.Server.Controllers
                     // BƯỚC 3: Áp dụng tác động tồn kho theo danh sách chi tiết mới
                     foreach (var newItem in dto.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == newItem.HangHoaId && t.so_lo == newItem.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == newItem.HangHoaId && t.so_lo == newItem.SoLo && t.ma_kho == dto.ma_kho);
                         if (tonKho == null)
                         {
                             tonKho = new TonKho
                             {
                                 id_hang_hoa = newItem.HangHoaId,
-                                so_lo=newItem.SoLo,
+                                ma_kho = dto.ma_kho,
+                                so_lo =newItem.SoLo,
                                 so_luong = (dto.LoaiPhieu == 1 || dto.LoaiPhieu == 4) ? newItem.SoLuong : -newItem.SoLuong
                             };
                             _context.TonKhos.Add(tonKho);
@@ -377,7 +389,7 @@ namespace ketoan.Server.Controllers
                     // Hoàn tác lại số lượng tồn kho trước khi xóa
                     foreach (var item in phieuDb.ChiTiets)
                     {
-                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == item.IdHangHoa && t.so_lo == item.SoLo);
+                        var tonKho = await _context.TonKhos.FirstOrDefaultAsync(t => t.id_hang_hoa == item.IdHangHoa && t.so_lo == item.SoLo && t.ma_kho == phieuDb.MaKho);
                         if (tonKho != null)
                         {
                             if (phieuDb.LoaiPhieu == 1 || phieuDb.LoaiPhieu == 4)

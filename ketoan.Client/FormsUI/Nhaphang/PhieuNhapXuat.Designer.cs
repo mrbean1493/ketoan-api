@@ -29,6 +29,16 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            txtNhanVien = new TextBox();
+            lblNhanVien = new Label();
+            txtConNo = new TextBox();
+            lblConNo = new Label();
+            txtTraLai = new TextBox();
+            label1 = new Label();
+            txtDaTT = new TextBox();
+            lblDaTT = new Label();
+            cboHTTT = new ComboBox();
+            lblHTTT = new Label();
             btnAddHangHoa = new Button();
             btnAddDoiTac = new Button();
             gridLookupDoiTac1 = new ketoan.Client.ClassComponent.GridLookupDoiTac();
@@ -64,6 +74,16 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(txtNhanVien);
+            groupBox1.Controls.Add(lblNhanVien);
+            groupBox1.Controls.Add(txtConNo);
+            groupBox1.Controls.Add(lblConNo);
+            groupBox1.Controls.Add(txtTraLai);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(txtDaTT);
+            groupBox1.Controls.Add(lblDaTT);
+            groupBox1.Controls.Add(cboHTTT);
+            groupBox1.Controls.Add(lblHTTT);
             groupBox1.Controls.Add(btnAddHangHoa);
             groupBox1.Controls.Add(btnAddDoiTac);
             groupBox1.Controls.Add(gridLookupDoiTac1);
@@ -81,6 +101,94 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Cuống phiếu";
+            // 
+            // txtNhanVien
+            // 
+            txtNhanVien.Enabled = false;
+            txtNhanVien.Location = new Point(1123, 110);
+            txtNhanVien.Name = "txtNhanVien";
+            txtNhanVien.ReadOnly = true;
+            txtNhanVien.Size = new Size(101, 23);
+            txtNhanVien.TabIndex = 21;
+            txtNhanVien.Visible = false;
+            // 
+            // lblNhanVien
+            // 
+            lblNhanVien.AutoSize = true;
+            lblNhanVien.Location = new Point(1097, 114);
+            lblNhanVien.Name = "lblNhanVien";
+            lblNhanVien.Size = new Size(23, 15);
+            lblNhanVien.TabIndex = 20;
+            lblNhanVien.Text = "NV";
+            lblNhanVien.Visible = false;
+            // 
+            // txtConNo
+            // 
+            txtConNo.Enabled = false;
+            txtConNo.Location = new Point(652, 90);
+            txtConNo.Name = "txtConNo";
+            txtConNo.Size = new Size(101, 23);
+            txtConNo.TabIndex = 19;
+            // 
+            // lblConNo
+            // 
+            lblConNo.AutoSize = true;
+            lblConNo.Location = new Point(605, 94);
+            lblConNo.Name = "lblConNo";
+            lblConNo.Size = new Size(46, 15);
+            lblConNo.TabIndex = 18;
+            lblConNo.Text = "Còn nợ";
+            // 
+            // txtTraLai
+            // 
+            txtTraLai.Location = new Point(494, 90);
+            txtTraLai.Name = "txtTraLai";
+            txtTraLai.Size = new Size(101, 23);
+            txtTraLai.TabIndex = 17;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(450, 94);
+            label1.Name = "label1";
+            label1.Size = new Size(37, 15);
+            label1.TabIndex = 16;
+            label1.Text = "Trả lại";
+            // 
+            // txtDaTT
+            // 
+            txtDaTT.Location = new Point(330, 90);
+            txtDaTT.Name = "txtDaTT";
+            txtDaTT.Size = new Size(101, 23);
+            txtDaTT.TabIndex = 15;
+            txtDaTT.TextChanged += txtDaTT_TextChanged;
+            // 
+            // lblDaTT
+            // 
+            lblDaTT.AutoSize = true;
+            lblDaTT.Location = new Point(287, 94);
+            lblDaTT.Name = "lblDaTT";
+            lblDaTT.Size = new Size(36, 15);
+            lblDaTT.TabIndex = 14;
+            lblDaTT.Text = "Đã TT";
+            // 
+            // cboHTTT
+            // 
+            cboHTTT.FormattingEnabled = true;
+            cboHTTT.Items.AddRange(new object[] { "Kho chính" });
+            cboHTTT.Location = new Point(116, 90);
+            cboHTTT.Name = "cboHTTT";
+            cboHTTT.Size = new Size(165, 23);
+            cboHTTT.TabIndex = 13;
+            // 
+            // lblHTTT
+            // 
+            lblHTTT.AutoSize = true;
+            lblHTTT.Location = new Point(12, 93);
+            lblHTTT.Name = "lblHTTT";
+            lblHTTT.Size = new Size(101, 15);
+            lblHTTT.TabIndex = 12;
+            lblHTTT.Text = "Hình thức th.toán";
             // 
             // btnAddHangHoa
             // 
@@ -116,15 +224,15 @@
             // 
             cboKho.FormattingEnabled = true;
             cboKho.Items.AddRange(new object[] { "Kho chính" });
-            cboKho.Location = new Point(632, 21);
+            cboKho.Location = new Point(470, 21);
             cboKho.Name = "cboKho";
-            cboKho.Size = new Size(121, 23);
+            cboKho.Size = new Size(283, 23);
             cboKho.TabIndex = 7;
             // 
             // lblKho
             // 
             lblKho.AutoSize = true;
-            lblKho.Location = new Point(571, 24);
+            lblKho.Location = new Point(432, 24);
             lblKho.Name = "lblKho";
             lblKho.Size = new Size(28, 15);
             lblKho.TabIndex = 6;
@@ -143,7 +251,7 @@
             // 
             dateTimePickerNgayNhap.CustomFormat = "dd/MM/yyyy";
             dateTimePickerNgayNhap.Format = DateTimePickerFormat.Custom;
-            dateTimePickerNgayNhap.Location = new Point(391, 22);
+            dateTimePickerNgayNhap.Location = new Point(306, 22);
             dateTimePickerNgayNhap.Name = "dateTimePickerNgayNhap";
             dateTimePickerNgayNhap.Size = new Size(100, 23);
             dateTimePickerNgayNhap.TabIndex = 3;
@@ -151,7 +259,7 @@
             // lblNgayNhap
             // 
             lblNgayNhap.AutoSize = true;
-            lblNgayNhap.Location = new Point(292, 25);
+            lblNgayNhap.Location = new Point(237, 25);
             lblNgayNhap.Name = "lblNgayNhap";
             lblNgayNhap.Size = new Size(65, 15);
             lblNgayNhap.TabIndex = 2;
@@ -372,5 +480,15 @@
         private DataGridViewTextBoxColumn colDongia;
         private DataGridViewTextBoxColumn colThanhtien;
         private DataGridViewTextBoxColumn col_id_dvt;
+        private TextBox txtDaTT;
+        private Label lblDaTT;
+        private ComboBox cboHTTT;
+        private Label lblHTTT;
+        private TextBox txtNhanVien;
+        private Label lblNhanVien;
+        private TextBox txtConNo;
+        private Label lblConNo;
+        private TextBox txtTraLai;
+        private Label label1;
     }
 }

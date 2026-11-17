@@ -20,5 +20,8 @@ namespace ketoan.Server.Models
 
         [Column("so_luong")]
         public decimal so_luong { get; set; }
+
+        [Column("ma_kho")]
+        public decimal ma_kho { get; set; }
     }
 }
