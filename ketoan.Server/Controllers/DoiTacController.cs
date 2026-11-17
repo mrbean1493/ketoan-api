@@ -23,70 +23,79 @@ namespace ketoan.Server.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? keyword, [FromQuery] bool? isNcc,
     [FromQuery] bool? isKh)
         {
-            var query = _context.DoiTacs.AsQueryable();
-            // 1. Lọc theo Nhà cung cấp (nếu có truyền parameter)
-            if (isNcc.HasValue)
+            try
             {
-                query = query.Where(x => x.is_ncc == isNcc.Value);
-            }
-            // 2. Lọc theo Khách hàng (nếu có truyền parameter)
-            if (isKh.HasValue)
-            {
-                query = query.Where(x => x.is_kh == isKh.Value);
-            }
-            // Nếu người dùng có truyền từ khóa tìm kiếm
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                //string kw = keyword.Trim().ToLower();
-                //string kw = $"%{keyword.Trim()}%"; // Tạo Pattern tìm kiếm dạng %An%
-                /*
-                query = query.Where(x =>
-        EF.Functions.ILike(x.TenDoiTac, kw) ||
-        (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, kw)) ||
-        (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, kw)) ||
-        (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, kw))
-    );
-                */
-                // Sử dụng .ToLower() cho cả thuộc tính DB và từ khóa tìm kiếm
-                /*
-                query = query.Where(x =>
-                    (x.TenDoiTac != null && x.TenDoiTac.ToLower().Contains(kw)) ||
-                    (x.MaDoiTac != null && x.MaDoiTac.ToLower().Contains(kw)) ||
-                    (x.SoDienThoai != null && x.SoDienThoai.ToLower().Contains(kw)) ||
-                    (x.SoDienThoai2 != null && x.SoDienThoai2.ToLower().Contains(kw))
-                );
-                */
-                string kw = keyword.Trim();
-                query = query.Where(x => x.TenDoiTac.ToLower().Contains(kw) || x.MaDoiTac.ToLower().Contains(kw));
-                
-                /*
-                query = query.Where(x =>
-                    EF.Functions.ILike(x.TenDoiTac, $"%{kw}%") ||
-                    (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, $"%{kw}%")) ||
-                    (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, $"%{kw}%")) ||
-                    (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, $"%{kw}%"))
-                );
-                */
-            }
-
-            var list = await query
-                .Select(x => new ResponseDoiTacDto
+                var query = _context.DoiTacs.AsQueryable();
+                // 1. Lọc theo Nhà cung cấp (nếu có truyền parameter)
+                if (isNcc.HasValue)
                 {
-                    Id = x.Id,
-                    TenDoiTac = x.TenDoiTac,
-                    dia_chi=x.dia_chi,
-                    SoDienThoai = x.SoDienThoai,
-                    SoDienThoai2 = x.SoDienThoai2,
-                    MaDoiTac = x.MaDoiTac
-                })
-                .ToListAsync();
+                    query = query.Where(x => x.is_ncc == isNcc.Value);
+                }
+                // 2. Lọc theo Khách hàng (nếu có truyền parameter)
+                if (isKh.HasValue)
+                {
+                    query = query.Where(x => x.is_kh == isKh.Value);
+                }
+                // Nếu người dùng có truyền từ khóa tìm kiếm
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    //string kw = keyword.Trim().ToLower();
+                    //string kw = $"%{keyword.Trim()}%"; // Tạo Pattern tìm kiếm dạng %An%
+                    /*
+                    query = query.Where(x =>
+            EF.Functions.ILike(x.TenDoiTac, kw) ||
+            (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, kw)) ||
+            (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, kw)) ||
+            (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, kw))
+        );
+                    */
+                    // Sử dụng .ToLower() cho cả thuộc tính DB và từ khóa tìm kiếm
+                    /*
+                    query = query.Where(x =>
+                        (x.TenDoiTac != null && x.TenDoiTac.ToLower().Contains(kw)) ||
+                        (x.MaDoiTac != null && x.MaDoiTac.ToLower().Contains(kw)) ||
+                        (x.SoDienThoai != null && x.SoDienThoai.ToLower().Contains(kw)) ||
+                        (x.SoDienThoai2 != null && x.SoDienThoai2.ToLower().Contains(kw))
+                    );
+                    */
+                    string kw = keyword.Trim();
+                    query = query.Where(x => x.TenDoiTac.ToLower().Contains(kw) || x.MaDoiTac.ToLower().Contains(kw));
 
-            return Ok(new ApiResponseDoiTac<List<ResponseDoiTacDto>>
+                    /*
+                    query = query.Where(x =>
+                        EF.Functions.ILike(x.TenDoiTac, $"%{kw}%") ||
+                        (x.MaDoiTac != null && EF.Functions.ILike(x.MaDoiTac, $"%{kw}%")) ||
+                        (x.SoDienThoai != null && EF.Functions.ILike(x.SoDienThoai, $"%{kw}%")) ||
+                        (x.SoDienThoai2 != null && EF.Functions.ILike(x.SoDienThoai2, $"%{kw}%"))
+                    );
+                    */
+                }
+
+                var list = await query
+                    .Select(x => new ResponseDoiTacDto
+                    {
+                        Id = x.Id,
+                        TenDoiTac = x.TenDoiTac,
+                        dia_chi = x.dia_chi,
+                        SoDienThoai = x.SoDienThoai,
+                        SoDienThoai2 = x.SoDienThoai2,
+                        MaDoiTac = x.MaDoiTac
+                    })
+                    .ToListAsync();
+
+                return Ok(new ApiResponse<List<ResponseDoiTacDto>>
+                {
+                    Success = true,
+                    Data = list,
+                    Message = "Lấy danh sách thành công"
+                });
+
+
+            }
+            catch (Exception ex)
             {
-                Success = true,
-                Data = list,
-                Message = "Lấy danh sách thành công"
-            });
+                return StatusCode(500, new ApiResponse<object> { Success = false, Message = ex.Message });
+            }
         }
 
         // 2. POST: api/doi-tac
