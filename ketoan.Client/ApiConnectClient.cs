@@ -399,28 +399,45 @@ namespace ketoan.Client
         }
 
         // 1a. Lấy toàn bộ phiếu nhập
-        public async Task<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>> GetByLoaiPhieuVaNgayAsync(int loaiPhieu,DateTime fr,DateTime t,int doitac)
+        public async Task<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>> GetByLoaiPhieuVaNgayAsync(int loaiPhieu,DateTime fr,DateTime t,int doitac,int kho)
         {
             // 1. Format ngày tháng sang chuỗi chuẩn ISO (yyyy-MM-ddTHH:mm:ss) để Server nhận diện chính xác
             string fromDStr = fr.ToString("yyyy-MM-ddTHH:mm:ss");
             string toDStr = t.ToString("yyyy-MM-ddTHH:mm:ss");
 
             // 2. Ghép các tham số vào đường dẫn URL (Query String)
-            string url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            string url = "";
+            if (kho > 0) {
+                url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}&Kho={kho}";
+            }
+            else
+            {
+                url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            }
+
+            
             var response = await Client.GetAsync(url);
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<ApiResponse<List<ResponsePhieuNhapXuatDtoClient>>>(json, _jsonOptions)!;
         }
 
         // 1b. Lấy toàn bộ phiếu xuất
-        public async Task<ApiResponse<List<ResponsePhieuNhapXuat2DtoClient>>> GetByLoaiPhieuVaNgay2Async(int loaiPhieu, DateTime fr, DateTime t, int doitac)
+        public async Task<ApiResponse<List<ResponsePhieuNhapXuat2DtoClient>>> GetByLoaiPhieuVaNgay2Async(int loaiPhieu, DateTime fr, DateTime t, int doitac,int kho)
         {
             // 1. Format ngày tháng sang chuỗi chuẩn ISO (yyyy-MM-ddTHH:mm:ss) để Server nhận diện chính xác
             string fromDStr = fr.ToString("yyyy-MM-ddTHH:mm:ss");
             string toDStr = t.ToString("yyyy-MM-ddTHH:mm:ss");
 
             // 2. Ghép các tham số vào đường dẫn URL (Query String)
-            string url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            string url = "";
+            if (kho > 0)
+            {
+                url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}&Kho={kho}";
+            }
+            else
+            {
+                url = $"api/PhieuNhapXuat/filter?loaiPhieu={loaiPhieu}&fromD={fromDStr}&toD={toDStr}&doiTac={doitac}";
+            }
             var response = await Client.GetAsync(url);
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<ApiResponse<List<ResponsePhieuNhapXuat2DtoClient>>>(json, _jsonOptions)!;
@@ -542,7 +559,7 @@ namespace ketoan.Client
             return result!;
         }
 
-        // 1. Lấy toàn bộ phiếu
+        // 1. Lấy toàn bộ người dùng
         public async Task<List<NguoiDungDtoClient>> GetAllNguoiDungAsync()
         {
             var response = await Client.GetAsync("api/NguoiDung");
@@ -556,6 +573,21 @@ namespace ketoan.Client
             var result = JsonSerializer.Deserialize<ApiResponse<List<NguoiDungDtoClient>>>(json, _jsonOptions)!;
             return result?.Data ?? new List<NguoiDungDtoClient>();
         }
+
+        public async Task<List<NguoiDungDtoClient>> GetKhoByIdNguoiDungAsync(int id)
+        {
+            var response = await Client.GetAsync($"api/NguoiDung/{id}/get-kho");
+            var json = await response.Content.ReadAsStringAsync();
+            // Nếu server trả về mã lỗi (400, 500...)
+            if (!response.IsSuccessStatusCode)
+            {
+                var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(json, _jsonOptions);
+                throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
+            }
+            var result = JsonSerializer.Deserialize<ApiResponse<List<NguoiDungDtoClient>>>(json, _jsonOptions)!;
+            return result?.Data ?? new List<NguoiDungDtoClient>();
+        }
+
         // 2. Tạo người dùng mới (POST)
         public async Task<ApiResponse<NguoiDungDtoClient>> CreateNguoiDungAsync(NguoiDungDtoClient request)
         {

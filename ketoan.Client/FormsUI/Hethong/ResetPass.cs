@@ -17,7 +17,10 @@ namespace ketoan.Client.FormsUI.Hethong
     public partial class ResetPass : Form
     {
         private readonly ApiConnectClient _apiClient = new ApiConnectClient();
-
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true // Tự động map camelCase từ API sang PascalCase của C#
+        };
         int Id_user = 0;
         string userName = "";
         public ResetPass(int id, string username)
@@ -104,6 +107,13 @@ namespace ketoan.Client.FormsUI.Hethong
             catch (Exception ex)
             {
                 MessageBox.Show("Không thể kết nối đến máy chủ API: " + ex.Message, "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtMatKhau_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) {
+                btnLuu.PerformClick();
             }
         }
     }

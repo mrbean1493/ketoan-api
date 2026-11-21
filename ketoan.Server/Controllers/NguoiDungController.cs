@@ -191,6 +191,36 @@ namespace ketoan.Server.Controllers
             }
         }
 
+        [HttpGet("{id}/get-kho")]
+        public async Task<IActionResult> GetKhoByIdNguoiDung(int id)
+        {
+            try
+            {
+                var query = _context.NguoiDungs.AsQueryable();
+                var list = await query
+                    .Select(x => new ResponseNguoiDungDto
+                    {
+                        Id = x.Id,
+                        ma_kho = x.ma_kho ?? 0
+                    })
+                    .Where(x => x.Id == id)
+                    .ToListAsync();
+
+                return Ok(new ApiResponse<List<ResponseNguoiDungDto>>
+                {
+                    Success = true,
+                    Data = list,
+                    Message = "Lấy danh sách thành công"
+                });
+
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object> { Success = false, Message = ex.Message });
+            }
+        }
+
         // 2. POST: api/nguoidung
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] RequestNguoiDungDto dto)

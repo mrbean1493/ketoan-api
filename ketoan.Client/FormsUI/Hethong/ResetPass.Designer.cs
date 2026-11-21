@@ -43,6 +43,7 @@
             txtMatKhau.PasswordChar = '*';
             txtMatKhau.Size = new Size(187, 23);
             txtMatKhau.TabIndex = 9;
+            txtMatKhau.KeyDown += txtMatKhau_KeyDown;
             // 
             // btnHuy
             // 

@@ -113,5 +113,10 @@ namespace ketoan.Client.FormsUI.Hethong
                 btnDangNhap.PerformClick();
             }
         }
+
+        private void DangNhap_Shown(object sender, EventArgs e)
+        {
+            txtTenDangNhap.Focus();
+        }
     }
 }

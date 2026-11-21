@@ -88,6 +88,7 @@
             txtMatKhauMoi2.PasswordChar = '*';
             txtMatKhauMoi2.Size = new Size(155, 23);
             txtMatKhauMoi2.TabIndex = 5;
+            txtMatKhauMoi2.KeyDown += txtMatKhauMoi2_KeyDown;
             // 
             // btnDoiMatKhau
             // 

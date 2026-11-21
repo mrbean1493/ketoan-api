@@ -33,7 +33,7 @@ namespace ketoan.Client.FormsUI.Hethong
                 return;
             }
 
-            if (strMatKhauMoi!=strMatKhauMoi2)
+            if (strMatKhauMoi != strMatKhauMoi2)
             {
                 MessageBox.Show("Vui lòng nhập mật khẩu mới và xác nhận lại mật khẩu mới phải trùng nhau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -59,7 +59,21 @@ namespace ketoan.Client.FormsUI.Hethong
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Đổi mật khẩu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    //this.Close();
+
+                    if (this.Parent is TabPage currentTabPage)
+                    {
+                        // Lấy TabControl chính (giả sử tabControlMain nằm ở form chính)
+                        if (currentTabPage.Parent is TabControl tabControl)
+                        {
+                            // Hủy/Dispose form con trước khi xóa tab để tránh rò rỉ bộ nhớ
+                            this.Close();
+                            this.Dispose();
+
+                            // Xóa tab hiện tại ra khỏi TabControl
+                            tabControl.TabPages.Remove(currentTabPage);
+                        }
+                    }
                 }
                 else
                 {
@@ -81,6 +95,15 @@ namespace ketoan.Client.FormsUI.Hethong
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+
+        }
+
+        private void txtMatKhauMoi2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnDoiMatKhau.PerformClick();
+            }
         }
     }
 }

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            cboKho = new ComboBox();
+            lblKho = new Label();
             btnTraHang = new Button();
             btnXoa = new Button();
             btnSua = new Button();
@@ -45,8 +47,6 @@
             txtSoPhieu = new TextBox();
             lblSoPhieu = new Label();
             dataGridView1 = new DataGridView();
-            cboKho = new ComboBox();
-            lblKho = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -77,6 +77,24 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Tìm kiếm phiếu nhập xuất";
+            // 
+            // cboKho
+            // 
+            cboKho.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboKho.FormattingEnabled = true;
+            cboKho.Location = new Point(400, 66);
+            cboKho.Name = "cboKho";
+            cboKho.Size = new Size(348, 23);
+            cboKho.TabIndex = 23;
+            // 
+            // lblKho
+            // 
+            lblKho.AutoSize = true;
+            lblKho.Location = new Point(286, 68);
+            lblKho.Name = "lblKho";
+            lblKho.Size = new Size(28, 15);
+            lblKho.TabIndex = 22;
+            lblKho.Text = "Kho";
             // 
             // btnTraHang
             // 
@@ -166,6 +184,7 @@
             // 
             // cboLoaiPhieu
             // 
+            cboLoaiPhieu.DropDownStyle = ComboBoxStyle.DropDownList;
             cboLoaiPhieu.FormattingEnabled = true;
             cboLoaiPhieu.Location = new Point(115, 66);
             cboLoaiPhieu.Name = "cboLoaiPhieu";
@@ -226,23 +245,6 @@
             dataGridView1.Size = new Size(1189, 383);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // cboKho
-            // 
-            cboKho.FormattingEnabled = true;
-            cboKho.Location = new Point(400, 66);
-            cboKho.Name = "cboKho";
-            cboKho.Size = new Size(348, 23);
-            cboKho.TabIndex = 23;
-            // 
-            // lblKho
-            // 
-            lblKho.AutoSize = true;
-            lblKho.Location = new Point(286, 68);
-            lblKho.Name = "lblKho";
-            lblKho.Size = new Size(28, 15);
-            lblKho.TabIndex = 22;
-            lblKho.Text = "Kho";
             // 
             // DanhSachPhieuNhapXuat
             // 

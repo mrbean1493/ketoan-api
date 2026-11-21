@@ -115,6 +115,7 @@
             Name = "DangNhap";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Đăng nhập";
+            Shown += DangNhap_Shown;
             ResumeLayout(false);
             PerformLayout();
         }

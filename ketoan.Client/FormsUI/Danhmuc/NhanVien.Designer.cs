@@ -103,7 +103,7 @@
             btnResetPass.Location = new Point(462, 20);
             btnResetPass.Name = "btnResetPass";
             btnResetPass.Size = new Size(100, 23);
-            btnResetPass.TabIndex = 30;
+            btnResetPass.TabIndex = 5;
             btnResetPass.Text = "Đổi mật khẩu";
             btnResetPass.UseVisualStyleBackColor = true;
             btnResetPass.Click += btnResetPass_Click;
@@ -114,7 +114,7 @@
             txtMatKhau.Name = "txtMatKhau";
             txtMatKhau.PasswordChar = '*';
             txtMatKhau.Size = new Size(288, 23);
-            txtMatKhau.TabIndex = 29;
+            txtMatKhau.TabIndex = 14;
             // 
             // lblMatKhau
             // 
@@ -145,11 +145,12 @@
             // 
             // cboKho
             // 
+            cboKho.DropDownStyle = ComboBoxStyle.DropDownList;
             cboKho.FormattingEnabled = true;
             cboKho.Location = new Point(299, 141);
             cboKho.Name = "cboKho";
             cboKho.Size = new Size(325, 23);
-            cboKho.TabIndex = 25;
+            cboKho.TabIndex = 17;
             // 
             // lblKho
             // 
@@ -167,7 +168,7 @@
             dateTimePickerNgaySinh.Location = new Point(98, 141);
             dateTimePickerNgaySinh.Name = "dateTimePickerNgaySinh";
             dateTimePickerNgaySinh.Size = new Size(105, 23);
-            dateTimePickerNgaySinh.TabIndex = 20;
+            dateTimePickerNgaySinh.TabIndex = 16;
             // 
             // lblNgaySinh
             // 
@@ -183,7 +184,7 @@
             txtDiaChi.Location = new Point(98, 110);
             txtDiaChi.Name = "txtDiaChi";
             txtDiaChi.Size = new Size(694, 23);
-            txtDiaChi.TabIndex = 18;
+            txtDiaChi.TabIndex = 15;
             // 
             // lblDiaChi
             // 
@@ -208,7 +209,7 @@
             btnRefresh.Location = new Point(369, 20);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(75, 23);
-            btnRefresh.TabIndex = 15;
+            btnRefresh.TabIndex = 4;
             btnRefresh.Text = "Làm mới";
             btnRefresh.UseVisualStyleBackColor = true;
             btnRefresh.Click += btnRefresh_Click;
@@ -219,7 +220,7 @@
             btnSave.Location = new Point(277, 20);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 14;
+            btnSave.TabIndex = 3;
             btnSave.Text = "Lưu";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
@@ -229,7 +230,7 @@
             txtSDT.Location = new Point(462, 52);
             txtSDT.Name = "txtSDT";
             txtSDT.Size = new Size(128, 23);
-            txtSDT.TabIndex = 13;
+            txtSDT.TabIndex = 12;
             // 
             // txtTenDangNhap
             // 
@@ -287,7 +288,7 @@
             txtEmail.Location = new Point(654, 52);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(138, 23);
-            txtEmail.TabIndex = 5;
+            txtEmail.TabIndex = 13;
             // 
             // btnTimKiem
             // 

@@ -44,7 +44,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                 if((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac, (int)cboKho.SelectedValue);
 
                     if (result != null && result.Success && result.Data != null)
                     {
@@ -83,7 +83,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 }
                 else
                 {
-                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac, (int)cboKho.SelectedValue);
 
                     if (result != null && result.Success && result.Data != null)
                     {
@@ -408,7 +408,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                 if ((int)cboLoaiPhieu.SelectedValue == 1 || (int)cboLoaiPhieu.SelectedValue == 4)
                 {
-                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgayAsync((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac,(int)cboKho.SelectedValue);
 
                     if (result != null && result.Success && result.Data != null)
                     {
@@ -461,7 +461,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 }
                 else
                 {
-                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac);
+                    var result = await _apiClient.GetByLoaiPhieuVaNgay2Async((int)cboLoaiPhieu.SelectedValue, dateTimePickerNgayNhapFrom.Value, dateTimePickerNgayNhapTo.Value, iddoitac, (int)cboKho.SelectedValue);
 
                     if (result != null && result.Success && result.Data != null)
                     {
@@ -584,9 +584,27 @@ namespace ketoan.Client.FormsUI.Nhaphang
             // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
             List<KhoDtoClient> listKho = new List<KhoDtoClient>();
             listKho = await _apiClient.GetKhoAsync();
+            listKho.Insert(0, new KhoDtoClient { Id = 0, ten_kho = "-- Tất cả các kho (Admin) --" });
             cboKho.DataSource = listKho;
             cboKho.ValueMember = "Id";
             cboKho.DisplayMember = "ten_kho";
+
+            //lấy đúng kho theo user 
+            List<NguoiDungDtoClient> listNguoiDung = new List<NguoiDungDtoClient>();
+            listNguoiDung= await _apiClient.GetKhoByIdNguoiDungAsync(QuanLyPhien.UserId);
+
+            if (listNguoiDung.Count > 0)
+            {
+                if (listNguoiDung[0].ma_kho == 0)
+                {
+                    cboKho.SelectedValue = 0;//admin
+                }
+                else
+                {
+                    cboKho.SelectedValue = listNguoiDung[0].ma_kho;
+                    cboKho.Enabled = false;
+                }
+            }
         }
 
         private void CapNhatGiaoDien(bool isNhapKho)
