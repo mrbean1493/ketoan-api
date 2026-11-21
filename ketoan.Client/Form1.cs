@@ -169,6 +169,8 @@ namespace ketoan.Client
 
         private void tabControlMain_MouseDown(object sender, MouseEventArgs e)
         {
+            
+            
             for (int i = 0; i < tabControlMain.TabPages.Count; i++)
             {
                 Rectangle tabRect = tabControlMain.GetTabRect(i);
@@ -177,19 +179,36 @@ namespace ketoan.Client
                 Rectangle closeButton = new Rectangle(tabRect.Right - 18, tabRect.Y + (tabRect.Height - 16) / 2, 16, 16);
                 if (closeButton.Contains(e.Location))
                 {
-                    // Hủy/Dispose form con bên trong tab trước khi xóa để tránh rò rỉ bộ nhớ
-                    if (tabControlMain.TabPages[i].Controls.Count > 0)
+                    DialogResult result = MessageBox.Show(
+    "Bạn có chắc chắn muốn đóng màn hình " + tabControlMain.TabPages[i].Name + " này không? Việc đóng khi chưa lưu sẽ làm mất dữ liệu đang nhập dở!",
+    "Xác nhận",
+    MessageBoxButtons.YesNo,
+    MessageBoxIcon.Question
+);
+
+                    if (result == DialogResult.Yes)
                     {
-                        if (tabControlMain.TabPages[i].Controls[0] is Form frmChild)
+                        // Hủy/Dispose form con bên trong tab trước khi xóa để tránh rò rỉ bộ nhớ
+                        if (tabControlMain.TabPages[i].Controls.Count > 0)
                         {
-                            frmChild.Close();
-                            frmChild.Dispose();
+                            if (tabControlMain.TabPages[i].Controls[0] is Form frmChild)
+                            {
+                                frmChild.Close();
+                                frmChild.Dispose();
+                            }
                         }
+
+
+                        tabControlMain.TabPages.RemoveAt(i);
+                        break;
+                    }
+                    else
+                    {
+                        return;
                     }
 
 
-                    tabControlMain.TabPages.RemoveAt(i);
-                    break;
+                        
                 }
             }
         }
@@ -301,7 +320,8 @@ namespace ketoan.Client
 
         private void nhânViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = new NhanVien();
+            OpenChildFormInTab(form, "NguoiDung");
         }
 
         private void danhSáchPhiếuToolStripMenuItem_Click(object sender, EventArgs e)

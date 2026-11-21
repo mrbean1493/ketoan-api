@@ -557,7 +557,7 @@ namespace ketoan.Client
             return result?.Data ?? new List<NguoiDungDtoClient>();
         }
         // 2. Tạo người dùng mới (POST)
-        public async Task<ApiResponse<object>> CreateNguoiDungAsync(NguoiDungDtoClient request)
+        public async Task<ApiResponse<NguoiDungDtoClient>> CreateNguoiDungAsync(NguoiDungDtoClient request)
         {
             string jsonContent = JsonSerializer.Serialize(request);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -565,20 +565,29 @@ namespace ketoan.Client
             var response = await Client.PostAsync("api/NguoiDung", content);
             var jsonResult = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+            //var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+            // 1. Kiểm tra an toàn: Nếu server trả về lỗi text thuần (không phải JSON) thì văng luôn nội dung lỗi đó ra
+            if (string.IsNullOrWhiteSpace(jsonResult) || !jsonResult.TrimStart().StartsWith("{"))
+            {
+                throw new Exception(!string.IsNullOrEmpty(jsonResult) ? jsonResult : $"Lỗi Server: {(int)response.StatusCode}");
+            }
 
             if (!response.IsSuccessStatusCode)
             {
                 // Hiển thị trực tiếp thông báo thô từ Server lên MessageBox để bạn đọc được ngay
                 //throw new Exception($"Server trả về lỗi ({response.StatusCode}):\n{jsonResult}");
 
-                throw new Exception(result?.Message ?? "Lỗi khi lưu người dùng mới!");
+                //throw new Exception(result?.Message ?? "Lỗi khi lưu người dùng mới!");
+                var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+                throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
             }
 
-            return result!;
+            //return result!;
+            
+            return JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions)!;
         }
         // 3. Cập nhật người dùng (PUT)
-        public async Task<ApiResponse<object>> UpdateNguoiDungAsync(int id, NguoiDungDtoClient request)
+        public async Task<ApiResponse<NguoiDungDtoClient>> UpdateNguoiDungAsync(int id, NguoiDungDtoClient request)
         {
             string jsonContent = JsonSerializer.Serialize(request);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -586,29 +595,66 @@ namespace ketoan.Client
             var response = await Client.PutAsync($"api/NguoiDung/{id}", content);
             var jsonResult = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
-
+            //var result = JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions);
+            // 1. Kiểm tra an toàn: Nếu server trả về lỗi text thuần (không phải JSON) thì văng luôn nội dung lỗi đó ra
+            if (string.IsNullOrWhiteSpace(jsonResult) || !jsonResult.TrimStart().StartsWith("{"))
+            {
+                throw new Exception(!string.IsNullOrEmpty(jsonResult) ? jsonResult : $"Lỗi Server: {(int)response.StatusCode}");
+            }
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(result?.Message ?? "Lỗi khi cập nhật người dùng!");
+                //throw new Exception(result?.Message ?? "Lỗi khi cập nhật người dùng!");
+                //var errResult = JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions);
+                //throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
+
+                string errorMessage = string.Empty;
+                try
+                {
+                    // 1. Thử giải mã theo chuẩn ApiResponse<object> của bạn
+                    var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+                    if (errResult != null && !string.IsNullOrEmpty(errResult.Message))
+                    {
+                        errorMessage = errResult.Message;
+                    }
+                }
+                catch
+                {
+                    // Nếu không phải định dạng ApiResponse thì bỏ qua để xử lý ở bước sau
+                }
+
+                // 2. Nếu không lấy được Message từ ApiResponse, dùng thẳng chuỗi jsonResult hoặc mã lỗi
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    errorMessage = !string.IsNullOrEmpty(jsonResult) ? jsonResult : $"Lỗi Server: {(int)response.StatusCode}";
+                }
+
+                throw new Exception(errorMessage);
             }
 
-            return result!;
+            //return result!;
+            return JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions)!;
         }
         // 4. Xóa người dùng (DELETE)
-        public async Task<ApiResponse<object>> DeleteNguoiDungAsync(int id)
+        public async Task<ApiResponse<NguoiDungDtoClient>> DeleteNguoiDungAsync(int id)
         {
             var response = await Client.DeleteAsync($"api/NguoiDung/{id}");
             var jsonResult = await response.Content.ReadAsStringAsync();
 
             var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
-
+            // 1. Kiểm tra an toàn: Nếu server trả về lỗi text thuần (không phải JSON) thì văng luôn nội dung lỗi đó ra
+            if (string.IsNullOrWhiteSpace(jsonResult) || !jsonResult.TrimStart().StartsWith("{"))
+            {
+                throw new Exception(!string.IsNullOrEmpty(jsonResult) ? jsonResult : $"Lỗi Server: {(int)response.StatusCode}");
+            }
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(result?.Message ?? "Lỗi khi xóa người dùng!");
+                //throw new Exception(result?.Message ?? "Lỗi khi xóa người dùng!");
+                var errResult = JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions);
+                throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
             }
 
-            return result!;
+            //return result!;
+            return JsonSerializer.Deserialize<ApiResponse<NguoiDungDtoClient>>(jsonResult, _jsonOptions)!;
         }
 
 

@@ -236,7 +236,7 @@ namespace ketoan.Server.Controllers
 
         // 3. PUT: api/nguoidung/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] RequestNguoiDungDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateNguoiDungDto dto)
         {
             var model = await _context.NguoiDungs.FindAsync(id);
             if (model == null)
@@ -260,13 +260,13 @@ namespace ketoan.Server.Controllers
             }
 
 
-            model.TenDangNhap = dto.TenDangNhap.Trim();
+            //model.TenDangNhap = dto.TenDangNhap.Trim();
             model.TenNguoiDung = dto.TenNguoiDung;
             model.SoDienThoai = dto.SoDienThoai ?? "";
             model.Email = dto.Email ?? "";
             model.NgaySinh = dto.NgaySinh ?? DateOnly.FromDateTime(DateTime.Now);
             model.TrangThai = dto.TrangThai;
-            model.NgayTao = dto.NgayTao;
+            //model.NgayTao = dto.NgayTao;
             model.ma_kho = dto.ma_kho;
             model.dia_chi = dto.dia_chi ?? "";
             await _context.SaveChangesAsync();

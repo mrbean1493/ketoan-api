@@ -57,6 +57,15 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 Width = 100
             });
 
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "MatKhau",
+                Name = "colTenDangNhap",
+                HeaderText = "Tài khoản đăng nhập",
+                //Width = 100
+                Visible=false
+            });
+
 
             // 3. Cột Địa chỉ
 
@@ -261,8 +270,8 @@ namespace ketoan.Client.FormsUI.Danhmuc
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            lblMatKhau.Visible = false;
-            txtMatKhau.Visible = false;
+            //lblMatKhau.Visible = false;
+            //txtMatKhau.Visible = false;
 
             if (status == 1)
             {
@@ -307,16 +316,16 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         Email = txtEmail.Text,
                         dia_chi = txtDiaChi.Text,
                         NgaySinh = DateOnly.FromDateTime(dateTimePickerNgaySinh.Value),
-                        NgayTao = DateTime.Now,
+                        NgayTao = DateTime.UtcNow,
                         ma_kho = (int)cboKho.SelectedValue,
                     };
 
                     var response = await _apiClient.CreateNguoiDungAsync(request);
 
-                    if (response != null && response.Success)
+                    if (response != null)// && response.Success
                     {
-                        MessageBox.Show(response.Message, "Thông báo",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Thêm mới người dùng thành công", "Thông báo",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);//response.Message
 
                         // 4. Xóa trắng ô nhập liệu và tải lại danh sách trên DataGridView
                         txtHoTen.Text = "";
@@ -324,7 +333,17 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         txtDiaChi.Text = "";
                         txtSDT.Text = "";
                         txtEmail.Text = "";
+
+                        lblMatKhau.Visible = false;
+                        txtMatKhau.Visible = false;
+
                         await LoadDataToGridView();
+
+                        btnAdd.Enabled = true;
+                        btnEdit.Enabled = true;
+                        btnDel.Enabled = true;
+                        btnSave.Enabled = false;
+                        status = 0;
                     }
                  
                 }
@@ -337,11 +356,11 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 finally
                 {
                     // Mở lại nút sau khi xử lý xong
-                    btnAdd.Enabled = true;
-                    btnEdit.Enabled = true;
-                    btnDel.Enabled = true;
-                    btnSave.Enabled = false;
-                    status = 0;
+                    //btnAdd.Enabled = true;
+                    //btnEdit.Enabled = true;
+                    //btnDel.Enabled = true;
+                    //btnSave.Enabled = false;
+                    //status = 0;
                 }
             }
             else if (status == 2)
@@ -379,15 +398,15 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         Email = txtEmail.Text,
                         dia_chi = txtDiaChi.Text,
                         NgaySinh = DateOnly.FromDateTime(dateTimePickerNgaySinh.Value),
-                        NgayTao = DateTime.Now,
+                        //NgayTao = DateTime.UtcNow,
                         ma_kho = (int)cboKho.SelectedValue
                     };
-
-                    var response = await _apiClient.CreateNguoiDungAsync(request);
+                    int.TryParse(txtId.Text, out int txtID);
+                    var response = await _apiClient.UpdateNguoiDungAsync(txtID, request);
 
                     if (response != null && response.Success)
                     {
-                        MessageBox.Show(response.Message, "Thông báo",
+                        MessageBox.Show("Cập nhật người dùng " + request.TenDangNhap + " thành công", "Thông báo",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // 4. Xóa trắng ô nhập liệu và tải lại danh sách trên DataGridView
@@ -397,6 +416,12 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         txtSDT.Text = "";
                         txtEmail.Text = "";
                         await LoadDataToGridView();
+
+                        btnAdd.Enabled = true;
+                        btnEdit.Enabled = true;
+                        btnDel.Enabled = true;
+                        btnSave.Enabled = false;
+                        status = 0;
                     }
 
                 }
@@ -409,11 +434,11 @@ namespace ketoan.Client.FormsUI.Danhmuc
                 finally
                 {
                     // Mở lại nút sau khi xử lý xong
-                    btnAdd.Enabled = true;
-                    btnEdit.Enabled = true;
-                    btnDel.Enabled = true;
-                    btnSave.Enabled = false;
-                    status = 0;
+                   // btnAdd.Enabled = true;
+                   // btnEdit.Enabled = true;
+                    //btnDel.Enabled = true;
+                   // btnSave.Enabled = false;
+                   // status = 0;
                 }
             }
         }

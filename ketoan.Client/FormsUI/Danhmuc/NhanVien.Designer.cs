@@ -205,7 +205,6 @@
             // 
             // btnRefresh
             // 
-            btnRefresh.Enabled = false;
             btnRefresh.Location = new Point(369, 20);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(75, 23);
