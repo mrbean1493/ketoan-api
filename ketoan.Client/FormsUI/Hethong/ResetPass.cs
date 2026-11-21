@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -61,10 +62,41 @@ namespace ketoan.Client.FormsUI.Hethong
                 else
                 {
                     // Đọc thông báo lỗi từ API
+                    /*
                     var errorResponse = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
                     string message = errorResponse != null && errorResponse.ContainsKey("message")
                         ? errorResponse["message"]
                         : "Đổi mật khẩu thất bại!";
+
+                    MessageBox.Show(message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    */
+                    // Đọc toàn bộ chuỗi nội dung trả về từ server dưới dạng text thô
+                    string jsonError = await response.Content.ReadAsStringAsync();
+                    string message = "Đổi mật khẩu thất bại!";
+
+                    try
+                    {
+                        // Thử giải mã theo chuẩn ApiResponse<object> của hệ thống
+                        var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(jsonError, _jsonOptions);
+                        if (errResult != null && !string.IsNullOrEmpty(errResult.Message))
+                        {
+                            message = errResult.Message; // Lấy đúng câu thông báo tiếng Việt sạch sẽ
+                        }
+                        else
+                        {
+                            // Phòng hờ nếu server trả về dạng object đơn lẻ chứa khóa "message" viết thường
+                            using var doc = JsonDocument.Parse(jsonError);
+                            if (doc.RootElement.TryGetProperty("message", out var prop))
+                            {
+                                message = prop.GetString() ?? message;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Nếu không parse được JSON thì dùng thẳng chuỗi thô hoặc mã lỗi
+                        message = !string.IsNullOrEmpty(jsonError) ? jsonError : $"Lỗi kết nối (Mã: {(int)response.StatusCode})";
+                    }
 
                     MessageBox.Show(message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

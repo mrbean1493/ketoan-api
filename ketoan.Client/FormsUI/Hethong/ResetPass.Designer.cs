@@ -102,6 +102,7 @@
             Controls.Add(btnLuu);
             Controls.Add(lblMatKhau);
             Name = "ResetPass";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Đổi mật khẩu cho người dùng";
             ResumeLayout(false);
             PerformLayout();

@@ -92,6 +92,33 @@ namespace ketoan.Server.Controllers
             }
         }
 
+        [HttpPost("reset-mat-khau")]
+        public async Task<IActionResult> ResetMatKhau([FromBody] ResetMatKhauDto model)
+        {
+            try
+            {
+                // 1. Tìm người dùng theo ID
+                var user = await _context.NguoiDungs.FindAsync(model.UserId);
+                if (user == null)
+                {
+                    //return BadRequest(new { message = "Người dùng không tồn tại." });
+                    return BadRequest(new ApiResponse<object> { Success = false, Message = "Người dùng không tồn tại." });
+                }
+
+                // 3. Cập nhật mật khẩu mới
+                user.MatKhau = BCrypt.Net.BCrypt.HashPassword(model.MatKhauMoi);
+                await _context.SaveChangesAsync();
+
+                //return Ok(new { message = "Đổi mật khẩu thành công!" });
+                return Ok(new ApiResponse<object> { Success = true, Message = "Đổi mật khẩu thành công!" });
+            }
+            catch (Exception ex)
+            {
+                //return StatusCode(500, new { message = "Lỗi hệ thống: " + ex.Message });
+                return StatusCode(500, new ApiResponse<object> { Success = false, Message = "Lỗi hệ thống: " + ex.Message });
+            }
+        }
+
         // 1. GET: api/nguoidung
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? keyword)
