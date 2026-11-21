@@ -63,7 +63,7 @@ namespace ketoan.Client.FormsUI.Hethong
                     }
 
                     MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lblTrangThai.Text = "Đăng nhập thành công!"; lblTrangThai.ForeColor = Color.Green;
+                    //lblTrangThai.Text = "Đăng nhập thành công!"; lblTrangThai.ForeColor = Color.Green;
                     this.Hide();
                     // Mở FormMain
                     FormMain main = new FormMain(this); // Mở FormMain và truyền 'this' (FormDangNhap) sang FormMain

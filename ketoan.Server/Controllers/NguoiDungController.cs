@@ -26,7 +26,7 @@ namespace ketoan.Server.Controllers
 
             if (user == null || !user.TrangThai)
             {
-                return BadRequest(new { message = "Tài khoản không tồn tại hoặc đã bị khóa." });
+                return BadRequest(new { message = "Tài khoản không tồn tại hoặc đã bị khóa/không hoạt động. Liên hệ quản trị để kiểm tra" });
             }
 
             // Kiểm tra mật khẩu mã hóa BCrypt (hoặc kiểm tra chuỗi nếu bạn chưa hash)

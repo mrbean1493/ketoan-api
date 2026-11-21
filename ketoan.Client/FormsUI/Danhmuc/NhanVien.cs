@@ -318,6 +318,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
                         NgaySinh = DateOnly.FromDateTime(dateTimePickerNgaySinh.Value),
                         NgayTao = DateTime.UtcNow,
                         ma_kho = (int)cboKho.SelectedValue,
+                        TrangThai = chkIsActive.Checked
                     };
 
                     var response = await _apiClient.CreateNguoiDungAsync(request);
@@ -394,10 +395,11 @@ namespace ketoan.Client.FormsUI.Danhmuc
                     {
                         TenNguoiDung = HoTen,
                         TenDangNhap = TenDangNhap,
-                        SoDienThoai = txtSDT.Text,
-                        Email = txtEmail.Text,
-                        dia_chi = txtDiaChi.Text,
+                        SoDienThoai = txtSDT.Text.Trim(),
+                        Email = txtEmail.Text.Trim(),
+                        dia_chi = txtDiaChi.Text.Trim(),
                         NgaySinh = DateOnly.FromDateTime(dateTimePickerNgaySinh.Value),
+                        TrangThai= chkIsActive.Checked,
                         //NgayTao = DateTime.UtcNow,
                         ma_kho = (int)cboKho.SelectedValue
                     };
