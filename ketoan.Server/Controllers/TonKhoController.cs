@@ -32,9 +32,13 @@ namespace ketoan.Server.Controllers
                 var query = from h in _context.HangHoas
                             join t in _context.TonKhos on h.Id equals t.id_hang_hoa into tkGroup
                             from tk in tkGroup.DefaultIfEmpty() // Left join để lấy cả sản phẩm chưa phát sinh giao dịch tồn kho nếu cần
-                            // 2. Left Join với bảng Đơn vị tính (DVT) để lấy tên đơn vị tính
+                                // 2. Left Join với bảng Đơn vị tính (DVT) để lấy tên đơn vị tính
                             join d in _context.DVTs on h.id_dvt equals d.Id into dvtGroup
                             from dvt in dvtGroup.DefaultIfEmpty() // Dùng DefaultIfEmpty để phòng hờ hàng hóa chưa gắn đơn vị tính vẫn không bị mất dữ liệu
+
+                            join k in _context.Khos on (tk != null ? tk.ma_kho : 0) equals k.Id into kGroup
+                            from kho in kGroup.DefaultIfEmpty()
+
                             select new ResponseTonKhoDto
                             {
                                 id_hang_hoa = h.Id,
@@ -45,13 +49,14 @@ namespace ketoan.Server.Controllers
                                 so_lo = tk != null ? tk.so_lo : "",
                                 //DinhMuc = h.DinhMuc,
                                 so_luong = tk != null ? tk.so_luong : 0,
-                                //TenKho = tk != null ? tk.TenKho : "Chưa xác định"
+                                ma_kho = kho !=null ? kho.Id : 0,
+                                TenKho = kho != null ? kho.ten_kho: "Chưa xác định"
                             };
 
                 // Nếu có lọc theo kho cụ thể
                 if (khoId > 0)
                 {
-                    // query = query.Where(x => x.KhoId == khoId);
+                    query = query.Where(x => x.ma_kho == khoId);
                 }
                 if (soluongduong)
                 {
@@ -82,13 +87,15 @@ namespace ketoan.Server.Controllers
                                                   chiTiet.IdHangHoa,
                                                   chiTiet.SoLo,
                                                   chiTiet.SoLuong,
+                                                  phieu.MaKho,
                                                   IsPhieuNhap = (phieu.LoaiPhieu==1|| phieu.LoaiPhieu == 4) // Điều kiện phân biệt phiếu nhập / xuất
                                               })
-                            .GroupBy(x => new { x.IdHangHoa, x.SoLo })
+                            .GroupBy(x => new { x.IdHangHoa, x.SoLo,x.MaKho })
                             .Select(g => new
                             {
                                 IdHangHoa = g.Key.IdHangHoa,
                                 SoLo = g.Key.SoLo,
+                                MaKho = g.Key.MaKho,
                                 TongTon = g.Sum(x => x.IsPhieuNhap ? x.SoLuong : -x.SoLuong)
                             })
                             .ToListAsync();
@@ -96,7 +103,7 @@ namespace ketoan.Server.Controllers
                 // 2. (Tùy chọn) Cập nhật ngược lại vào bảng TonKho trong Database
                 foreach (var item in danhSachPhatSinh)
                 {
-                    var tonKhoRecord = await _context.TonKhos.FirstOrDefaultAsync(x => x.id_hang_hoa == item.IdHangHoa && x.so_lo == item.SoLo);
+                    var tonKhoRecord = await _context.TonKhos.FirstOrDefaultAsync(x => x.id_hang_hoa == item.IdHangHoa && x.so_lo == item.SoLo && x.ma_kho == item.MaKho);
                     if (tonKhoRecord != null)
                     {
                         tonKhoRecord.so_luong = item.TongTon; // Cập nhật số lượng mới
@@ -108,6 +115,7 @@ namespace ketoan.Server.Controllers
                         {
                             id_hang_hoa = item.IdHangHoa,
                             so_lo = item.SoLo, // Gán thêm số lô
+                            ma_kho = item.MaKho,
                             so_luong = item.TongTon
                         });
                     }

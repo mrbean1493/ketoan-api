@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            txtDiaChi = new TextBox();
+            lblDiaChi = new Label();
             txtId = new TextBox();
             btnRefresh = new Button();
             btnSave = new Button();
@@ -46,8 +48,6 @@
             btnEdit = new Button();
             btnAdd = new Button();
             dataGridView1 = new DataGridView();
-            txtDiaChi = new TextBox();
-            lblDiaChi = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -79,6 +79,22 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = ".";
+            // 
+            // txtDiaChi
+            // 
+            txtDiaChi.Location = new Point(98, 110);
+            txtDiaChi.Name = "txtDiaChi";
+            txtDiaChi.Size = new Size(694, 23);
+            txtDiaChi.TabIndex = 18;
+            // 
+            // lblDiaChi
+            // 
+            lblDiaChi.AutoSize = true;
+            lblDiaChi.Location = new Point(14, 113);
+            lblDiaChi.Name = "lblDiaChi";
+            lblDiaChi.Size = new Size(43, 15);
+            lblDiaChi.TabIndex = 17;
+            lblDiaChi.Text = "Địa chỉ";
             // 
             // txtId
             // 
@@ -177,7 +193,7 @@
             // 
             // btnTimKiem
             // 
-            btnTimKiem.Location = new Point(799, 22);
+            btnTimKiem.Location = new Point(799, 21);
             btnTimKiem.Name = "btnTimKiem";
             btnTimKiem.Size = new Size(75, 23);
             btnTimKiem.TabIndex = 4;
@@ -187,7 +203,7 @@
             // 
             // txtTenDoiTac
             // 
-            txtTenDoiTac.Location = new Point(480, 22);
+            txtTenDoiTac.Location = new Point(480, 20);
             txtTenDoiTac.Name = "txtTenDoiTac";
             txtTenDoiTac.PlaceholderText = "Nhập thông tin đối tác để tìm kiếm";
             txtTenDoiTac.Size = new Size(312, 23);
@@ -235,22 +251,6 @@
             dataGridView1.Size = new Size(1422, 319);
             dataGridView1.TabIndex = 2;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // txtDiaChi
-            // 
-            txtDiaChi.Location = new Point(98, 110);
-            txtDiaChi.Name = "txtDiaChi";
-            txtDiaChi.Size = new Size(694, 23);
-            txtDiaChi.TabIndex = 18;
-            // 
-            // lblDiaChi
-            // 
-            lblDiaChi.AutoSize = true;
-            lblDiaChi.Location = new Point(14, 113);
-            lblDiaChi.Name = "lblDiaChi";
-            lblDiaChi.Size = new Size(43, 15);
-            lblDiaChi.TabIndex = 17;
-            lblDiaChi.Text = "Địa chỉ";
             // 
             // DoiTac
             // 

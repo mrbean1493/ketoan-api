@@ -115,7 +115,7 @@
             // 
             // danhMụcToolStripMenuItem
             // 
-            danhMụcToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hàngHóaToolStripMenuItem, nhàCungCấpToolStripMenuItem, kháchHàngToolStripMenuItem, nhânViênToolStripMenuItem, đơnVịTínhToolStripMenuItem, khoToolStripMenuItem });
+            danhMụcToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hàngHóaToolStripMenuItem, nhàCungCấpToolStripMenuItem, kháchHàngToolStripMenuItem, đơnVịTínhToolStripMenuItem, khoToolStripMenuItem, nhânViênToolStripMenuItem });
             danhMụcToolStripMenuItem.Name = "danhMụcToolStripMenuItem";
             danhMụcToolStripMenuItem.Size = new Size(74, 20);
             danhMụcToolStripMenuItem.Text = "Danh mục";

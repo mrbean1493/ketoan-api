@@ -23,7 +23,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
             _loaiDoiTac = loaiDoiTac;
             _apiClient = new ApiConnectClient();
 
-            //CapNhatGiaoDien();
+            CapNhatGiaoDien();
         }
 
         private void CapNhatGiaoDien()
@@ -56,7 +56,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
             // 2. Cột Tên kho
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "tendoitac",
+                DataPropertyName = "TenDoiTac",
                 Name = "colTenDoiTac",
                 HeaderText = "Tên đối tác",
                 Width = 300
@@ -64,7 +64,7 @@ namespace ketoan.Client.FormsUI.Danhmuc
 
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "madoitac",
+                DataPropertyName = "MaDoiTac",
                 Name = "colVietTat",
                 HeaderText = "Tên viết tắt",
                 Width = 300
@@ -85,19 +85,19 @@ namespace ketoan.Client.FormsUI.Danhmuc
             // 4. Cột Địa chỉ
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "sodienthoai",
+                DataPropertyName = "SoDienThoai",
                 Name = "colSDT",
                 HeaderText = "SĐT",
-                Width = 70,
+                Width = 90,
                 Visible = true
             });
             // 3. Cột Địa chỉ
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "sodienthoai2",
+                DataPropertyName = "SoDienThoai2",
                 Name = "colSDT2",
                 HeaderText = "SĐT2",
-                Width = 70,
+                Width = 90,
                 Visible = true
             });
         }

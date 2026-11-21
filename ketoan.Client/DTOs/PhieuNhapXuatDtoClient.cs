@@ -18,6 +18,10 @@ namespace ketoan.Client.DTOs
         //public string? GhiChu { get; set; }
         //public bool IsPhieuNhap { get; set; }
         public decimal TongTien { get; set; }
+
+        public int id_nguoi_dung { get; set; }
+        public int id_nguoi_cap_nhat { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
         public int LoaiPhieu { get; set; }
         // Danh sách chi tiết truyền lên
         public List<ChiTietPhieuNhapXuatDtoClient> ChiTiets { get; set; } = new();

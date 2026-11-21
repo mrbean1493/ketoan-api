@@ -12,4 +12,10 @@ namespace ketoan.Client.DTOs
         public string MatKhauCu { get; set; } = string.Empty;
         public string MatKhauMoi { get; set; } = string.Empty;
     }
+
+    public class ResetMatKhauDtoClient
+    {
+        public int UserId { get; set; }
+        public string MatKhauMoi { get; set; } = string.Empty;
+    }
 }

@@ -238,6 +238,11 @@ namespace ketoan.Client.FormsUI.Nhaphang
         private void btnSua_Click(object sender, EventArgs e)
         {
             var selectedRow = dataGridView1.CurrentRow;
+            if (selectedRow == null)
+            {
+                MessageBox.Show("Vui lòng chọn một dòng trên bảng","Cảnh báo");
+                return;
+            }
             LoaiPhieuNhapXuat lpnx = new LoaiPhieuNhapXuat();
             string NameForm = "NhapKho";
             int idphieu = 0;

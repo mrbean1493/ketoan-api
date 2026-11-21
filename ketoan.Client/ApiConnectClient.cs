@@ -3,10 +3,12 @@ using ketoan.Client.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ketoan.Client
 {
@@ -539,6 +541,76 @@ namespace ketoan.Client
 
             return result!;
         }
+
+        // 1. Lấy toàn bộ phiếu
+        public async Task<List<NguoiDungDtoClient>> GetAllNguoiDungAsync()
+        {
+            var response = await Client.GetAsync("api/NguoiDung");
+            var json = await response.Content.ReadAsStringAsync();
+            // Nếu server trả về mã lỗi (400, 500...)
+            if (!response.IsSuccessStatusCode)
+            {
+                var errResult = JsonSerializer.Deserialize<ApiResponse<object>>(json, _jsonOptions);
+                throw new Exception(errResult?.Message ?? $"Lỗi Server: {(int)response.StatusCode}");
+            }
+            var result = JsonSerializer.Deserialize<ApiResponse<List<NguoiDungDtoClient>>>(json, _jsonOptions)!;
+            return result?.Data ?? new List<NguoiDungDtoClient>();
+        }
+        // 2. Tạo người dùng mới (POST)
+        public async Task<ApiResponse<object>> CreateNguoiDungAsync(NguoiDungDtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PostAsync("api/NguoiDung", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Hiển thị trực tiếp thông báo thô từ Server lên MessageBox để bạn đọc được ngay
+                //throw new Exception($"Server trả về lỗi ({response.StatusCode}):\n{jsonResult}");
+
+                throw new Exception(result?.Message ?? "Lỗi khi lưu người dùng mới!");
+            }
+
+            return result!;
+        }
+        // 3. Cập nhật người dùng (PUT)
+        public async Task<ApiResponse<object>> UpdateNguoiDungAsync(int id, NguoiDungDtoClient request)
+        {
+            string jsonContent = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await Client.PutAsync($"api/NguoiDung/{id}", content);
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi cập nhật người dùng!");
+            }
+
+            return result!;
+        }
+        // 4. Xóa người dùng (DELETE)
+        public async Task<ApiResponse<object>> DeleteNguoiDungAsync(int id)
+        {
+            var response = await Client.DeleteAsync($"api/NguoiDung/{id}");
+            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ApiResponse<object>>(jsonResult, _jsonOptions);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(result?.Message ?? "Lỗi khi xóa người dùng!");
+            }
+
+            return result!;
+        }
+
 
         // 1. GET: Lấy danh sách hàng tồn kho
         public async Task<List<HangTonKhoDtoClient>> GetHangTonKhoAsync()

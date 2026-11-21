@@ -12,6 +12,8 @@
 
         public string so_lo { get; set; }
         public decimal so_luong { get; set; }
+
+        public int ma_kho { get; set; }
         public string TenKho { get; set; } = string.Empty;
     }
 }

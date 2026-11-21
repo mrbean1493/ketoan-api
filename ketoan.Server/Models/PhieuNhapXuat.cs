@@ -30,6 +30,10 @@ namespace ketoan.Server.Models
         [Column("ngay_cap_nhat")]
         public DateTime NgayCapNhat { get; set; }
 
+        [Column("id_nguoi_dung")]
+        public int id_nguoi_dung { get; set; }
+        public int id_nguoi_cap_nhat { get; set; }
+
         // Navigation Properties
         public List<ChiTietPhieuNhapXuat> ChiTiets { get; set; } = new();
 

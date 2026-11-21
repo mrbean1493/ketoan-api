@@ -36,8 +36,9 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
 
             LoadDoiTac();
-
+            LoadKho();
             LoadHTTT();
+            
         }
 
         private async Task LoadDataToEditAsync(int phieuId)
@@ -57,6 +58,10 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
                     // Gán ID đối tác vào Custom Control GridLookupDoiTac mà chúng ta đã cấu hình
                     gridLookupDoiTac1.SelectedId = phieu.DoiTacId;
+
+                    cboKho.SelectedValue = phieu.ma_kho;
+
+
 
                     // 2. Đổ danh sách chi tiết lên DataGridView
                     dataGridView1.DataSource = null;
@@ -89,6 +94,15 @@ namespace ketoan.Client.FormsUI.Nhaphang
             }
         }
 
+        private async void LoadKho()
+        {
+            // 1. Tạo danh sách dữ liệu mẫu (hoặc lấy từ CSDL/EF Core)
+            List<KhoDtoClient> listKho = new List<KhoDtoClient>();
+            listKho = await _apiClient.GetKhoAsync();
+            cboKho.DataSource = listKho;
+            cboKho.ValueMember = "Id";
+            cboKho.DisplayMember = "ten_kho";
+        }
         private async void LoadDoiTac()
         {
 
@@ -657,11 +671,13 @@ namespace ketoan.Client.FormsUI.Nhaphang
                     //GhiChu = txtGhiChu.Text.Trim(),
                     //IsPhieuNhap = rdoPhieuNhap.Checked,
                     LoaiPhieu = (int)_loaiPhieuNhapXuat,
+                    
                     ChiTiets = danhSachChiTiet
                 };
 
                 if (txtSoPhieu.Text == "") //phiếu mới
                 {
+                    request.id_nguoi_dung = QuanLyPhien.UserId;
                     var res = await _apiClient.CreatePhieuAsync(request);
                     MessageBox.Show(res.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (res.Id != null)
@@ -673,6 +689,8 @@ namespace ketoan.Client.FormsUI.Nhaphang
                 }
                 else //cập nhật phiếu
                 {
+                    request.id_nguoi_cap_nhat= QuanLyPhien.UserId;
+                    request.NgayCapNhat = DateTime.UtcNow;
                     var res = await _apiClient.UpdatePhieuAsync(Int32.Parse(txtSoPhieu.Text), request);
                     if (res != null && res.Success) // Kiểm tra dựa trên property Success từ controller của bạn
                     {
@@ -695,6 +713,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private void btnAddDoiTac_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Vui lòng đóng form hiện tại và mở lại để lấy danh sách đối tác mới nhất", "Thông báo");
             // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
             var formThem = new DoiTac(LoaiDoiTac.NhaCungCap);
             if (_loaiPhieuNhapXuat == LoaiPhieuNhapXuat.Nhaphang)
@@ -719,6 +738,7 @@ namespace ketoan.Client.FormsUI.Nhaphang
 
         private void btnAddHangHoa_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Vui lòng đóng form hiện tại và mở lại để lấy danh sách hàng hóa mới nhất","Thông báo");
             // 1. Khởi tạo form PhieuNhapXuat ở chế độ thêm mới (Id = 0)
             var formThem = new HangHoa(); // 1 là loại phiếu nhập (hoặc truyền biến tương ứng)
 

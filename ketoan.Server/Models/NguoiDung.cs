@@ -33,6 +33,15 @@ namespace ketoan.Server.Models
         [Column("TrangThai")]
         public bool TrangThai { get; set; } = true;
 
+        [Column("ma_kho")]
+        public int? ma_kho { get; set; }
+
+        [Column("dia_chi")]
+        public string? dia_chi { get; set; } = string.Empty;
+
+        [Column("NgayTao")]
+        public DateTime NgayTao { get; set; }
+
         // Bổ sung quan hệ với bảng trung gian
         public ICollection<NguoiDungQuyen> NguoiDungQuyens { get; set; } = new List<NguoiDungQuyen>();
     }
